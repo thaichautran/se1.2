@@ -3,5 +3,5 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 
 ### Technologies
 Frontend: Vuejs
-Backend: Sprint boot
+Backend: Spring boot
 Database: Mysql
