@@ -1,0 +1,21 @@
+.btn-dark {
+    @include styleButton($color-white-0, $color-black-0, $color-black-0, 13px, $fs-text, $fw-bold, 0.75rem, 7.25rem);
+    &:hover {
+        @include hoverButton($color-white-0, $color-black-0, $color-gray-hover);
+    }
+}
+.btn-white {
+    @include styleButton(
+        $color-black-0,
+        $color-white-0,
+        $color-black-0,
+        13px,
+        $fs-medium,
+        $fw-normal,
+        0.75rem,
+        4.85rem
+    );
+    &:hover {
+        @include hoverButton($color-black-0, $color-white-0, $color-gray-hover);
+    }
+}

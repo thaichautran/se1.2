@@ -1,0 +1,15 @@
+.text-title {
+    @include styleText($color-black-0, $fs-title, $fw-bold);
+}
+.text-sub-title {
+    @include styleText($color-gray-bold, $fs-text, $fw-bold);
+}
+.text-sub-2-title {
+    @include styleText($color-gray-light, $fs-small, $fw-bold);
+}
+.text-link {
+    @include styleLink($color-blue-0, $fs-text, $fw-bold);
+    &:hover {
+        @include hoverLink($color-gray-bold);
+    }
+}

@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "fontWeb";
+    src:
+        url("/src/assets/fonts/Poppins-Regular.ttf") format("ttf"),
+        url("/src/assets/fonts/Poppins-Light.ttf") format("ttf"),
+        url("/src/assets/fonts/Poppins-Bold.ttf") format("ttf");
+}
+
+* {
+    font-family: "fontWeb", sans-serif;
+}

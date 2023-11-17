@@ -1,0 +1,33 @@
+@mixin styleButton($color, $bg-color, $border-color, $border-radius, $fs, $fw, $px, $py) {
+    color: $color;
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    font-size: $fs;
+    font-weight: $fw;
+    padding: $px $py;
+}
+@mixin hoverButton($color, $bg-color, $border-color) {
+    color: $color;
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+    cursor: pointer;
+}
+
+@mixin styleText($color, $font-size, $font-weigh) {
+    color: $color;
+    font-size: $font-size;
+    font-weight: $font-weigh;
+}
+
+@mixin styleLink($color, $font-size, $font-weigh) {
+    color: $color;
+    font-size: $font-size;
+    font-weight: $font-weigh;
+    text-decoration: underline;
+}
+
+@mixin hoverLink($color) {
+    color: $color;
+    cursor: pointer;
+}
