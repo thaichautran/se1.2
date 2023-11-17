@@ -12,16 +12,7 @@
       @finish="onFinish"
       @finishFailed="onFinishFailed"
     >
-      <a-form-item
-        label="Họ và tên"
-        name="name"
-        :rules="[
-          {
-            required: true,
-            message: 'Vui lòng nhập họ và tên!',
-          },
-        ]"
-      >
+      <a-form-item label="Họ và tên" name="name">
         <a-input
           style="
             width: 80%;
@@ -32,16 +23,7 @@
           v-model:value="formState.name"
         />
       </a-form-item>
-      <a-form-item
-        label="Email"
-        name="email"
-        :rules="[
-          {
-            required: true,
-            message: 'Vui lòng nhập tài khoản!',
-          },
-        ]"
-      >
+      <a-form-item label="Email" name="email">
         <a-input
           style="
             width: 80%;
@@ -131,7 +113,24 @@ export default {
         return Promise.resolve();
       }
     };
+    const validateName = async (_rule, value) => {
+      if (value === "") {
+        return Promise.reject("Vui lòng nhập họ và tên!");
+      } else {
+        return Promise.resolve();
+      }
+    };
+    const validateEmail = async (_rule, value) => {
+      if (value === "") {
+        return Promise.reject("Vui lòng nhập email!");
+      }
+      {
+        return Promise.resolve();
+      }
+    };
     const rules = {
+      name: [{ required: true, validator: validateName, trigger: "change" }],
+      email: [{ required: true, validator: validateEmail, trigger: "change" }],
       password: [
         {
           required: true,

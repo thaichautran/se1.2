@@ -81,7 +81,7 @@
           <Register></Register>
         </div>
         <div v-else-if="$route.params.name == 'forgot_password'">
-          <Register></Register>
+          <ForgotPass></ForgotPass>
         </div>
       </a-col>
     </a-row>
@@ -91,9 +91,9 @@
 <script>
 import Login from "@/components/Login.vue";
 import Register from "@/components/Register.vue";
-
+import ForgotPass from "@/components/ForgotPass.vue";
 export default {
-  components: { Login, Register },
+  components: { Login, Register, ForgotPass },
   setup() {},
 };
 </script>
