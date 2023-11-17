@@ -110,7 +110,6 @@ export default {
       return !(formState.name && formState.password);
     });
 
-    //validate pass
     const validatePass = async (_rule, value) => {
       if (value === "") {
         return Promise.reject("Vui lòng nhập mật khẩu!");
