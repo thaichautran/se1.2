@@ -109,7 +109,7 @@ export default {
     const disabled = computed(() => {
       return !(formState.name && formState.password);
     });
-
+    //validate password
     const validatePass = async (_rule, value) => {
       if (value === "") {
         return Promise.reject("Vui lòng nhập mật khẩu!");
