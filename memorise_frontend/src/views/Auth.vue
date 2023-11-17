@@ -74,10 +74,13 @@
         </div>
       </a-col>
       <a-col :span="8" :style="{ height: '100%' }">
-        <div v-if="$route.params.name == 'Login'">
+        <div v-if="$route.params.name == 'login'">
           <Login></Login>
         </div>
-        <div v-else-if="$route.params.name == 'Register'">
+        <div v-else-if="$route.params.name == 'register'">
+          <Register></Register>
+        </div>
+        <div v-else-if="$route.params.name == 'forgot_password'">
           <Register></Register>
         </div>
       </a-col>

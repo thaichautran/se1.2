@@ -4,7 +4,9 @@
       <h2 class="text-title">Đăng nhập</h2>
       <div>
         <span class="text-sub-title">Chưa có tài khoản?</span> &nbsp;
-        <router-link to="/" class="text-link">Tạo tài khoản mới</router-link>
+        <router-link to="/authentication/register" class="text-link"
+          >Tạo tài khoản mới</router-link
+        >
       </div>
     </div>
     <a-form
@@ -73,7 +75,9 @@
       </a-form-item>
 
       <a-form-item>
-        <button type="submit" class="btn-dark">Đăng nhập</button>
+        <button style="width: 80%" type="submit" class="btn-dark">
+          Đăng nhập
+        </button>
       </a-form-item>
     </a-form>
 
@@ -82,11 +86,11 @@
         Đăng nhập bằng tài khoản khác
       </p>
       <div>
-        <GoogleLogin :callback="googleLogin">
+        <GoogleLogin :callback="googleLogin" :popup-type="TOKEN">
           <button
             type="submit"
             class="login-form-button btn-white"
-            style="padding: 0.75rem 3.9rem; margin-bottom: 0.5rem"
+            style="margin-bottom: 0.5rem; min-width: 129%"
           >
             <span style="margin-right: 0.25rem"
               ><img
@@ -102,9 +106,9 @@
       <button
         type="submit"
         class="login-form-button btn-white"
-        style="padding: 0.75rem 3.4rem"
+        style="min-width: 80%"
       >
-        <span style="margin-right: 0.25rem"
+        <span style="margin-left: 0.45rem; margin-right: 0.25rem"
           ><img
             src="../assets/image/facebook 1.png"
             style="width: 20px; height: 20px"
