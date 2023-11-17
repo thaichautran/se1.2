@@ -1,5 +1,5 @@
 <template>
-  <h1>Home view</h1>
+  <h1>Register</h1>
 </template>
 
 <script>
