@@ -9,6 +9,7 @@ public class MemoriseBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MemoriseBackendApplication.class, args);
 		System.out.println("Hello World!");
+
 	}
 
 }
