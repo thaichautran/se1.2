@@ -69,7 +69,7 @@
         <router-link
           style="margin-left: 8rem"
           class="login-form-forgot text-sub-2-title"
-          to="/"
+          to="/authentication/forgot_password"
           >Quên mật khẩu?</router-link
         >
       </a-form-item>

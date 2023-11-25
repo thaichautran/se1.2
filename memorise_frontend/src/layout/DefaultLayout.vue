@@ -1,16 +1,15 @@
 <template>
-  <main>
-    <h1>The Header</h1>
-    <div class="max-w-[1200px] mx-auto">
-      <router-view />
-    </div>
-    <h1>The footer</h1>
-  </main>
+  <AppBar> </AppBar>
 </template>
 
 <script>
-export default {};
+import AppBar from "@/components/AppBar.vue";
+export default {
+  components: {
+    AppBar,
+  },
+};
 </script>
 
 <style>
-</style>
+</style> 
