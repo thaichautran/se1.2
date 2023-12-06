@@ -1,11 +1,22 @@
-package com.memorise.memorise_backend.payload.request;
+package com.memorise.memorise_backend.dto;
 
-public class SignUpRequest {
+import java.util.Date;
+
+public class UserDTO {
+    private int id;
     private String username;
     private String password;
     private String name;
+    private String avatar;
+    private int roleId;
 
-    private int roleId = 2;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -29,6 +40,14 @@ public class SignUpRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getRoleId() {

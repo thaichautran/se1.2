@@ -41,4 +41,11 @@ public class AuthenticationService implements AuthenticationServiceImp {
 
         return isSuccess;
     }
+
+    @Override
+    public boolean checkLogin(String username, String password) {
+        User user = userRepository.findByUsername(username);
+//        System.out.println(user.getUsername() + " " + user.getPassword());
+        return passwordEncoder.matches(password, user.getPassword());
+    }
 }
