@@ -89,9 +89,9 @@
 </template>
 
 <script>
-import Login from "@/components/Login.vue";
-import Register from "@/components/Register.vue";
-import ForgotPass from "@/components/ForgotPass.vue";
+import Login from "@/components/Authenticattion/Login.vue";
+import Register from "@/components/Authenticattion/Register.vue";
+import ForgotPass from "@/components/Authenticattion/ForgotPass.vue";
 export default {
   components: { Login, Register, ForgotPass },
   setup() {},

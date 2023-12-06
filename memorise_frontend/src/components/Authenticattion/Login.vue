@@ -94,7 +94,7 @@
           >
             <span style="margin-right: 0.25rem"
               ><img
-                src="../assets/image/google 1.png"
+                src="../../assets/image/google 1.png"
                 style="width: 20px; height: 20px"
                 alt=""
                 srcset=""
@@ -103,19 +103,6 @@
           </button>
         </GoogleLogin>
       </div>
-      <button
-        type="submit"
-        class="login-form-button btn-white"
-        style="min-width: 80%"
-      >
-        <span style="margin-left: 0.45rem; margin-right: 0.25rem"
-          ><img
-            src="../assets/image/facebook 1.png"
-            style="width: 20px; height: 20px"
-            alt=""
-            srcset="" /></span
-        >Đăng nhập bằng <span style="font-weight: bold"> Facebook</span>
-      </button>
     </div>
   </section>
 </template>

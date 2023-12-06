@@ -17,6 +17,26 @@ const routes = [
         name: "gallery",
         component: () => import("../views/Gallery"),
       },
+      {
+        path: "/sharings",
+        name: "sharings",
+        component: () => import("../views/Sharing"),
+      },
+      {
+        path: "/albums",
+        name: "albums",
+        component: () => import("../views/Album"),
+      },
+      {
+        path: "/favorites",
+        name: "favorites",
+        component: () => import("../views/Favorite"),
+      },
+      {
+        path: "/trash",
+        name: "trash",
+        component: () => import("../views/Trash"),
+      },
     ],
   },
   {
