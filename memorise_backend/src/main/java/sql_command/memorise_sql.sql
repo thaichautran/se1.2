@@ -82,19 +82,19 @@ alter table image_album
 add constraint fk_image_album_image_id foreign key(image_id) references image(id);
 
 alter table role 
-modify column create_date timestamp default now();
+modify column create_date timestamp not null default now();
 
 alter table user 
-modify column create_date timestamp default now(),
-modify column update_date timestamp default now();
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
 
 alter table image 
-modify column create_date timestamp default now(),
-modify column update_date timestamp default now();
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
 
 alter table album 
-modify column create_date timestamp default now(),
-modify column update_date timestamp default now();
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
 
 -- Insert data 
 insert into role(role_name) values ("ROLE_ADMIN"), ("ROLE_USER");

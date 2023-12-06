@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
@@ -41,16 +43,18 @@ public class AuthenticationController {
         System.out.println(signUpRequest.getPassword());
         System.out.println(signUpRequest.getRoleId());
         User user = new User();
+        int roleId = signUpRequest.getRoleId();
+        Optional<Role> role = roleRepository.findById(roleId);
+
         user.setName(signUpRequest.getName());
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-//        user.setCreateDate(null);
-//        user.setUpdateDate(null);
 
 
-//        Role role = new Role();
-//        role.setRoleName(roleRepository.findById(signUpRequest.getRoleId()).get().getRoleName());
-//        user.setRole(role);
+        if(role != null){
+            user.setRole(role.get());
+        }
+
 
         userRepository.save(user);
         respondData.setData("User registered successfully");
