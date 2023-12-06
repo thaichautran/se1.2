@@ -9,6 +9,7 @@ import vue3GoogleLogin from "vue3-google-login";
 // style
 import "ant-design-vue/dist/reset.css";
 import "./assets/scss/main.scss";
+
 createApp(App)
   .use(store)
   .use(router)

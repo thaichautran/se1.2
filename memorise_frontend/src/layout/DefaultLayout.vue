@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import AppBar from "@/components/AppBar.vue";
+import AppBar from "@/components/Navigation/AppBar.vue";
 export default {
   components: {
     AppBar,
