@@ -1,3 +1,9 @@
+-- set global time_zone = “+7:00” ?
+-- set time_zone = 'Asia/Ho_Chi_Minh';
+-- select now();
+-- SELECT @@global.time_zone, @@session.time_zone; 
+
+create database memorise;
 use memorise;
 
 create table role(
@@ -53,7 +59,6 @@ create table album(
     
     primary key(id)
 );
-
 create table image_album(
 	album_id int,
     image_id int,
@@ -61,8 +66,38 @@ create table image_album(
     primary key(album_id, image_id)
 );
 
-alter table user add constraint fk_user_role_id foreign key(role_id) references role(id);
-alter table album add constraint fk_album_user_id foreign key(user_id) references user(id);
-alter table image add constraint fk_image_user_id foreign key(user_id) references user(id);
-alter table image_album add constraint fk_image_album_album_id foreign key(album_id) references album(id);
-alter table image_album add constraint fk_image_album_image_id foreign key(image_id) references image(id);
+alter table user 
+add constraint fk_user_role_id foreign key(role_id) references role(id);
+
+alter table album 
+add constraint fk_album_user_id foreign key(user_id) references user(id);
+
+alter table image 
+add constraint fk_image_user_id foreign key(user_id) references user(id);
+
+alter table image_album 
+add constraint fk_image_album_album_id foreign key(album_id) references album(id);
+
+alter table image_album 
+add constraint fk_image_album_image_id foreign key(image_id) references image(id);
+
+alter table role 
+modify column create_date timestamp not null default now();
+
+alter table user 
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
+
+alter table image 
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
+
+alter table album 
+modify column create_date timestamp not null default now(),
+modify column update_date timestamp not null default now();
+
+-- Insert data 
+insert into role(role_name) values ("ROLE_ADMIN"), ("ROLE_USER");
+insert into image(url) value("Test date");
+
+

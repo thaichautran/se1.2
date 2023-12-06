@@ -1,6 +1,7 @@
 package com.memorise.memorise_backend.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private int id ;
 
     @Column(name = "username")
     private String username;
@@ -24,10 +25,13 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "create_date")
+
+    @CreationTimestamp
+    @Column(name = "create_date", nullable = false, updatable = false)
     private Date createDate;
 
-    @Column(name = "update_date")
+    @CreationTimestamp
+    @Column(name = "update_date", nullable = false, updatable = false)
     private Date updateDate;
 
     @ManyToOne
