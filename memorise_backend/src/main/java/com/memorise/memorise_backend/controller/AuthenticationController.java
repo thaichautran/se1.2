@@ -2,6 +2,7 @@ package com.memorise.memorise_backend.controller;
 
 import com.memorise.memorise_backend.entity.Role;
 import com.memorise.memorise_backend.entity.User;
+import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
 import com.memorise.memorise_backend.payload.request.SignUpRequest;
 import com.memorise.memorise_backend.repository.RoleRepository;
@@ -20,44 +21,29 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/authentication")
-public class AuthenticationController {
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
+public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
+    AuthenticationServiceImp authenticationServiceImp;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
         RespondData respondData = new RespondData();
-        respondData.setData("Username is already taken!");
+
         if(userRepository.existsByUsername(signUpRequest.getUsername())){
+            respondData.setStatus(400);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Username is already taken!");
+
             return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
         }
 
-        System.out.println(signUpRequest.getName());
-        System.out.println(signUpRequest.getUsername());
-        System.out.println(signUpRequest.getPassword());
-        System.out.println(signUpRequest.getRoleId());
-        User user = new User();
-        int roleId = signUpRequest.getRoleId();
-        Optional<Role> role = roleRepository.findById(roleId);
-
-        user.setName(signUpRequest.getName());
-        user.setUsername(signUpRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
-
-        if(role != null){
-            user.setRole(role.get());
-        }
-
-
-        userRepository.save(user);
-        respondData.setData("User registered successfully");
+        respondData.setDesc("User registered successfully");
+        respondData.setData(authenticationServiceImp.isSignUp(signUpRequest));
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 }
