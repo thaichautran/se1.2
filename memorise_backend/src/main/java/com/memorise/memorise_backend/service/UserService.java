@@ -29,4 +29,9 @@ public class UserService implements UserServiceImp {
         }
         return userDTOs;
     }
+
+    @Override
+    public User getUserByOtp(String otp) {
+        return userRepository.findByOtp(otp);
+    }
 }
