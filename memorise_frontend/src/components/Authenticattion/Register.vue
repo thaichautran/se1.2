@@ -9,8 +9,8 @@
       layout="vertical"
       :rules="rules"
       class="register-form"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
+      @finish="handleRegister"
+      @finishFailed="handleRegisterFailed"
     >
       <a-form-item label="Họ và tên" name="name">
         <a-input
@@ -72,9 +72,13 @@
 
 <script>
 import { reactive, ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   components: {},
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const formRef = ref();
     const formState = reactive({
       name: "",
@@ -82,10 +86,7 @@ export default {
       password: "",
       checkpass: "",
     });
-    const onFinish = (values) => {
-      console.log("Success:", values);
-    };
-    const onFinishFailed = (errorInfo) => {
+    const handleRegisterFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
     const disabled = computed(() => {
@@ -146,12 +147,20 @@ export default {
         },
       ],
     };
+    const handleRegister = () => {
+      const rqBody = {
+        username: formState.email,
+        password: formState.password,
+        name: formState.name,
+      };
+      store.dispatch("user/registerAction", { data: rqBody, router });
+    };
     return {
-      onFinish,
-      onFinishFailed,
+      handleRegisterFailed,
       disabled,
       formState,
       rules,
+      handleRegister,
     };
   },
 };

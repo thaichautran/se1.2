@@ -14,7 +14,7 @@
         class="logo"
         @click="
           () => {
-            router.push('/');
+            router.push('/home');
           }
         "
       >
@@ -30,7 +30,7 @@
           key="1"
           @click="
             () => {
-              router.push('/');
+              router.push('/home');
             }
           "
         >
@@ -90,7 +90,7 @@
           <span class="anticon"
             ><img src="../../assets/image/trash_icon.svg" class="icon" alt=""
           /></span>
-          <span class="menu-item-text">Thùng rác</span>
+          <span class="menu-item-text">Thùng rác {{ token }}</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -122,6 +122,8 @@ import { defineComponent, ref } from "vue";
 import TheHeader from "./TheHeader.vue";
 import TheFooter from "./TheFooter.vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
 export default defineComponent({
   components: {
     TheHeader,
@@ -129,6 +131,10 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    store.dispatch("user/loadFromLocalStorageAction");
+    const token = store.state.user.userLogin.token;
+    console.log(token);
     return {
       selectedKeys: ref(["1"]),
       collapsed: ref(false),

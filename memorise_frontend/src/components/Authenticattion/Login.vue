@@ -13,8 +13,8 @@
       :model="formState"
       name="normal_login"
       class="login-form"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
+      @finish="handleLogin"
+      @finishFailed="handleLoginFailed"
     >
       <a-form-item
         name="email"
@@ -111,21 +111,31 @@
 import { reactive, computed } from "vue";
 import { MailOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { decodeCredential } from "vue3-google-login";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   components: {
     MailOutlined,
     LockOutlined,
   },
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const formState = reactive({
       email: "",
       password: "",
       remember: true,
     });
-    const onFinish = (values) => {
-      console.log("Success:", values);
+    const handleLogin = () => {
+      const rqBody = {
+        username: formState.email,
+        password: formState.password,
+      };
+
+      store.dispatch("user/loginAction", { data: rqBody, router });
+      store.dispatch("user/loadFromLocalStorageAction");
     };
-    const onFinishFailed = (errorInfo) => {
+    const handleLoginFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
     const disabled = computed(() => {
@@ -138,8 +148,8 @@ export default {
     };
 
     return {
-      onFinish,
-      onFinishFailed,
+      handleLogin,
+      handleLoginFailed,
       disabled,
       formState,
       googleLogin,
