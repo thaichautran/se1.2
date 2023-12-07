@@ -38,7 +38,6 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
         RespondData respondData = new RespondData();
-
         if(userRepository.existsByUsername(signUpRequest.getUsername())){
             respondData.setStatus(400);
             respondData.setSuccess(false);
