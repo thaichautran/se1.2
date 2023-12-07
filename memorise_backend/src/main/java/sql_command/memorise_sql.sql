@@ -100,4 +100,6 @@ modify column update_date timestamp not null default now();
 insert into role(role_name) values ("ROLE_ADMIN"), ("ROLE_USER");
 insert into image(url) value("Test date");
 
+-- Select
+select * from user;
 
