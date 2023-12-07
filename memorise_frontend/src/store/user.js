@@ -1,5 +1,3 @@
-import { register, login } from "@/apis/user";
-
 const state = () => {
   return {
     userRegister: {},
@@ -22,20 +20,14 @@ const mutations = {
   },
 };
 const actions = {
-  async registerAction(context, { data, router }) {
-    const userRegister = await register(data);
-    context.commit("setUserRegister", userRegister);
+  registerAction(context, { data, router }) {
+    context.commit("setUserRegister", data);
     router.push("/authentication/login");
   },
 
-  async loginAction(context, { data, router }) {
-    try {
-      const userLogin = await login(data);
-      router.push("/home");
-      context.commit("setUserLogin", userLogin);
-    } catch (error) {
-      //   alert("Tài Khoản hoặc mật khẩu không đúng");
-    }
+  loginAction(context, { data, router }) {
+    router.push("/home");
+    context.commit("setUserLogin", data);
   },
   loadFromLocalStorageAction({ commit }) {
     let userLogin = {};

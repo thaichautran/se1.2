@@ -9,13 +9,7 @@
         >
       </div>
     </div>
-    <a-form
-      :model="formState"
-      name="normal_login"
-      class="login-form"
-      @finish="handleLogin"
-      @finishFailed="handleLoginFailed"
-    >
+    <a-form :model="formState" name="normal_login" class="login-form">
       <a-form-item
         name="email"
         style="margin-top: 2rem"
@@ -29,7 +23,7 @@
         <a-input
           placeholder="Email"
           style="
-            width: 80%;
+            width: 85%;
             padding: 0.75rem 1rem;
             border-radius: 13px;
             font-size: 1rem;
@@ -48,7 +42,7 @@
       >
         <a-input-password
           style="
-            width: 80%;
+            width: 85%;
             padding: 0.75rem 1rem;
             border-radius: 13px;
             font-size: 1rem;
@@ -75,9 +69,25 @@
       </a-form-item>
 
       <a-form-item>
-        <button style="width: 80%" type="submit" class="btn-dark">
+        <a-button
+          style="width: 85%; height: 48px"
+          type="submit"
+          class="btn-dark"
+          :loading="loading"
+          @click="
+            () => {
+              handleLogin();
+            }
+          "
+        >
           Đăng nhập
-        </button>
+        </a-button>
+        <p
+          v-if="loginFaild"
+          style="text-align: center; color: red; width: 85%; margin-top: 0.5rem"
+        >
+          {{ loginFaild }}
+        </p>
       </a-form-item>
     </a-form>
 
@@ -90,7 +100,7 @@
           <button
             type="submit"
             class="login-form-button btn-white"
-            style="margin-bottom: 0.5rem; min-width: 129%"
+            style="margin-bottom: 0.5rem; min-width: 124%"
           >
             <span style="margin-right: 0.25rem"
               ><img
@@ -108,11 +118,12 @@
 </template>
 
 <script>
-import { reactive, computed } from "vue";
+import { reactive, computed, ref } from "vue";
 import { MailOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { decodeCredential } from "vue3-google-login";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { login } from "@/apis/user";
 export default {
   components: {
     MailOutlined,
@@ -126,18 +137,28 @@ export default {
       password: "",
       remember: true,
     });
-    const handleLogin = () => {
+    const loading = ref(false);
+    const loginFaild = ref("");
+    const handleLogin = async () => {
       const rqBody = {
         username: formState.email,
         password: formState.password,
       };
+      loading.value = true;
+      await login(rqBody)
+        .then((res) => {
+          store.dispatch("user/loginAction", { data: res, router });
+          store.dispatch("user/loadFromLocalStorageAction");
+        })
+        .catch((err) => {
+          console.log("Login failed", err);
+          loginFaild.value = "Tài khoản hoặc mật khẩu không đúng!";
+        })
+        .finally(() => {
+          loading.value = false;
+        });
+    };
 
-      store.dispatch("user/loginAction", { data: rqBody, router });
-      store.dispatch("user/loadFromLocalStorageAction");
-    };
-    const handleLoginFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
-    };
     const disabled = computed(() => {
       return !(formState.username && formState.password);
     });
@@ -149,10 +170,12 @@ export default {
 
     return {
       handleLogin,
-      handleLoginFailed,
+
       disabled,
       formState,
       googleLogin,
+      loading,
+      loginFaild,
     };
   },
 };

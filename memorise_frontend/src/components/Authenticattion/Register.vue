@@ -9,8 +9,6 @@
       layout="vertical"
       :rules="rules"
       class="register-form"
-      @finish="handleRegister"
-      @finishFailed="handleRegisterFailed"
     >
       <a-form-item label="Họ và tên" name="name">
         <a-input
@@ -62,9 +60,25 @@
       </a-form-item>
 
       <a-form-item>
-        <button style="width: 80%" type="submit" class="btn-dark">
+        <a-button
+          style="width: 80%; height: 48px; padding: 0"
+          type="submit"
+          @click="
+            () => {
+              handleRegister();
+            }
+          "
+          class="btn-dark"
+          :loading="loading"
+        >
           Tạo tài khoản
-        </button>
+        </a-button>
+        <p
+          v-if="registerFaild"
+          style="text-align: center; color: red; width: 80%; margin-top: 0.5rem"
+        >
+          {{ registerFaild }}
+        </p>
       </a-form-item>
     </a-form>
   </section>
@@ -74,6 +88,7 @@
 import { reactive, ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { register } from "@/apis/user";
 export default {
   components: {},
   setup() {
@@ -86,9 +101,8 @@ export default {
       password: "",
       checkpass: "",
     });
-    const handleRegisterFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
-    };
+    const loading = ref(false);
+    const registerFaild = ref("");
     const disabled = computed(() => {
       return !(formState.name && formState.password);
     });
@@ -147,20 +161,32 @@ export default {
         },
       ],
     };
-    const handleRegister = () => {
+    const handleRegister = async () => {
       const rqBody = {
         username: formState.email,
         password: formState.password,
         name: formState.name,
       };
-      store.dispatch("user/registerAction", { data: rqBody, router });
+      loading.value = true;
+      await register(rqBody)
+        .then((res) => {
+          store.dispatch("user/registerAction", { data: res, router });
+        })
+        .catch((err) => {
+          console.log(err);
+          registerFaild.value = "Tài khoản đã tồn tại!";
+        })
+        .finally(() => {
+          loading.value = false;
+        });
     };
     return {
-      handleRegisterFailed,
       disabled,
       formState,
       rules,
       handleRegister,
+      loading,
+      registerFaild,
     };
   },
 };
