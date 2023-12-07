@@ -62,7 +62,7 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
-    @PostMapping("/checklogin")
+    @PostMapping("/check_login")
     public ResponseEntity<?> checkLogin(@RequestBody LoginRequest loginRequest){
 
 //        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -89,18 +89,29 @@ public class AuthenticationController {
             return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
         }
 
-        if(authenticationServiceImp.checkLogin(loginRequest.getUsername(), loginRequest.getPassword())){
-            respondData.setDesc("Login successfully");
-            String token = jwtUtilsHelper.generateToken(loginRequest.getUsername());
-            TokenDTO tokeDTO = new TokenDTO(token);
-            respondData.setData(tokeDTO);
-        } else {
-            TokenDTO tokeDTO = new TokenDTO();
-            respondData.setData(tokeDTO);
+        if(!authenticationServiceImp.checkLogin(loginRequest.getUsername(), loginRequest.getPassword())){
+            respondData.setStatus(401);
             respondData.setSuccess(false);
-            respondData.setDesc("Failed to log");
-        }
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Password is not true");
 
+
+            return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
+        }
+        respondData.setDesc("Login successfully");
+        String token = jwtUtilsHelper.generateToken(loginRequest.getUsername());
+        TokenDTO tokeDTO = new TokenDTO(token);
+        respondData.setData(tokeDTO);
+
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @PostMapping("/forget_password")
+    public ResponseEntity<?> forgetPassword(@RequestParam String username){
+        RespondData respondData = new RespondData();
+        String otp = authenticationServiceImp.generateOtp();
+        System.out.println(otp);
+        respondData.setData(otp);
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 }

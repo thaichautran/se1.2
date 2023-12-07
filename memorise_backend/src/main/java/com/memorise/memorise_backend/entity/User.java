@@ -25,6 +25,8 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "otp")
+    private String otp;
 
     @CreationTimestamp
     @Column(name = "create_date", nullable = false, updatable = false)
@@ -122,5 +124,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }
