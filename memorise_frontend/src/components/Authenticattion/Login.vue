@@ -9,7 +9,12 @@
         >
       </div>
     </div>
-    <a-form :model="formState" name="normal_login" class="login-form">
+    <a-form
+      :model="formState"
+      name="normal_login"
+      class="login-form"
+      @onFinish="handleLogin"
+    >
       <a-form-item
         name="email"
         style="margin-top: 2rem"
@@ -71,14 +76,9 @@
       <a-form-item>
         <a-button
           style="width: 85%; height: 48px"
-          type="submit"
+          html-type="submit"
           class="btn-dark"
           :loading="loading"
-          @click="
-            () => {
-              handleLogin();
-            }
-          "
         >
           Đăng nhập
         </a-button>
