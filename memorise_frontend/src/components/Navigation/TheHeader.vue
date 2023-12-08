@@ -46,9 +46,18 @@
           </span>
           <SettingOutlined style="font-size: 20px" class="interactive" />
 
-          <a-avatar :size="48" class="interactive">
-            <template #icon><UserOutlined /></template>
-          </a-avatar>
+          <a-dropdown :trigger="['click']">
+            <a-avatar :size="48" class="interactive">
+              <template #icon><UserOutlined /></template>
+            </a-avatar>
+            <template #overlay>
+              <a-menu style="white-space: nowrap; margin-right: 0.5rem">
+                <a-menu-item key="0" @click="handleLogout">
+                  <span> <LogoutOutlined /> Đăng xuất</span>
+                </a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown>
         </div>
       </div>
     </a-space>
@@ -63,9 +72,10 @@ import {
   SettingOutlined,
   UploadOutlined,
   UserOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons-vue";
 import { computed, ref } from "vue";
-
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 export default {
   components: {
@@ -75,6 +85,7 @@ export default {
     SettingOutlined,
     UserOutlined,
     UploadOutlined,
+    LogoutOutlined,
   },
   props: {
     collapsedToChild: {
@@ -83,14 +94,18 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     store.dispatch("user/loadFromLocalStorageAction");
     const token = computed(() => store.state.user.userLogin.token);
 
     let keySearch = ref("");
-
+    const handleLogout = () => {
+      store.dispatch("user/removeLocalStorageAction", { router });
+    };
     return {
       keySearch,
       token,
+      handleLogout,
     };
   },
 };

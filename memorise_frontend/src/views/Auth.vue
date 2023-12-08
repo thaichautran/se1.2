@@ -83,6 +83,12 @@
         <div v-else-if="$route.params.name == 'forgot_password'">
           <ForgotPass></ForgotPass>
         </div>
+        <div v-else-if="$route.params.name == 'check_otp'">
+          <OTPInput></OTPInput>
+        </div>
+        <div v-else-if="$route.params.name == 'reset_password'">
+          <ResetPassword></ResetPassword>
+        </div>
       </a-col>
     </a-row>
   </section>
@@ -92,8 +98,10 @@
 import Login from "@/components/Authenticattion/Login.vue";
 import Register from "@/components/Authenticattion/Register.vue";
 import ForgotPass from "@/components/Authenticattion/ForgotPass.vue";
+import OTPInput from "@/components/Authenticattion/OTPInput.vue";
+import ResetPassword from "@/components/Authenticattion/ResetPassword.vue";
 export default {
-  components: { Login, Register, ForgotPass },
+  components: { Login, Register, ForgotPass, OTPInput, ResetPassword },
   setup() {},
 };
 </script>

@@ -2,6 +2,7 @@ const state = () => {
   return {
     userRegister: {},
     userLogin: {},
+    otp: "",
   };
 };
 const mutations = {
@@ -11,6 +12,9 @@ const mutations = {
   setUserLogin(state, payload) {
     state.userLogin = payload;
     localStorage.setItem("userLogin", JSON.stringify(payload.data));
+  },
+  setOTP(state, payload) {
+    state.otp = payload;
   },
   loadFromLocalStorageMutation(state, payload) {
     state.userLogin = payload;
@@ -29,6 +33,10 @@ const actions = {
     router.push("/home");
     context.commit("setUserLogin", data);
   },
+  checkOTPAction({ commit }, { data, router }) {
+    router.push("/authentication/reset_password");
+    commit("setOTP", data);
+  },
   loadFromLocalStorageAction({ commit }) {
     let userLogin = {};
     if (localStorage.getItem("userLogin")) {
@@ -36,10 +44,11 @@ const actions = {
     }
     commit("loadFromLocalStorageMutation", userLogin);
   },
-  removeLocalStorageAction({ commit }) {
+  removeLocalStorageAction({ commit }, { router }) {
     if (localStorage.getItem("userLogin")) {
       localStorage.removeItem("userLogin");
     }
+    router.push("/authentication/login");
     commit("removeLocalStorageMutations");
   },
 };

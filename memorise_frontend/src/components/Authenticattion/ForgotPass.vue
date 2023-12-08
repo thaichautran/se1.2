@@ -8,12 +8,11 @@
       name="normal_forgot-pass"
       layout="vertical"
       class="forgot-pass-form"
-      @finish="onFinish"
-      @finishFailed="onFinishFailed"
+      @finish="handeSendOTP"
     >
       <a-form-item
         label="Nhập email"
-        name="name"
+        name="email"
         :rules="[
           {
             required: true,
@@ -28,43 +27,57 @@
             border-radius: 13px;
             font-size: 1rem;
           "
-          v-model:value="formState.name"
+          v-model:value="formState.email"
         />
       </a-form-item>
 
       <a-form-item>
-        <button
-          style="width: 80%; padding: 0.75rem 0"
-          type="submit"
+        <a-button
+          style="width: 80%; padding: 0.75rem 0; height: 50px"
           class="btn-dark"
+          html-type="submit"
+          :loading="loading"
         >
           Gửi mã xác nhận
-        </button>
+        </a-button>
       </a-form-item>
     </a-form>
   </section>
 </template>
   
   <script>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import { sendOTP } from "@/apis/user";
 export default {
   components: {},
   setup() {
+    const router = useRouter();
     const formState = reactive({
       email: "",
     });
+    const loading = ref(false);
+    const handeSendOTP = async () => {
+      loading.value = true;
+      await sendOTP(formState.email)
+        .then(() => {
+          router.push({
+            path: "/authentication/check_otp",
+            query: { data: formState.email },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          loading.value = false;
+        });
+    };
 
-    const onFinish = (values) => {
-      console.log("Success:", values);
-    };
-    const onFinishFailed = (errorInfo) => {
-      console.log("Failed:", errorInfo);
-    };
-    console.log(formState.email);
     return {
-      onFinish,
-      onFinishFailed,
+      handeSendOTP,
       formState,
+      loading,
     };
   },
 };
