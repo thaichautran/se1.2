@@ -13,7 +13,7 @@
       :model="formState"
       name="normal_login"
       class="login-form"
-      @onFinish="handleLogin"
+      @finish="handleLogin"
     >
       <a-form-item
         name="email"
