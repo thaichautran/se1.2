@@ -5,10 +5,11 @@ import DefaultLayout from "../layout/DefaultLayout";
 const routes = [
   {
     path: "/",
+    redirect: "/authentication/login",
     component: DefaultLayout,
     children: [
       {
-        path: "/",
+        path: "/home",
         name: "home",
         component: HomeView,
       },
