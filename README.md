@@ -5,7 +5,7 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 - Frontend: Vuejs
 - Backend: Spring boot
 - Database: Mysql
-
+### Set up software backend: MySQL, MySQLWorkbench, Intelij, Postman in FE local, and test local
 ### Goal
 Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo, lưu trữ và chia sẻ kỷ niệm thông qua hình ảnh và video một cách dễ dàng và linh hoạt.
 
