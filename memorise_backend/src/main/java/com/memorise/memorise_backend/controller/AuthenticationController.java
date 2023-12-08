@@ -135,7 +135,7 @@ public class AuthenticationController {
             respondData.setData("Can not send OTP to your email, Please check again smtp configuration in backend side");
 
 
-            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN); 
         }
 
         respondData.setDesc("Request is successfull");

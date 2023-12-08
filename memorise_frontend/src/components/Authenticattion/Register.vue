@@ -9,6 +9,7 @@
       layout="vertical"
       :rules="rules"
       class="register-form"
+      @onFinish="handleRegister"
     >
       <a-form-item label="Họ và tên" name="name">
         <a-input
@@ -62,12 +63,7 @@
       <a-form-item>
         <a-button
           style="width: 80%; height: 48px; padding: 0"
-          type="submit"
-          @click="
-            () => {
-              handleRegister();
-            }
-          "
+          html-type="submit"
           class="btn-dark"
           :loading="loading"
         >
