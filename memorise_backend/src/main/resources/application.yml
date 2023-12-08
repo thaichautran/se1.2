@@ -1,5 +1,5 @@
 server:
-    port: 8100
+  port: 8100
 spring:
     datasource:
         url: jdbc:mysql://127.0.0.1:3307/memorise
@@ -25,4 +25,4 @@ spring:
                         enable: true
 
 jwt:
-    privateKey: EOyZ5zHPxtfFZbslS1siLAWzx3EE/b48yLru1eVxNAs=
+  privateKey: EOyZ5zHPxtfFZbslS1siLAWzx3EE/b48yLru1eVxNAs=

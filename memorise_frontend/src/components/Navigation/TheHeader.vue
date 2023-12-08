@@ -15,6 +15,7 @@
       class="trigger"
       @click="$emit('setCollapsed', false)"
     />
+
     <menu-fold-outlined
       v-else
       class="trigger"
@@ -25,7 +26,7 @@
       <div class="header-row">
         <div class="header-row-left">
           <a-input
-            v-model:value="value"
+            v-model:value="keySearch"
             placeholder='Tìm kiếm "Thứ 7", "Thành phố Hồ Chí Minh"'
             style="
               width: 500px;
@@ -63,8 +64,9 @@ import {
   UploadOutlined,
   UserOutlined,
 } from "@ant-design/icons-vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
+import { useStore } from "vuex";
 export default {
   components: {
     MenuUnfoldOutlined,
@@ -80,9 +82,15 @@ export default {
     },
   },
   setup() {
-    let value = ref("");
+    const store = useStore();
+    store.dispatch("user/loadFromLocalStorageAction");
+    const token = computed(() => store.state.user.userLogin.token);
+
+    let keySearch = ref("");
+
     return {
-      value,
+      keySearch,
+      token,
     };
   },
 };
