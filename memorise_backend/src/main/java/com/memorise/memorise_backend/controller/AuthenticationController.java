@@ -1,5 +1,6 @@
 package com.memorise.memorise_backend.controller;
 
+import com.memorise.memorise_backend.dto.OtpDTO;
 import com.memorise.memorise_backend.dto.TokenDTO;
 import com.memorise.memorise_backend.entity.Role;
 import com.memorise.memorise_backend.entity.User;
@@ -110,7 +111,8 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
-    @PostMapping("/forget_password")
+
+    @PostMapping("/send_otp")
     public ResponseEntity<?> forgetPassword(@RequestParam String username){
         RespondData respondData = new RespondData();
         User user = userRepository.findByUsername(username);
@@ -142,6 +144,88 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @GetMapping("/check_otp")
+    public ResponseEntity<?> resetPassword(@RequestParam String otp){
+        RespondData respondData = new RespondData();
+        User user = userRepository.findByOtp(otp);
+        if(user == null){
+            respondData.setStatus(401);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("OTP is not valid!");
 
+            return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
+        }
+        respondData.setDesc("Request is successful");
+        OtpDTO otpDTO = new OtpDTO(otp);
+        respondData.setData(otpDTO);
+
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @PostMapping("/reset_password")
+    public ResponseEntity<?> resetPassword(@RequestParam String otp, @RequestParam String newPassword){
+        RespondData respondData = new RespondData();
+        User user = userRepository.findByOtp(otp);
+        if(user == null){
+            respondData.setStatus(400);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Username does not exist!");
+
+            return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
+        }
+        boolean isSuccess = authenticationServiceImp.resetPassword(user, newPassword);
+        respondData.setDesc("Request is successful");
+        respondData.setData("Reset password successfully!");
+
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+
+//    API test
+    @PostMapping("/check_login1")
+    public ResponseEntity<?> checkLogin(@RequestParam String username, @RequestParam String password){
+
+//        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//        String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
+//        System.out.println(encrypted);
+
+        RespondData respondData = new RespondData();
+
+        if(username == null || password == null) {
+            respondData.setStatus(403);
+            respondData.setSuccess(false);
+            respondData.setDesc("Paramater receives wrong parameters");
+            respondData.setData("Check again parameter name: username - password");
+
+            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN);
+        }
+
+        if(!userRepository.existsByUsername(username)){
+            respondData.setStatus(400);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Username does not exist");
+
+            return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
+        }
+
+        if(!authenticationServiceImp.checkLogin(username, password)){
+            respondData.setStatus(401);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Password is not true");
+
+
+            return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
+        }
+        respondData.setDesc("Login successfully");
+        String token = jwtUtilsHelper.generateToken(username);
+        TokenDTO tokeDTO = new TokenDTO(token);
+        respondData.setData(tokeDTO);
+
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
 
 }

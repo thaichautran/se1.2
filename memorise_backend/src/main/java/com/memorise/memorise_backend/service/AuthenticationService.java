@@ -77,11 +77,11 @@ public class AuthenticationService implements AuthenticationServiceImp {
     @Override
     public boolean resetPassword(User user, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
-        user.setPassword(encodedPassword);
         try{
+            user.setPassword(encodedPassword);
             user.setOtp(null);
             userRepository.save(user);
-            return false;
+            return true;
         } catch (Exception e){
             System.out.println("Can not reset password");
             return false;
@@ -100,7 +100,7 @@ public class AuthenticationService implements AuthenticationServiceImp {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
-            helper.setFrom("manhdung18102003@gmail.com", "Memorise Support");
+            helper.setFrom("memorise@gmail.com", "Memorise Support");
             helper.setTo(username);
             String subject = "Here is the OTP to reset your password";
             String contentOtp = "Your OTP to reset your password is: " + otp;
