@@ -41,7 +41,13 @@ public class CustomFilterSecurity {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/authentication/**")
+                .requestMatchers("/authentication/**",
+                        "/api/v1/auth/**",
+                        "/v3/api-docs/**",
+                        "/v3/api-docs.yaml",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                )
                 .permitAll()
                 .anyRequest().authenticated();
         httpSecurity.addFilterBefore(customJwtFilter, UsernamePasswordAuthenticationFilter.class);

@@ -14,6 +14,10 @@ import com.memorise.memorise_backend.utils.JwtUtilsHelper;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +32,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/authentication")
-
+@Tag(name = "Authentication")
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
@@ -41,6 +45,24 @@ public class AuthenticationController {
 
 
 
+    @Operation(
+            description = "Regist an user",
+            summary = "This API to regist an account",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is not valid, Username existed!",
+                            responseCode = "400"
+                    ),
+                    @ApiResponse(
+                            description = "Request receives wrong parameters, check again parameter name: username - password - name!",
+                            responseCode = "403"
+                    ),
+                    @ApiResponse(
+                            description = "Register successfully!",
+                            responseCode = "200"
+                    ),
+            }
+    )
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
         RespondData respondData = new RespondData();
@@ -48,7 +70,7 @@ public class AuthenticationController {
             respondData.setStatus(400);
             respondData.setSuccess(false);
             respondData.setDesc("Request is not valid");
-            respondData.setData("Username is already taken!");
+            respondData.setData("Username existed!");
 
             return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
         }
@@ -67,6 +89,29 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+
+    @Operation(
+            description = "Authenticate login!",
+            summary = "This API to authenticate user to login",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is not valid, username does not exist!",
+                            responseCode = "400"
+                    ),
+                    @ApiResponse(
+                            description = "Request is not valid, password is not true!",
+                            responseCode = "400"
+                    ),
+                    @ApiResponse(
+                            description = "Request receives wrong parameters, check again parameter name: username - password!",
+                            responseCode = "403"
+                    ),
+                    @ApiResponse(
+                            description = "Login successfully!",
+                            responseCode = "200"
+                    ),
+            }
+    )
     @PostMapping("/check_login")
     public ResponseEntity<?> checkLogin(@RequestBody LoginRequest loginRequest){
 
@@ -112,6 +157,24 @@ public class AuthenticationController {
     }
 
 
+    @Operation(
+            description = "Send OTP to email",
+            summary = "This API to send OTP to user email and store it into database",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is not valid, username does not exist!",
+                            responseCode = "400"
+                    ),
+                    @ApiResponse(
+                            description = "Request is fobbiden, check again smtp configuration in backend side",
+                            responseCode = "403"
+                    ),
+                    @ApiResponse(
+                            description = "Send successfully!",
+                            responseCode = "200"
+                    ),
+            }
+    )
     @PostMapping("/send_otp")
     public ResponseEntity<?> forgetPassword(@RequestParam String username){
         RespondData respondData = new RespondData();
@@ -144,6 +207,20 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Check authentication of OTP",
+            summary = "This API to check OTP whether user is exact",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is not valid, OTP is wrong!",
+                            responseCode = "401"
+                    ),
+                    @ApiResponse(
+                            description = "Check successfully!",
+                            responseCode = "200"
+                    ),
+            }
+    )
     @GetMapping("/check_otp")
     public ResponseEntity<?> resetPassword(@RequestParam String otp){
         RespondData respondData = new RespondData();
@@ -163,6 +240,20 @@ public class AuthenticationController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Input to reset password",
+            summary = "This API to reset forgot password",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is not valid, username does not exist!",
+                            responseCode = "400"
+                    ),
+                    @ApiResponse(
+                            description = "Reset successfully!",
+                            responseCode = "200"
+                    ),
+            }
+    )
     @PostMapping("/reset_password")
     public ResponseEntity<?> resetPassword(@RequestParam String otp, @RequestParam String newPassword){
         RespondData respondData = new RespondData();
@@ -184,48 +275,48 @@ public class AuthenticationController {
 
 
 //    API test
-    @PostMapping("/check_login1")
-    public ResponseEntity<?> checkLogin(@RequestParam String username, @RequestParam String password){
-
-//        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-//        String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
-//        System.out.println(encrypted);
-
-        RespondData respondData = new RespondData();
-
-        if(username == null || password == null) {
-            respondData.setStatus(403);
-            respondData.setSuccess(false);
-            respondData.setDesc("Paramater receives wrong parameters");
-            respondData.setData("Check again parameter name: username - password");
-
-            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN);
-        }
-
-        if(!userRepository.existsByUsername(username)){
-            respondData.setStatus(400);
-            respondData.setSuccess(false);
-            respondData.setDesc("Request is not valid");
-            respondData.setData("Username does not exist");
-
-            return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
-        }
-
-        if(!authenticationServiceImp.checkLogin(username, password)){
-            respondData.setStatus(401);
-            respondData.setSuccess(false);
-            respondData.setDesc("Request is not valid");
-            respondData.setData("Password is not true");
-
-
-            return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
-        }
-        respondData.setDesc("Login successfully");
-        String token = jwtUtilsHelper.generateToken(username);
-        TokenDTO tokeDTO = new TokenDTO(token);
-        respondData.setData(tokeDTO);
-
-        return new ResponseEntity<>(respondData, HttpStatus.OK);
-    }
+//    @PostMapping("/check_login1")
+//    public ResponseEntity<?> checkLogin(@RequestParam String username, @RequestParam String password){
+//
+////        SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+////        String encrypted = Encoders.BASE64.encode(secretKey.getEncoded());
+////        System.out.println(encrypted);
+//
+//        RespondData respondData = new RespondData();
+//
+//        if(username == null || password == null) {
+//            respondData.setStatus(403);
+//            respondData.setSuccess(false);
+//            respondData.setDesc("Paramater receives wrong parameters");
+//            respondData.setData("Check again parameter name: username - password");
+//
+//            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN);
+//        }
+//
+//        if(!userRepository.existsByUsername(username)){
+//            respondData.setStatus(400);
+//            respondData.setSuccess(false);
+//            respondData.setDesc("Request is not valid");
+//            respondData.setData("Username does not exist");
+//
+//            return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
+//        }
+//
+//        if(!authenticationServiceImp.checkLogin(username, password)){
+//            respondData.setStatus(401);
+//            respondData.setSuccess(false);
+//            respondData.setDesc("Request is not valid");
+//            respondData.setData("Password is not true");
+//
+//
+//            return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
+//        }
+//        respondData.setDesc("Login successfully");
+//        String token = jwtUtilsHelper.generateToken(username);
+//        TokenDTO tokeDTO = new TokenDTO(token);
+//        respondData.setData(tokeDTO);
+//
+//        return new ResponseEntity<>(respondData, HttpStatus.OK);
+//    }
 
 }
