@@ -9,7 +9,7 @@
       layout="vertical"
       :rules="rules"
       class="register-form"
-      @onFinish="handleRegister"
+      @finish="handleRegister"
     >
       <a-form-item label="Họ và tên" name="name">
         <a-input
