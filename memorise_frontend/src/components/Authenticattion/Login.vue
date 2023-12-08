@@ -28,7 +28,7 @@
         <a-input
           placeholder="Email"
           style="
-            width: 85%;
+            width: 80%;
             padding: 0.75rem 1rem;
             border-radius: 13px;
             font-size: 1rem;
@@ -47,7 +47,7 @@
       >
         <a-input-password
           style="
-            width: 85%;
+            width: 80%;
             padding: 0.75rem 1rem;
             border-radius: 13px;
             font-size: 1rem;
@@ -75,7 +75,7 @@
 
       <a-form-item>
         <a-button
-          style="width: 85%; height: 48px"
+          style="width: 80%; height: 48px"
           html-type="submit"
           class="btn-dark"
           :loading="loading"
@@ -100,7 +100,7 @@
           <button
             type="submit"
             class="login-form-button btn-white"
-            style="margin-bottom: 0.5rem; min-width: 124%"
+            style="margin-bottom: 0.5rem; min-width: 129%"
           >
             <span style="margin-right: 0.25rem"
               ><img
