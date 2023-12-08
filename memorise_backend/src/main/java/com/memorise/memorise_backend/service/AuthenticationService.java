@@ -6,10 +6,18 @@ import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
 import com.memorise.memorise_backend.payload.request.SignUpRequest;
 import com.memorise.memorise_backend.repository.RoleRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailMessage;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.Random;
 
@@ -23,6 +31,9 @@ public class AuthenticationService implements AuthenticationServiceImp {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     @Override
     public boolean isSignUp(SignUpRequest signUpRequest) {
@@ -81,8 +92,33 @@ public class AuthenticationService implements AuthenticationServiceImp {
     public String generateOtp() {
         Random rnd = new Random();
         int number = rnd.nextInt(111111, 1000000);
-
-        // this will convert any number sequence into 6 character.
         return String.format("%06d", number);
+    }
+
+    @Override
+    public boolean mailSender(String username, String otp) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        try {
+            helper.setFrom("manhdung18102003@gmail.com", "Memorise Support");
+            helper.setTo(username);
+            String subject = "Here is the OTP to reset your password";
+            String contentOtp = "Your OTP to reset your password is: " + otp;
+            helper.setSubject(subject);
+            helper.setText(contentOtp);
+
+            javaMailSender.send(message);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error to send email");
+            return false;
+        }
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setTo(username);
+//        System.out.println("username: " + username);
+//        message.setSubject("Here is the OTP to reset your password");
+//        message.setText("Your OTP to reset your password is: " + otp);
+//        javaMailSender.send(message);
+//        return true;
     }
 }

@@ -5,6 +5,8 @@ import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,4 +36,6 @@ public class UserService implements UserServiceImp {
     public User getUserByOtp(String otp) {
         return userRepository.findByOtp(otp);
     }
+
+
 }
