@@ -13,9 +13,11 @@ import com.memorise.memorise_backend.utils.JwtUtilsHelper;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,8 @@ public class AuthenticationController {
 
     @Autowired
     JwtUtilsHelper jwtUtilsHelper;
+
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest){
@@ -110,9 +114,35 @@ public class AuthenticationController {
     @PostMapping("/forget_password")
     public ResponseEntity<?> forgetPassword(@RequestParam String username){
         RespondData respondData = new RespondData();
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            respondData.setStatus(400);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is not valid");
+            respondData.setData("Username does not exist");
+
+            return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
+        }
         String otp = authenticationServiceImp.generateOtp();
-        System.out.println(otp);
-        respondData.setData(otp);
+        boolean isUpdateOtp = authenticationServiceImp.updateResetPasswordOtp(username, otp);
+        boolean isSendMail = authenticationServiceImp.mailSender(username, otp);
+
+        if(!isSendMail){
+            respondData.setStatus(403);
+            respondData.setSuccess(false);
+            respondData.setDesc("Request is fobbiden");
+            respondData.setData("Can not send OTP to your email, Please check again smtp configuration in backend side");
+
+
+            return new ResponseEntity<>(respondData, HttpStatus.FORBIDDEN);
+        }
+
+        respondData.setDesc("Request is successfull");
+        respondData.setData("OTP is sent to your email, please check!");
+
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+
+
 }
