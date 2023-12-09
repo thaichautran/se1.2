@@ -6,7 +6,38 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 - Frontend: Vuejs
 - Backend: Spring boot
 - Database: Mysql
-### Set up software backend: MySQL, MySQLWorkbench, Intelij, Postman in FE local, and test local
+### Cài đặt bên phía backend: MySQL, MySQLWorkbench, Intelij, Postman in FE local, and test local
+#### 1.Cài đặt MySQL lên Docker:
+  1.1 Cài đặt Docker Desktop: 
+  - Download từ trang web và cài đặt: https://docs.docker.com/desktop/install/windows-install/
+  - Download WSL từ trang web vài cài đặt(kéo xuống step 4): https://learn.microsoft.com/en-us/windows/wsl/install-manual
+  - Sau khi cài đặt xong, ta sẽ có được biểu tượng Docker Desktop:
+  1.2 Cài đặt MySQL trên Docker:
+  - Mở Docker Desktop vừa tải về
+  - Mở cửa sổ cmd, gõ lệnh: docker pull mysql
+  - Sau khi pull về, mở tab images trong Docker Desktop kiểm tra xem images mysql đã được pull về chưa
+    ![markdown]()
+  - gõ lệnh để chạy images mysql: docker run --name name(tự đặt) -p 3307(port ngoài, tự đặt):3306(port trong) -e MYSQL_ROOT_PASSWORD=password(tự đặt) -d mysql:latest
+  - Sau khi run, vào tab container, kiểm tra xem MySQL đã được run hay chưa, nếu thấy container MySQL đã chạy ở trạng thái running là thành công
+    ![markdown]()
+#### 2.Cài đặt MySQL MySQLWorkbench:
+  2.1 Download MySQLWorkbench từ trang web và cài đặt: https://dev.mysql.com/downloads/workbench/
+  2.2 Mở MySQLWorkbench lên để kết nối với MySQL trên Docker: 
+  - Click vào nút dấu + để tạo kết nối mới, một bảng config sẽ hiện ra
+   ![markdown]()
+  - Tại dòng Connection Name: Nhập tên cho MySQL Connection
+  - Tại dòng Port điền port ngoài đã cài đặt cho container MySQL đã config trước đó, ở đây là 3307
+  - Tại dòng Store in Vault: nhập password đã setup trước đó, ở đây là admin123
+  - Port và Password bạn có thể setup tùy theo ý bạn
+  - Sau đó ấn vào Test connection, nếu thành công, một pop-up sẽ hiện ra:
+    ![markdown]()
+  - Ấn ok, khi đó một MySQL Connection đã được tạo, click vào đó để làm việc với MySQL
+  - Pull code dự án từ github về thì mở file SQL Script trong dự án tại: memorise_backend/src/main/java/sql_command/memorise_sql.sql, và ấn vào biểu tượng Run(hình sấm sét trên thanh công cụ) để tạo database
+#### 3.Cài đặt Postman để testAPI:
+  - Download Postman và cài đặt: https://www.postman.com/downloads/
+#### 4.Cài đặt Intelij bản Ultimate:
+  - Thực hiện theo hướng dẫn sau: https://quoc9x.com/2022/03/01/intellij-huong-dan-cai-dat-va-kich-hoat-chi-tiet/?fbclid=IwAR37FdW0G8p6pCc29ZyY71YpIxGjMlJ59UkZq_TadmwVbCZ326_0myOpmDQ
+#### Như vậy là setup thành công các công cụ cần thiết bên phía backend, mỗi lần chạy dự án, thì start docker lên trước, sau đó vào Intelij có code backend của dự án và chạy chương trình, như vậy là server và database đã sẵn sàng để làm việc.
 ### Goal
 Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo, lưu trữ và chia sẻ kỷ niệm thông qua hình ảnh và video một cách dễ dàng và linh hoạt.
 
