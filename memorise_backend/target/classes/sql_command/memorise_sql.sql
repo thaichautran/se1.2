@@ -67,6 +67,9 @@ create table image_album(
 );
 
 alter table user 
+add column otp varchar(6);
+
+alter table user 
 add constraint fk_user_role_id foreign key(role_id) references role(id);
 
 alter table album 
@@ -100,4 +103,6 @@ modify column update_date timestamp not null default now();
 insert into role(role_name) values ("ROLE_ADMIN"), ("ROLE_USER");
 insert into image(url) value("Test date");
 
+-- Select
+select * from user;
 

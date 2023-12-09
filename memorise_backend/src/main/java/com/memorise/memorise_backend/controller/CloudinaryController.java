@@ -20,7 +20,11 @@ public class CloudinaryController {
     CloudinaryServiceImp cloudinaryServiceImp;
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image){
+    public ResponseEntity<?> uploadImage(@RequestParam MultipartFile image,
+                                         @RequestParam String name,
+                                         @RequestParam String description,
+                                         @RequestParam String location,
+                                         @RequestParam int user_id){
         RespondData respondData = new RespondData();
         Map data = this.cloudinaryServiceImp.upload(image);
         System.out.println(data.get("url"));

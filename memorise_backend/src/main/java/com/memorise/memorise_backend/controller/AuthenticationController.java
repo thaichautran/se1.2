@@ -1,34 +1,23 @@
 package com.memorise.memorise_backend.controller;
 
+import com.memorise.memorise_backend.dto.InfoLoginDTO;
 import com.memorise.memorise_backend.dto.OtpDTO;
-import com.memorise.memorise_backend.dto.TokenDTO;
-import com.memorise.memorise_backend.entity.Role;
+import com.memorise.memorise_backend.dto.UserDTO;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
+import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
 import com.memorise.memorise_backend.payload.request.LoginRequest;
 import com.memorise.memorise_backend.payload.request.SignUpRequest;
-import com.memorise.memorise_backend.repository.RoleRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import com.memorise.memorise_backend.utils.JwtUtilsHelper;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Encoders;
-import io.jsonwebtoken.security.Keys;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.crypto.SecretKey;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/authentication")
@@ -36,6 +25,9 @@ import java.util.Optional;
 public class AuthenticationController {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserServiceImp userServiceImp;
 
     @Autowired
     AuthenticationServiceImp authenticationServiceImp;
@@ -150,8 +142,11 @@ public class AuthenticationController {
         }
         respondData.setDesc("Login successfully");
         String token = jwtUtilsHelper.generateToken(loginRequest.getUsername());
-        TokenDTO tokeDTO = new TokenDTO(token);
-        respondData.setData(tokeDTO);
+        User user = userRepository.findByUsername(loginRequest.getUsername());
+        UserDTO userDTO = userServiceImp.getUserDTO(user);
+//        TokenDTO tokenDTO = new TokenDTO(token);
+        InfoLoginDTO infoLoginDTO = new InfoLoginDTO(token, userDTO);
+        respondData.setData(infoLoginDTO);
 
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
