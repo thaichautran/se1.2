@@ -95,6 +95,9 @@ alter table image
 modify column create_date timestamp not null default now(),
 modify column update_date timestamp not null default now();
 
+alter table image 
+modify column favourite boolean;
+
 alter table album 
 modify column create_date timestamp not null default now(),
 modify column update_date timestamp not null default now();

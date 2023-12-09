@@ -144,8 +144,9 @@ public class AuthenticationController {
         String token = jwtUtilsHelper.generateToken(loginRequest.getUsername());
         User user = userRepository.findByUsername(loginRequest.getUsername());
         UserDTO userDTO = userServiceImp.getUserDTO(user);
-//        TokenDTO tokenDTO = new TokenDTO(token);
+
         InfoLoginDTO infoLoginDTO = new InfoLoginDTO(token, userDTO);
+
         respondData.setData(infoLoginDTO);
 
         return new ResponseEntity<>(respondData, HttpStatus.OK);

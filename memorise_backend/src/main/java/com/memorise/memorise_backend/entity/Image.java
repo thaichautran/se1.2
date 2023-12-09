@@ -23,7 +23,7 @@ public class Image {
     private String name;
 
     @Column(name = "favourite")
-    private String favourite;
+    private boolean favourite = false;
 
     @Column(name = "sharing_url")
     private String sharingUrl;
@@ -40,10 +40,10 @@ public class Image {
     private Date updateDate;
 
     @Column(name = "is_public")
-    private boolean isPublic;
+    private boolean isPublic = false;
 
     @Column(name = "is_remove")
-    private boolean isRemove;
+    private boolean isRemove = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -92,11 +92,11 @@ public class Image {
         this.name = name;
     }
 
-    public String getFavourite() {
+    public boolean isFavourite() {
         return favourite;
     }
 
-    public void setFavourite(String favourite) {
+    public void setFavourite(boolean favourite) {
         this.favourite = favourite;
     }
 
