@@ -105,4 +105,5 @@ insert into image(url) value("Test date");
 
 -- Select
 select * from user;
+select * from image;
 

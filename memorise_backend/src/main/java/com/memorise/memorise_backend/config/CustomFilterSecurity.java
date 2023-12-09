@@ -41,7 +41,7 @@ public class CustomFilterSecurity {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/authentication/**",
+                .requestMatchers("/authentication/**", "/cloudinary/**",
                         "/api/v1/auth/**",
                         "/v3/api-docs/**",
                         "/v3/api-docs.yaml",
