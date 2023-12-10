@@ -1,6 +1,7 @@
 package com.memorise.memorise_backend.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDTO {
     private int id;
@@ -8,6 +9,7 @@ public class UserDTO {
     private String name;
     private String avatar;
     private int roleId;
+    List<ImageDTO> imageDTOS;
 
     public int getId() {
         return id;
@@ -51,4 +53,11 @@ public class UserDTO {
     }
 
 
+    public List<ImageDTO> getImageDTOS() {
+        return imageDTOS;
+    }
+
+    public void setImageDTOS(List<ImageDTO> imageDTOS) {
+        this.imageDTOS = imageDTOS;
+    }
 }

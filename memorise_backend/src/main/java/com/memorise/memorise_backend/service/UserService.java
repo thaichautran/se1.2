@@ -1,6 +1,8 @@
 package com.memorise.memorise_backend.service;
 
+import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.dto.UserDTO;
+import com.memorise.memorise_backend.entity.Image;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.repository.UserRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserServiceImp {
@@ -45,6 +48,26 @@ public class UserService implements UserServiceImp {
         userDTO.setAvatar(user.getAvatar());
         userDTO.setRoleId(user.getRole().getId());
 
+        return userDTO;
+    }
+
+    @Override
+    public UserDTO getUserDTO(int id) {
+        Optional<User> user = userRepository.findById(id);
+        UserDTO userDTO = new UserDTO();
+        List<ImageDTO> listImg = new ArrayList<>();
+        for(Image img : user.get().getListImage()){
+            ImageDTO imageDTO = new ImageDTO();
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setUserId(user.get().getId());
+            imageDTO.setUrl(img.getUrl());
+
+            listImg.add(imageDTO);
+        }
+
+        userDTO.setImageDTOS(listImg);
         return userDTO;
     }
 
