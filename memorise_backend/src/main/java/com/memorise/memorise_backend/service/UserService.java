@@ -24,7 +24,6 @@ public class UserService implements UserServiceImp {
             UserDTO userDTO = new UserDTO();
             userDTO.setId(user.getId());
             userDTO.setUsername(user.getUsername());
-            userDTO.setPassword(user.getPassword());
             userDTO.setName(user.getName());
             userDTO.setAvatar(user.getAvatar());
             userDTOs.add(userDTO);
@@ -35,6 +34,18 @@ public class UserService implements UserServiceImp {
     @Override
     public User getUserByOtp(String otp) {
         return userRepository.findByOtp(otp);
+    }
+
+    @Override
+    public UserDTO getUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setName(user.getName());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setRoleId(user.getRole().getId());
+
+        return userDTO;
     }
 
 

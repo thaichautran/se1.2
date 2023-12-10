@@ -5,7 +5,6 @@ import java.util.Date;
 public class UserDTO {
     private int id;
     private String username;
-    private String password;
     private String name;
     private String avatar;
     private int roleId;
@@ -26,13 +25,6 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getName() {
         return name;
@@ -57,4 +49,6 @@ public class UserDTO {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
+
+
 }

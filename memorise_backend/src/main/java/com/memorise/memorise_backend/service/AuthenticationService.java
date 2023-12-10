@@ -1,8 +1,10 @@
 package com.memorise.memorise_backend.service;
 
+import com.memorise.memorise_backend.dto.UserDTO;
 import com.memorise.memorise_backend.entity.Role;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
+import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.payload.request.SignUpRequest;
 import com.memorise.memorise_backend.repository.RoleRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -62,6 +66,7 @@ public class AuthenticationService implements AuthenticationServiceImp {
 //        System.out.println(user.getUsername() + " " + user.getPassword());
         return passwordEncoder.matches(password, user.getPassword());
     }
+
 
     @Override
     public boolean updateResetPasswordOtp(String username, String otp) {
