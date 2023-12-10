@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -22,6 +23,13 @@ public class UserController {
     public ResponseEntity<?> getAllUsers(){
         RespondData respondData = new RespondData();
         respondData.setData(userServiceImp.getAllUserDTO());
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @GetMapping("/getuser")
+    public ResponseEntity<?> getUser(@RequestParam int userId){
+        RespondData respondData = new RespondData();
+        respondData.setData(userServiceImp.getUserDTO(userId));
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 }

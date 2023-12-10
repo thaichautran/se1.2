@@ -12,6 +12,8 @@ public interface UserServiceImp {
 
     UserDTO getUserDTO(User user);
 
+    UserDTO getUserDTO(int id);
+
 
 
 }
