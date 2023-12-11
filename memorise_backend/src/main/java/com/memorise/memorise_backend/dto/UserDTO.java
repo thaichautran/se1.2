@@ -9,6 +9,7 @@ public class UserDTO {
     private String name;
     private String avatar;
     private int roleId;
+    private Date createDate;
     List<ImageDTO> imageDTOS;
 
     public int getId() {
@@ -59,5 +60,13 @@ public class UserDTO {
 
     public void setImageDTOS(List<ImageDTO> imageDTOS) {
         this.imageDTOS = imageDTOS;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

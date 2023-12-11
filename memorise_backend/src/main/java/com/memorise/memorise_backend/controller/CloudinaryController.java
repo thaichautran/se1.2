@@ -52,9 +52,9 @@ public class CloudinaryController {
 //                                         @RequestParam String description,
 //                                         @RequestParam int userId){
 //        RespondData respondData = new RespondData();
-//        boolean isUploadImage = cloudinaryServiceImp.isUploadImage(file, name, location, description, userId);
+//        ImageDTO imageDTO =  cloudinaryServiceImp.isUploadImage(file, name, location, description, userId);
 //
-//        respondData.setData(isUploadImage);
+//        respondData.setData(imageDTO);
 //        return new ResponseEntity<>(respondData, HttpStatus.OK);
 //    }
 }

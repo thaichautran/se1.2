@@ -2,6 +2,7 @@ package com.memorise.memorise_backend.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -31,12 +32,12 @@ public class Image {
     @Column(name = "location")
     private String location;
 
-    @CreationTimestamp
-    @Column(name = "create_date", nullable = false, updatable = false)
+//    @CreationTimestamp
+    @Column(name = "create_date")
     private Date createDate;
 
-    @CreationTimestamp
-    @Column(name = "update_date", nullable = false, updatable = false)
+//    @CreationTimestamp
+    @Column(name = "update_date")
     private Date updateDate;
 
     @Column(name = "is_public")
