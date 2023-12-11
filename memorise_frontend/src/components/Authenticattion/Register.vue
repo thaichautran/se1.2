@@ -170,6 +170,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          loading.value = false;
           registerFaild.value = "Tài khoản đã tồn tại!";
         })
         .finally(() => {

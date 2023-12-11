@@ -124,6 +124,7 @@ import { decodeCredential } from "vue3-google-login";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { login } from "@/apis/user";
+
 export default {
   components: {
     MailOutlined,
@@ -152,6 +153,7 @@ export default {
         })
         .catch((err) => {
           console.log("Login failed", err);
+          loading.value = false;
           loginFaild.value = "Tài khoản hoặc mật khẩu không đúng!";
         })
         .finally(() => {

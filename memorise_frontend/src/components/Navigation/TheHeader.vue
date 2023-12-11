@@ -40,10 +40,7 @@
           </a-input>
         </div>
         <div class="header-row-right">
-          <span style="font-size: 16px" class="interactive">
-            <UploadOutlined />
-            Tải lên
-          </span>
+          <UploadModal></UploadModal>
           <SettingOutlined style="font-size: 20px" class="interactive" />
 
           <a-dropdown :trigger="['click']">
@@ -70,13 +67,13 @@ import {
   MenuFoldOutlined,
   SearchOutlined,
   SettingOutlined,
-  UploadOutlined,
   UserOutlined,
   LogoutOutlined,
 } from "@ant-design/icons-vue";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import UploadModal from "../Modal/UploadModal.vue";
 export default {
   components: {
     MenuUnfoldOutlined,
@@ -84,8 +81,9 @@ export default {
     SearchOutlined,
     SettingOutlined,
     UserOutlined,
-    UploadOutlined,
+
     LogoutOutlined,
+    UploadModal,
   },
   props: {
     collapsedToChild: {
@@ -97,7 +95,6 @@ export default {
     const router = useRouter();
     store.dispatch("user/loadFromLocalStorageAction");
     const token = computed(() => store.state.user.userLogin.token);
-
     let keySearch = ref("");
     const handleLogout = () => {
       store.dispatch("user/removeLocalStorageAction", { router });

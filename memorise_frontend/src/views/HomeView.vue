@@ -1,7 +1,7 @@
 <template>
   <section id="home">
     <div class="home-slider">
-      <swiper
+      <!-- <swiper
         :navigation="true"
         :modules="modules"
         :slidesPerView="4"
@@ -32,31 +32,31 @@
         <swiper-slide>
           <img src="../assets/image/bg4.jpg" alt="" />
         </swiper-slide>
-      </swiper>
+      </swiper> -->
     </div>
     <div class="home-gallery"></div>
   </section>
 </template>
 <script>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
+// import { Swiper, SwiperSlide } from "swiper/vue";
 
-// Import Swiper styles
-import "swiper/css";
+// // Import Swiper styles
+// import "swiper/css";
 
-import "swiper/css/navigation";
+// import "swiper/css/navigation";
 
-// import required modules
-import { Navigation } from "swiper/modules";
+// // import required modules
+// import { Navigation } from "swiper/modules";
 
 export default {
   components: {
-    Swiper,
-    SwiperSlide,
+    // Swiper,
+    // SwiperSlide,
   },
   setup() {
     return {
-      modules: [Navigation],
+      // modules: [Navigation],
     };
   },
 };
