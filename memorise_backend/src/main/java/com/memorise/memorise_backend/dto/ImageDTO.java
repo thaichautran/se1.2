@@ -1,11 +1,15 @@
 package com.memorise.memorise_backend.dto;
 
+import java.util.Date;
+
 public class ImageDTO {
     private String url;
     private String name;
     private String location;
     private String description;
     private int userId;
+    private Date createDate;
+    private Date updateDate;
 
     public ImageDTO() {
 
@@ -17,6 +21,18 @@ public class ImageDTO {
         this.location = location;
         this.description = description;
         this.userId = userId;
+
+    }
+
+
+    public ImageDTO(String url, String name, String location, String description, int userId, Date createDate, Date updateDate) {
+        this.url = url;
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.userId = userId;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 
     public String getUrl() {
@@ -57,5 +73,21 @@ public class ImageDTO {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

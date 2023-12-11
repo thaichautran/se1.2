@@ -12,6 +12,10 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.MySQL8Dialect
+    servlet:
+      multipart:
+        max-file-size: 100MB
+        max-request-size: 100MB
     mail:
         host: smtp.gmail.com
         username: hoangmanhdung18102003@gmail.com

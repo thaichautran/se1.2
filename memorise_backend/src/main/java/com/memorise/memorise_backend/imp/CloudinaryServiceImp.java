@@ -10,7 +10,8 @@ import java.util.Map;
 
 public interface CloudinaryServiceImp {
     Map upload(MultipartFile file);
-    ImageDTO isUploadImage(UploadRequest uploadRequest);
+    ImageDTO uploadImage(UploadRequest uploadRequest);
+    ImageDTO uploadVideo(UploadRequest uploadRequest);
     ImageDTO isUploadImage(MultipartFile file, UploadRequest uploadRequest);
     ImageDTO isUploadImage(MultipartFile file, String name, String location, String description, int userId);
 }

@@ -3,6 +3,7 @@ package com.memorise.memorise_backend.controller;
 import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
-
+@Tag(name = "Get users")
 public class UserController {
     @Autowired
     UserServiceImp userServiceImp;
