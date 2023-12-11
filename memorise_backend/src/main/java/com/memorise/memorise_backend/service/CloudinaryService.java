@@ -11,6 +11,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import com.drew.metadata.mp4.Mp4Directory;
 import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.dto.UserDTO;
 import com.memorise.memorise_backend.entity.Image;
@@ -156,13 +157,22 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(uploadRequest.getFile().getInputStream(), uploadRequest.getFile().getSize());
-
+            for (Directory directory : metadata.getDirectories()) {
+                for (Tag tag : directory.getTags()) {
+                    System.out.format("[%s] - %s = %s", directory.getName(), tag.getTagName(), tag.getDescription());
+                    System.out.println();
+                }
+            }
             // Try to get Exif metadata
-            ExifSubIFDDirectory exifDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-            if (exifDirectory != null) {
-                originCreatedDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+            // Try to get Exif metadata
+            Mp4Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
+            if (mp4Directory != null) {
+                originCreatedDate = mp4Directory.getDate(Mp4Directory.TAG_CREATION_TIME);
+                System.out.println("Creation date: " + originCreatedDate);
             } else {
                 originCreatedDate = new Date();
+                System.out.println("No Exif metadata found in the uploaded image.");
+                // Handle the case when Exif metadata is not present
             }
         } catch (Exception e) {
             System.out.println("Error to get created date");
@@ -204,8 +214,6 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(uploadRequest.getFile().getInputStream(), uploadRequest.getFile().getSize());
-
-            // Try to get Exif metadata
             ExifSubIFDDirectory exifDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             if (exifDirectory != null) {
                 Date creationDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
