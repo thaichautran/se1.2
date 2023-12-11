@@ -13,28 +13,29 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
   - Download WSL từ trang web vài cài đặt(kéo xuống step 4): **https://learn.microsoft.com/en-us/windows/wsl/install-manual**
   - Sau khi cài đặt xong, ta sẽ có được biểu tượng Docker Desktop:
 #####  1.2 Cài đặt MySQL trên Docker:
-  - Mở Docker Desktop vừa tải về
+  - Mở Docker Desktop vừa tải về.
   - Mở cửa sổ cmd, gõ lệnh: **docker pull mysql**
-  - Sau khi pull về, mở tab images trong Docker Desktop kiểm tra xem images mysql đã được pull về chưa
-    ![markdown](https://drive.google.com/file/d/1n285Ljri1zGfI7-hK8mnlbUpG5LP43FP/view?usp=drive_link)
-  - gõ lệnh để chạy images mysql:
-    **docker run --name name(tự đặt) -p 3307(port ngoài, tự đặt):3306(port trong) -e MYSQL_ROOT_PASSWORD=password(tự đặt) -d mysql:latest**
-  - Sau khi run, vào tab container, kiểm tra xem MySQL đã được run hay chưa, nếu thấy container MySQL đã chạy ở trạng thái running là thành công
-    ![markdown](https://drive.google.com/file/d/1m6NmJofpuUV_7BBDvpHq5aquAwEIIYgC/view?usp=drive_link)
+  - Sau khi pull về, mở tab images trong Docker Desktop kiểm tra xem images mysql đã được pull về chưa:
+    ![image](https://github.com/thaichautran/se1.2/assets/110666723/d01ae95a-3fff-4252-89c1-3f9d37538716)
+  - Gõ lệnh để chạy images mysql: 
+#### docker run --name name(tự đặt) -p 3307(port ngoài, tự đặt):3306(port trong) -e MYSQL_ROOT_PASSWORD=password(tự đặt) -d mysql:latest
+  - Sau khi run, vào tab container, kiểm tra xem MySQL đã được run hay chưa, nếu thấy container MySQL đã chạy ở trạng thái running là thành công:
+    ![image](https://github.com/thaichautran/se1.2/assets/110666723/4a6cae99-bd16-4465-b438-4e4170168f96)
+
 #### 2.Cài đặt MySQL MySQLWorkbench:
 #####  2.1 Download MySQLWorkbench từ trang web và cài đặt: **https://dev.mysql.com/downloads/workbench/**
 #####  2.2 Mở MySQLWorkbench lên để kết nối với MySQL trên Docker: 
-  - Click vào nút dấu + để tạo kết nối mới, một bảng config sẽ hiện ra
-   ![markdown](https://drive.google.com/file/d/1IM8zbj1ho21q1RqGA5AwERlnS3Fsxl-A/view?usp=drive_link)
-  - Tại dòng Connection Name: Nhập tên cho MySQL Connection
-  - Tại dòng Port điền port ngoài đã cài đặt cho container MySQL đã config trước đó, ở đây là 3307
-  - Tại dòng Store in Vault: nhập password đã setup trước đó, ở đây là admin123
-  - Port và Password bạn có thể setup tùy theo ý bạn
+  - Click vào nút dấu + để tạo kết nối mới, một bảng config sẽ hiện ra.
+   ![image](https://github.com/thaichautran/se1.2/assets/110666723/eff32b93-2fb7-4d88-9593-a02227397c46)
+  - Tại dòng Connection Name: Nhập tên cho MySQL Connection.
+  - Tại dòng Port điền port ngoài đã cài đặt cho container MySQL đã config trước đó, ở đây là 3307.
+  - Tại dòng Store in Vault: nhập password đã setup trước đó, ở đây là admin123.
+  - Port và Password bạn có thể setup tùy theo ý bạn.
   - Sau đó ấn vào Test connection, nếu thành công, một pop-up sẽ hiện ra:
-    ![markdown](https://drive.google.com/file/d/1oG-OgjL1hl4Jy_eVPDYEyV2M0ebcXKD6/view?usp=drive_link)
-  - Ấn ok, khi đó một MySQL Connection đã được tạo, click vào đó để làm việc với MySQL
-  - Pull code dự án từ github về thì mở file SQL Script trong dự án tại: memorise_backend/src/main/java/sql_command/memorise_sql.sql, và ấn vào biểu tượng Run(hình sấm sét trên thanh công cụ) để tạo database
-   ![markdown]([https://drive.google.com/file/d/1oG-OgjL1hl4Jy_eVPDYEyV2M0ebcXKD6/view?usp=drive_link](https://drive.google.com/file/d/1pKwpOGjpYgCF5ZiVQH55YWULBuaTJNao/view?usp=drive_link))
+    ![image](https://github.com/thaichautran/se1.2/assets/110666723/9181a9c8-e2d4-43a4-b8f0-24f2bdd38dc9)
+  - Ấn ok, khi đó một MySQL Connection đã được tạo, click vào đó để làm việc với MySQL.
+  - Pull code dự án từ github về thì mở file SQL Script trong dự án tại: memorise_backend/src/main/java/sql_command/memorise_sql.sql, và ấn vào biểu tượng Run(hình sấm sét trên thanh công cụ) để tạo database:
+  ![image](https://github.com/thaichautran/se1.2/assets/110666723/98f4db29-c5a2-43ba-8cce-75ed5d3df250)
 #### 3.Cài đặt Postman để testAPI:
   - Download Postman và cài đặt: **https://www.postman.com/downloads/**
 #### 4.Cài đặt Intelij bản Ultimate:
