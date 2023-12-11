@@ -1,6 +1,6 @@
 # se1.2
 Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
-### hosting web: https://memorise-d34b0.web.app/
+### Hosting web: https://memorise-d34b0.web.app/
 
 ### Technologies
 - Frontend: Vuejs
@@ -75,6 +75,17 @@ Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo
 
 **Khôi phục ảnh sau khi xóa:**
 - Đảm bảo 100% người dùng có thể khôi phục dữ liệu ảnh đã bị xóa trong vòng 30 ngày kể từ ngày xóa.
+
+### Phân loại mức độ nghiêm trọng của lỗi:
+1. Cao:
+- **Mô tả: **Những lỗi này ảnh hưởng nghiêm trọng tới toàn bộ hệ thống, khiến hệ thống không thể sử dụng được. Những lỗi này có thể gây mất dữ liệu, làm hệ thống bị treo, gây ra các lỗi nghiêm trọng về bảo mật.
+- Ví dụ: Hệ thống không xác thực được người dùng
+2. Trung bình:
+- **Mô tả:** Những lỗi này ảnh hưởng đến những chức năng quan trọng trong hệ thống nhưng những phần còn lại của hệ thống không bị ảnh hưởng. Những lỗi này có thể gây ra những vấn đề về hiệu suất hoặc tạo ra sự khó chịu với người dùng.
+- **Ví dụ:** Khi người dùng nhập thông tin vào phần điền thông tin không đúng yêu cầu của hệ thống, người dùng không nhận được thông báo lỗi trả về.
+3. Thấp:
+- **Mô tả:** Những lỗi này gần như không ảnh hưởng đến hệ thống. Những lỗi này có thể tạo ra những lỗi liên quan đến mặt hiển thị nhưng không ảnh hưởng đến các chức năng chính.
+- **Ví dụ:** Ảnh hiển thị không đúng với tỷ lệ mô tả ban đầu.
 
 
 
