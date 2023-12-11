@@ -6,15 +6,18 @@
     </span>
     <a-modal
       v-model:open="open"
-      title="Thêm kỷ niệm"
       :confirm-loading="confirmLoading"
-      @ok="handleOk"
-      width="700px"
+      width="1000px"
     >
+      <h1>Thêm kỷ niệm</h1>
+      <p style="color: #6e7787; font-size: 16px">
+        Bạn có thể thêm kỷ niệm sau khi tải ảnh lên
+      </p>
       <template #footer>
         <a-button key="back" style="border-radius: 18px" @click="handleCancel"
           >Hủy</a-button
         >
+
         <a-button
           key="submit"
           style="border-radius: 18px"
@@ -24,7 +27,7 @@
         >
       </template>
       <a-row class="modal-upload-input" :gutter="32">
-        <a-col :span="14" class="modal-upload-input-left">
+        <a-col :span="12" class="modal-upload-input-left">
           <a-form :model="formState">
             <a-row :gutter="16">
               <a-col :span="12">
@@ -53,30 +56,44 @@
                     v-model:value="formState.desc"
                     placeholder="Mô tả kỷ niệm"
                     :rows="4"
-                    style="height: 128px"
+                    style="height: 170px"
                   />
                 </a-form-item>
               </a-col>
             </a-row>
           </a-form>
         </a-col>
-        <a-col :span="10" class="modal-upload-input-right">
+        <a-col
+          :span="12"
+          class="modal-upload-input-right"
+          style="margin-bottom: 2rem"
+        >
           <a-upload-dragger
-            v-model:fileList="fileList"
             name="file"
-            :multiple="true"
-            @change="handleChange"
+            :multiple="false"
+            :max-count="1"
+            :before-upload="beforeUpload"
             @drop="handleDrop"
+            @change="handleChange"
+            @remove="handleRemove"
           >
-            <p class="ant-upload-drag-icon">
-              <CloudUploadOutlined />
-            </p>
-            <p class="ant-upload-text">Keo thả ảnh hoặc video vào đây</p>
-            <p class="ant-upload-hint">
-              Định dạng được hỗ trợ: PNG, JPG và MP4
-            </p>
-            <p class="ant-upload-text">Hoặc</p>
-            <p class="ant-upload-hint">Lựa chọn tệp từ máy tính</p>
+            <img
+              v-if="imageUrl"
+              :src="imageUrl"
+              style="width: 100%; height: 100%; object-fit: cover"
+              alt="preview"
+            />
+            <div v-else>
+              <p class="ant-upload-drag-icon">
+                <CloudUploadOutlined />
+              </p>
+              <p class="ant-upload-text">Kéo thả ảnh hoặc video vào đây</p>
+              <p class="ant-upload-hint">
+                Định dạng được hỗ trợ: PNG, JPG và MP4
+              </p>
+              <p class="ant-upload-text">Hoặc</p>
+              <p class="ant-upload-hint">Lựa chọn tệp từ máy tính</p>
+            </div>
           </a-upload-dragger>
         </a-col>
       </a-row>
@@ -85,50 +102,94 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { UploadOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
+import { uploadImage } from "@/apis/images";
+import { useStore } from "vuex";
 export default {
   components: {
     UploadOutlined,
     CloudUploadOutlined,
   },
   setup() {
+    const store = useStore();
     const open = ref(false);
+    const loading = ref(false);
     const confirmLoading = ref(false);
-
+    const fileUpload = ref("");
+    const fileList = ref([]);
+    const imageUrl = ref("");
     const formState = reactive({
       name: "",
       location: "",
       desc: "",
     });
-
+    const userId = computed(() => store.state.user.userLogin.userDTO.id);
+    const token = computed(() => store.state.user.userLogin.token);
     //show modal
     const showModal = () => {
-      open.value = true;
+      if (token.value) {
+        open.value = true;
+      } else {
+        message.error("Bạn cần đăng nhập để tải lên");
+      }
     };
-    const handleOk = () => {
+    //upload
+    function getBase64(img, callback) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => callback(reader.result));
+      reader.readAsDataURL(img);
+    }
+    const beforeUpload = (file) => {
+      fileUpload.value = file;
+      return false;
+    };
+    const handleChange = (info) => {
+      console.log(info);
+      if (info.fileList.length > 0) {
+        getBase64(info.file, (base64Url) => {
+          imageUrl.value = base64Url;
+          loading.value = false;
+        });
+      }
+    };
+    const handleRemove = () => {
+      imageUrl.value = "";
+    };
+
+    function handleDrop(e) {
+      console.log(e);
+    }
+    const handleOk = async () => {
+      let bodyFormData = new FormData();
+      bodyFormData.append("file", fileUpload.value);
+      bodyFormData.append("name", formState.name);
+      bodyFormData.append("description", formState.desc);
+      bodyFormData.append("location", formState.location);
+      bodyFormData.append("userId", userId.value);
       confirmLoading.value = true;
+      loading.value = true;
+      await uploadImage(bodyFormData, token.value)
+        .then((res) => {
+          console.log(res);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.success("Tải lên thành công");
+        })
+        .catch((err) => {
+          console.log(err);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.error("Tải lên thất bại");
+        });
     };
     const handleCancel = () => {
       open.value = false;
     };
-    //upload
-    const fileList = ref([]);
-    const handleChange = (info) => {
-      const status = info.file.status;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    };
-    function handleDrop(e) {
-      console.log(e);
-    }
+
     return {
       open,
       confirmLoading,
@@ -137,14 +198,34 @@ export default {
       handleCancel,
       formState,
       fileList,
+      loading,
       handleChange,
       handleDrop,
+      fileUpload,
+      beforeUpload,
+      handleRemove,
+      imageUrl,
+      getBase64,
     };
   },
 };
 </script>
-<style lang="scss" scoped>
+
+<style>
 .interactive {
   cursor: pointer;
+}
+.avatar-uploader > .ant-upload {
+  width: 128px;
+  height: 128px;
+}
+.ant-upload-select-picture-card i {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-upload-select-picture-card .ant-upload-text {
+  margin-top: 8px;
+  color: #666;
 }
 </style>
