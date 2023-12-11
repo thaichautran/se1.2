@@ -5,6 +5,10 @@ import com.memorise.memorise_backend.entity.Image;
 import com.memorise.memorise_backend.imp.CloudinaryServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
 import com.memorise.memorise_backend.payload.request.UploadRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,14 +20,48 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/cloudinary")
+@Tag(name = "Cloudinary upload")
 public class CloudinaryController {
     @Autowired
     CloudinaryServiceImp cloudinaryServiceImp;
 
-    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
+    @Operation(
+            description = "Upload images to Cloudinary",
+            summary = "This API to upload images to Cloudinary",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping(value = "/upload_image", consumes = {"multipart/form-data"})
     public ResponseEntity<?> uploadImage(@ModelAttribute UploadRequest uploadRequest){
         RespondData respondData = new RespondData();
-        ImageDTO imageDTO = cloudinaryServiceImp.isUploadImage(uploadRequest);
+        ImageDTO imageDTO = cloudinaryServiceImp.uploadImage(uploadRequest);
+
+        respondData.setDesc("Upload file successfully!");
+        respondData.setData(imageDTO);
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+
+    @Operation(
+            description = "Upload videos to Cloudinary",
+            summary = "This API to upload videos to Cloudinary",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping(value = "/upload_video", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> uploadVideo(@ModelAttribute UploadRequest uploadRequest){
+        RespondData respondData = new RespondData();
+        ImageDTO imageDTO = cloudinaryServiceImp.uploadVideo(uploadRequest);
 
         respondData.setDesc("Upload file successfully!");
         respondData.setData(imageDTO);
