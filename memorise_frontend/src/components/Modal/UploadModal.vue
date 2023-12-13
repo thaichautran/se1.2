@@ -23,6 +23,7 @@
           style="border-radius: 18px"
           :loading="loading"
           @click="handleOk"
+          :disabled="fileUpload == ''"
           >Tải lên</a-button
         >
       </template>
@@ -76,13 +77,22 @@
             @drop="handleDrop"
             @change="handleChange"
             @remove="handleRemove"
+            style="display: block; max-height: 250px"
           >
             <img
               v-if="imageUrl"
               :src="imageUrl"
-              style="width: 100%; height: 100%; object-fit: cover"
-              alt="preview"
+              style="width: 100%; max-height: 226px; object-fit: cover"
+              alt="preview Image"
             />
+            <video
+              v-else-if="videoUrl"
+              controls
+              style="width: 100%; max-height: 226px"
+            >
+              <source :src="videoUrl" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
             <div v-else>
               <p class="ant-upload-drag-icon">
                 <CloudUploadOutlined />
@@ -105,7 +115,7 @@
 import { ref, reactive, computed } from "vue";
 import { UploadOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { uploadImage } from "@/apis/images";
+import { uploadImage, uploadVideo } from "@/apis/images";
 import { useStore } from "vuex";
 export default {
   components: {
@@ -120,12 +130,12 @@ export default {
     const fileUpload = ref("");
     const fileList = ref([]);
     const imageUrl = ref("");
+    const videoUrl = ref("");
     const formState = reactive({
       name: "",
       location: "",
       desc: "",
     });
-    const userId = computed(() => store.state.user.userLogin.userDTO.id);
     const token = computed(() => store.state.user.userLogin.token);
     //show modal
     const showModal = () => {
@@ -142,18 +152,68 @@ export default {
       reader.readAsDataURL(img);
     }
     const beforeUpload = (file) => {
+      const isJpgOrPng =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpg" ||
+        file.type === "video/mp4";
+      if (!isJpgOrPng) {
+        message.error("Chỉ có thể tải lên ảnh hoặc video!");
+        fileUpload.value = "";
+        imageUrl.value = "";
+        videoUrl.value = "";
+        return false;
+      }
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/jpg"
+      ) {
+        const isLt10M = file.size / 1024 / 1024 < 10;
+        if (!isLt10M) {
+          message.error("Ảnh phải nhỏ hơn 10MB!");
+          imageUrl.value = "";
+          videoUrl.value = "";
+          fileUpload.value = "";
+          return false;
+        }
+        fileUpload.value = file;
+        return false;
+      } else if (file.type === "video/mp4") {
+        const isLt100M = file.size / 1024 / 1024 < 100;
+        if (!isLt100M) {
+          message.error("Video phải nhỏ hơn 100MB!");
+          imageUrl.value = "";
+          videoUrl.value = "";
+          fileUpload.value = "";
+          return false;
+        }
+        fileUpload.value = file;
+        return false;
+      }
       fileUpload.value = file;
       return false;
     };
     const handleChange = (info) => {
-      console.log(info);
       if (info.fileList.length > 0) {
-        getBase64(info.file, (base64Url) => {
-          imageUrl.value = base64Url;
+        if (
+          info.file.type == "image/jpeg" ||
+          info.file.type == "image/png" ||
+          info.file.type == "image/jpg"
+        ) {
+          getBase64(info.file, (base64Url) => {
+            imageUrl.value = base64Url;
+            videoUrl.value = null;
+            loading.value = false;
+          });
+        } else if (info.file.type == "video/mp4") {
+          imageUrl.value = null;
+          videoUrl.value = URL.createObjectURL(info.file);
           loading.value = false;
-        });
+        }
       }
     };
+
     const handleRemove = () => {
       imageUrl.value = "";
     };
@@ -161,16 +221,27 @@ export default {
     function handleDrop(e) {
       console.log(e);
     }
+    const callApiUpload = (bodyFormData, token) => {
+      if (
+        fileUpload.value.type == "image/jpeg" ||
+        fileUpload.value.type == "image/jpg" ||
+        fileUpload.value.type == "image/png"
+      ) {
+        return uploadImage(bodyFormData, token);
+      } else if (fileUpload.value.type == "video/mp4") {
+        return uploadVideo(bodyFormData, token);
+      }
+    };
     const handleOk = async () => {
       let bodyFormData = new FormData();
       bodyFormData.append("file", fileUpload.value);
       bodyFormData.append("name", formState.name);
       bodyFormData.append("description", formState.desc);
       bodyFormData.append("location", formState.location);
-      bodyFormData.append("userId", userId.value);
+
       confirmLoading.value = true;
       loading.value = true;
-      await uploadImage(bodyFormData, token.value)
+      await callApiUpload(bodyFormData, token.value)
         .then((res) => {
           console.log(res);
           confirmLoading.value = false;
@@ -206,6 +277,8 @@ export default {
       handleRemove,
       imageUrl,
       getBase64,
+      videoUrl,
+      callApiUpload,
     };
   },
 };
