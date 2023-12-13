@@ -3,36 +3,51 @@ package com.memorise.memorise_backend.dto;
 import java.util.Date;
 
 public class ImageDTO {
+    private int id;
     private String url;
     private String name;
     private String location;
     private String description;
-    private int userId;
     private Date createDate;
     private Date updateDate;
+
+    private boolean isFavourite = false;
+    private boolean isPublic = false;
+    private boolean isRemove = false;
 
     public ImageDTO() {
 
     }
 
-    public ImageDTO(String url, String name, String location, String description, int userId) {
+    public ImageDTO(int id, String url, String name, String location, String description, Date createDate, Date updateDate) {
+        this.id = id;
         this.url = url;
         this.name = name;
         this.location = location;
         this.description = description;
-        this.userId = userId;
-
-    }
-
-
-    public ImageDTO(String url, String name, String location, String description, int userId, Date createDate, Date updateDate) {
-        this.url = url;
-        this.name = name;
-        this.location = location;
-        this.description = description;
-        this.userId = userId;
         this.createDate = createDate;
         this.updateDate = updateDate;
+    }
+
+    public ImageDTO(int id, String url, String name, String location, String description, Date createDate, Date updateDate, boolean isFavourite, boolean isPublic, boolean isRemove) {
+        this.id = id;
+        this.url = url;
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+        this.isFavourite = isFavourite;
+        this.isPublic = isPublic;
+        this.isRemove = isRemove;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUrl() {
@@ -67,14 +82,6 @@ public class ImageDTO {
         this.description = description;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
@@ -89,5 +96,29 @@ public class ImageDTO {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public boolean isRemove() {
+        return isRemove;
+    }
+
+    public void setRemove(boolean remove) {
+        isRemove = remove;
     }
 }

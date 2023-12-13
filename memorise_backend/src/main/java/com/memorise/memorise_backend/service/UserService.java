@@ -79,7 +79,7 @@ public class UserService implements UserServiceImp {
             imageDTO.setName(img.getName());
             imageDTO.setLocation(img.getLocation());
             imageDTO.setDescription(img.getDescription());
-            imageDTO.setUserId(user.get().getId());
+            imageDTO.setId(img.getId());
             imageDTO.setUrl(img.getUrl());
 
             listImg.add(imageDTO);
