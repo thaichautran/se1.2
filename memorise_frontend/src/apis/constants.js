@@ -6,8 +6,8 @@ const CHECK_OTP = "/authentication/check_otp";
 const RESET_PASSWORD = "/authentication/reset_password";
 
 //image
-const UPLOAD_IMAGE = "/cloudinary/upload";
-
+const UPLOAD_IMAGE = "/cloudinary/upload_image";
+const UPLOAD_VIDEO = "/cloudinary/upload_video";
 export {
   USER_REGISTER,
   USER_LOGIN,
@@ -15,4 +15,5 @@ export {
   CHECK_OTP,
   RESET_PASSWORD,
   UPLOAD_IMAGE,
+  UPLOAD_VIDEO,
 };
