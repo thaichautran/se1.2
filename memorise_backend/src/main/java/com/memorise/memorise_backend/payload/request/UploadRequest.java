@@ -8,7 +8,6 @@ public class UploadRequest {
     private String name;
     private String description;
     private String location;
-    private int userId;
 
     public String getName() {
         return name;
@@ -32,14 +31,6 @@ public class UploadRequest {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public MultipartFile getFile() {

@@ -22,6 +22,7 @@ import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -103,6 +104,8 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
     @Override
     public ImageDTO uploadImage(UploadRequest uploadRequest) {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
 
         try {
@@ -137,13 +140,13 @@ public class CloudinaryService implements CloudinaryServiceImp {
             image.setSharingUrl(url);
             image.setCreateDate(originCreatedDate);
             image.setUpdateDate(updateDate);
-            Optional<User> user = userRepository.findById(uploadRequest.getUserId());
+            Optional<User> user = userRepository.findById(userId);
             if (user != null) {
                 image.setUser(user.get());
             }
             imageRepository.save(image);
 
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), uploadRequest.getUserId(), originCreatedDate, updateDate);
+            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error to upload file");
@@ -153,6 +156,8 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
     @Override
     public ImageDTO uploadVideo(UploadRequest uploadRequest) {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
 
         try {
@@ -193,13 +198,13 @@ public class CloudinaryService implements CloudinaryServiceImp {
             image.setSharingUrl(url);
             image.setCreateDate(originCreatedDate);
             image.setUpdateDate(updateDate);
-            Optional<User> user = userRepository.findById(uploadRequest.getUserId());
+            Optional<User> user = userRepository.findById(userId);
             if (user != null) {
                 image.setUser(user.get());
             }
             imageRepository.save(image);
 
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), uploadRequest.getUserId(), originCreatedDate, updateDate);
+            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error to upload file");
@@ -210,6 +215,8 @@ public class CloudinaryService implements CloudinaryServiceImp {
     //    Test other parameters
     @Override
     public ImageDTO isUploadImage(MultipartFile file, UploadRequest uploadRequest) {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
 
         try {
@@ -245,14 +252,14 @@ public class CloudinaryService implements CloudinaryServiceImp {
             image.setDescription(uploadRequest.getDescription());
             image.setLocation(uploadRequest.getLocation());
             image.setSharingUrl(url);
-            Optional<User> user = userRepository.findById(uploadRequest.getUserId());
+            Optional<User> user = userRepository.findById(userId);
 
             if (user != null) {
                 image.setUser(user.get());
             }
 
             imageRepository.save(image);
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), uploadRequest.getUserId(), originCreatedDate, updateDate);
+            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
         } catch (Exception e) {
             System.out.println("Error to upload file");
             return null;
@@ -260,7 +267,9 @@ public class CloudinaryService implements CloudinaryServiceImp {
     }
 
     @Override
-    public ImageDTO isUploadImage(MultipartFile file, String name, String location, String description, int userId) {
+    public ImageDTO isUploadImage(MultipartFile file, String name, String location, String description) {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
 
         try {
