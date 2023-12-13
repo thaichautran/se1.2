@@ -13,5 +13,5 @@ public interface CloudinaryServiceImp {
     ImageDTO uploadImage(UploadRequest uploadRequest);
     ImageDTO uploadVideo(UploadRequest uploadRequest);
     ImageDTO isUploadImage(MultipartFile file, UploadRequest uploadRequest);
-    ImageDTO isUploadImage(MultipartFile file, String name, String location, String description, int userId);
+    ImageDTO isUploadImage(MultipartFile file, String name, String location, String description);
 }

@@ -110,3 +110,4 @@ insert into image(url) value("Test date");
 select * from user;
 select * from image;
 
+-- DELETE FROM image WHERE id >=0 and id <= 55;

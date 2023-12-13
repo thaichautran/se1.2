@@ -1,5 +1,7 @@
 package com.memorise.memorise_backend.utils;
 
+import com.memorise.memorise_backend.dto.UserDTO;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -21,6 +23,7 @@ public class JwtUtilsHelper {
     public boolean verifyToken(String token){
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(privateKey));
         try{
+
             Jwts.parser()
                     .verifyWith(key)
                     .build()
@@ -28,6 +31,20 @@ public class JwtUtilsHelper {
             return true;
         } catch (Exception e){
             return false;
+        }
+    }
+
+    public String getUserNameAndIdFromJwtToken(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(privateKey));
+        try{
+            return Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getBody().getSubject();
+
+        } catch (Exception e){
+            return null;
         }
     }
 }

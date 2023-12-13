@@ -1,8 +1,7 @@
 package com.memorise.memorise_backend.controller;
 
-import com.memorise.memorise_backend.dto.InfoLoginDTO;
 import com.memorise.memorise_backend.dto.OtpDTO;
-import com.memorise.memorise_backend.dto.UserDTO;
+import com.memorise.memorise_backend.dto.TokenDTO;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
 import com.memorise.memorise_backend.imp.UserServiceImp;
@@ -141,13 +140,12 @@ public class AuthenticationController {
             return new ResponseEntity<>(respondData, HttpStatus.UNAUTHORIZED);
         }
         respondData.setDesc("Login successfully");
-        String token = jwtUtilsHelper.generateToken(loginRequest.getUsername());
+//        UserDTO userDTO = userServiceImp.getUserDTO(userRepository.findByUsername(loginRequest.getUsername()));
+
         User user = userRepository.findByUsername(loginRequest.getUsername());
-        UserDTO userDTO = userServiceImp.getUserDTO(user);
-
-        InfoLoginDTO infoLoginDTO = new InfoLoginDTO(token, userDTO);
-
-        respondData.setData(infoLoginDTO);
+        String token = jwtUtilsHelper.generateToken(loginRequest.getUsername() + " - " + user.getId());
+        TokenDTO tokenDTO = new TokenDTO(token);
+        respondData.setData(tokenDTO);
 
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
