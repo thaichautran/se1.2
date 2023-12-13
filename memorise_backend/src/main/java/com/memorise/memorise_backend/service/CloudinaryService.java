@@ -57,7 +57,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
             // Use uploadLarge for videos
             Map<String, Object> uploadResult = cloudinary.uploader().uploadLarge(uploadedFile, uploadParams);
 //
-//            boolean isDeleted = uploadedFile.delete();
+            boolean isDeleted = uploadedFile.delete();
 //
 //            if (isDeleted) {
 //                System.out.println("File successfully deleted");
@@ -146,7 +146,10 @@ public class CloudinaryService implements CloudinaryServiceImp {
             }
             imageRepository.save(image);
 
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
+            Image image1 = imageRepository.findByUrl(url);
+            int idImage = image1.getId();
+            return new ImageDTO(idImage, url, uploadRequest.getName(), uploadRequest.getLocation(),
+                    uploadRequest.getDescription(), originCreatedDate, updateDate);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error to upload file");
@@ -162,18 +165,18 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
         try {
             Metadata metadata = ImageMetadataReader.readMetadata(uploadRequest.getFile().getInputStream(), uploadRequest.getFile().getSize());
-            for (Directory directory : metadata.getDirectories()) {
-                for (Tag tag : directory.getTags()) {
-                    System.out.format("[%s] - %s = %s", directory.getName(), tag.getTagName(), tag.getDescription());
-                    System.out.println();
-                }
-            }
+//            for (Directory directory : metadata.getDirectories()) {
+//                for (Tag tag : directory.getTags()) {
+//                    System.out.format("[%s] - %s = %s", directory.getName(), tag.getTagName(), tag.getDescription());
+//                    System.out.println();
+//                }
+//            }
             // Try to get Exif metadata
             // Try to get Exif metadata
             Mp4Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
             if (mp4Directory != null) {
                 originCreatedDate = mp4Directory.getDate(Mp4Directory.TAG_CREATION_TIME);
-                System.out.println("Creation date: " + originCreatedDate);
+//                System.out.println("Creation date: " + originCreatedDate);
             } else {
                 originCreatedDate = new Date();
                 System.out.println("No Exif metadata found in the uploaded image.");
@@ -204,7 +207,10 @@ public class CloudinaryService implements CloudinaryServiceImp {
             }
             imageRepository.save(image);
 
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
+            Image image1 = imageRepository.findByUrl(url);
+            int idImage = image1.getId();
+            return new ImageDTO(idImage, url, uploadRequest.getName(), uploadRequest.getLocation(),
+                    uploadRequest.getDescription(), originCreatedDate, updateDate);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error to upload file");
@@ -214,7 +220,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
     //    Test other parameters
     @Override
-    public ImageDTO isUploadImage(MultipartFile file, UploadRequest uploadRequest) {
+    public boolean isUploadImage(MultipartFile file, UploadRequest uploadRequest) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
@@ -259,15 +265,15 @@ public class CloudinaryService implements CloudinaryServiceImp {
             }
 
             imageRepository.save(image);
-            return new ImageDTO(url, uploadRequest.getName(), uploadRequest.getLocation(), uploadRequest.getDescription(), userId, originCreatedDate, updateDate);
+            return true;
         } catch (Exception e) {
             System.out.println("Error to upload file");
-            return null;
+            return false;
         }
     }
 
     @Override
-    public ImageDTO isUploadImage(MultipartFile file, String name, String location, String description) {
+    public boolean isUploadImage(MultipartFile file, String name, String location, String description) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - " )[1]);
         Date originCreatedDate = null;
@@ -312,10 +318,10 @@ public class CloudinaryService implements CloudinaryServiceImp {
                 image.setUser(user.get());
             }
             imageRepository.save(image);
-            return new ImageDTO(url, name, location, description, userId, originCreatedDate, updateDate);
+            return true;
         } catch (Exception e) {
             System.out.println("Error to upload file");
-            return null;
+            return false;
         }
     }
 
