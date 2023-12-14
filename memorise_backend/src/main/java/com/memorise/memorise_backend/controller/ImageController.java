@@ -10,9 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,9 +42,49 @@ public class ImageController {
             respondData.setData(imageDTOList);
         } else {
             respondData.setDesc("User does not have some files");
-            respondData.setData("");
+            respondData.setData(null);
         }
 
         return  new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Update a favourite image",
+            summary = "This API to make a favourite image",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/favourite")
+    public ResponseEntity<?> updateFavouriteImage(@RequestParam int id){
+        RespondData respondData = new RespondData();
+
+        ImageDTO imageDTO = imageServiceImp.updateFavouriteImage(id);
+        respondData.setData(imageDTO);
+        respondData.setDesc("Update image favourite successfully!");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Get all favourite images",
+            summary = "This API to get all favourite images",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/get_favourite")
+    public ResponseEntity<?> getFavouriteImages(){
+        RespondData respondData = new RespondData();
+
+        List<ImageDTO> imageDTOS = imageServiceImp.getFavouriteImages();
+        respondData.setData(imageDTOS);
+        respondData.setDesc("Get favourite images successfully!");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 }

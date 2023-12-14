@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ImageServiceImp {
     List<ImageDTO> getAllImages();
+    ImageDTO updateFavouriteImage(int id);
+    List<ImageDTO> getFavouriteImages();
 }
