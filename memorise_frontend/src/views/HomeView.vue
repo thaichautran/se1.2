@@ -1,117 +1,113 @@
 <template>
   <section id="home">
-    <div class="home-slider">
-      <!-- <swiper
-        :navigation="true"
-        :modules="modules"
-        :slidesPerView="4"
-        :loop="true"
-        class="mySwiper"
-      >
-        <swiper-slide>
-          <img src="../assets/image/bg1.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg2.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg3.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg4.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg1.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg2.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg3.jpg" alt="" />
-        </swiper-slide>
-        <swiper-slide>
-          <img src="../assets/image/bg4.jpg" alt="" />
-        </swiper-slide>
-      </swiper> -->
+    <div v-if="token">
+      <div class="home-slider">
+        <SwipSlider />
+      </div>
+      <div class="home-gallery">
+        <div
+          v-for="date in createdDateList"
+          style="margin-bottom: 20px"
+          :key="date"
+        >
+          <p style="margin-top: 100px">
+            {{ dayjs(date, "DD-MM-YYYY").locale("vi").format("MMMM") }}
+          </p>
+          <p v-if="dayjs(date, 'YYYY') != '2023'">
+            {{
+              dayjs(date, "DD-MM-YYYY")
+                .locale("vi")
+                .format("dddd, [ngày] DD MMMM")
+            }}
+          </p>
+          <p v-else>
+            {{
+              dayjs(date, "DD-MM-YYYY")
+                .locale("vi")
+                .format("dddd, [ngày] DD MMMM [năm] YYYY")
+            }}
+          </p>
+          <ImageList :imageList="getImageListByDate(date)" />
+        </div>
+      </div>
     </div>
-    <div class="home-gallery"></div>
   </section>
 </template>
 <script>
-// Import Swiper Vue.js components
-// import { Swiper, SwiperSlide } from "swiper/vue";
-
-// // Import Swiper styles
-// import "swiper/css";
-
-// import "swiper/css/navigation";
-
-// // import required modules
-// import { Navigation } from "swiper/modules";
-
+import SwipSlider from "../components/Slider/SwipSlider.vue";
+import { useStore } from "vuex";
+import { computed, ref, watchEffect } from "vue";
+import { getAllImageByUser } from "@/apis/images";
+import ImageList from "../components/Image/ImageList.vue";
+import { useRouter } from "vue-router";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
 export default {
   components: {
-    // Swiper,
-    // SwiperSlide,
+    SwipSlider,
+    ImageList,
   },
+
   setup() {
-    return {
-      // modules: [Navigation],
+    const store = useStore();
+    const router = useRouter();
+    const token = computed(() => store.state.user.userLogin.token);
+    const imageList = ref([]);
+    const createdDateList = ref([]);
+    const imageListByDate = ref([]);
+
+    const getImageList = async () => {
+      await getAllImageByUser(token.value)
+        .then((res) => {
+          imageList.value = [...res.data];
+          store.dispatch("image/getAllImagesAction", { data: imageList.value });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
+
+    const formatDate = (date) => {
+      return dayjs(date).format("DD-MM-YYYY");
+    };
+    const getCreatedDateList = () => {
+      imageList.value.forEach((image) => {
+        createdDateList.value.push(image.createDate);
+      });
+      createdDateList.value.sort();
+      createdDateList.value = createdDateList.value.map((createdDate) => {
+        return formatDate(createdDate);
+      });
+
+      createdDateList.value.reverse();
+      createdDateList.value = [...new Set(createdDateList.value)];
+    };
+
+    const getImageListByDate = (date) => {
+      return imageList.value.filter((image) => {
+        return formatDate(image.createDate) === date;
+      });
+    };
+    watchEffect(() => {
+      getCreatedDateList();
+    });
+
+    return {
+      token,
+      imageList,
+      router,
+      createdDateList,
+      formatDate,
+      dayjs,
+      getImageListByDate,
+      getImageList,
+      imageListByDate,
+    };
+  },
+  created() {
+    this.getImageList();
   },
 };
 </script>
 <style lang="scss" scoped>
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#home {
-  text-align: center;
-  .home-slider {
-    .swiper-slide {
-      img {
-        height: 170px;
-        width: 85%;
-      }
-    }
-  }
-}
-:deep(.swiper-button-prev),
-:deep(.swiper-button-next) {
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  background-color: #d9d9d9;
-
-  &::after {
-    font-size: 1rem;
-    color: #000;
-  }
-}
-:deep(.swiper-button-prev) {
-  left: var(--swiper-navigation-sides-offset, 0);
-}
-:deep(.swiper-button-next) {
-  right: var(--swiper-navigation-sides-offset, 0);
-}
 </style>

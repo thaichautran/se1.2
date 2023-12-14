@@ -8,6 +8,7 @@ const RESET_PASSWORD = "/authentication/reset_password";
 //image
 const UPLOAD_IMAGE = "/cloudinary/upload_image";
 const UPLOAD_VIDEO = "/cloudinary/upload_video";
+const GET_ALL_IMAGES_BY_USER = "/images/get_all";
 export {
   USER_REGISTER,
   USER_LOGIN,
@@ -16,4 +17,5 @@ export {
   RESET_PASSWORD,
   UPLOAD_IMAGE,
   UPLOAD_VIDEO,
+  GET_ALL_IMAGES_BY_USER,
 };
