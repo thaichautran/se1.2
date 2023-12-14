@@ -1,5 +1,9 @@
 import axios from "../config/axiosServices";
-import { UPLOAD_IMAGE, UPLOAD_VIDEO } from "./constants";
+import {
+  UPLOAD_IMAGE,
+  UPLOAD_VIDEO,
+  GET_ALL_IMAGES_BY_USER,
+} from "./constants";
 
 const uploadImage = (data, token) => {
   return axios.post(`${UPLOAD_IMAGE}`, data, {
@@ -11,4 +15,10 @@ const uploadVideo = (data, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
-export { uploadImage, uploadVideo };
+
+const getAllImageByUser = (token) => {
+  return axios.get(`${GET_ALL_IMAGES_BY_USER}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+export { uploadImage, uploadVideo, getAllImageByUser };

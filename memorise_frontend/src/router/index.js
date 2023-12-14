@@ -46,6 +46,11 @@ const routes = [
     component: () => import("../views/Auth"),
   },
   {
+    path: "/image/:id",
+    name: "image",
+    component: () => import("../views/ImageDetails"),
+  },
+  {
     path: "/introduction/",
     name: "intro",
     component: () => import("../views/Introduction"),
