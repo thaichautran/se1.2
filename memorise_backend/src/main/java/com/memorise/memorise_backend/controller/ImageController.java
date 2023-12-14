@@ -48,6 +48,16 @@ public class ImageController {
         return  new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Update a favourite image",
+            summary = "This API to make a favourite image",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
     @PutMapping("/favourite")
     public ResponseEntity<?> updateFavouriteImage(@RequestParam int id){
         RespondData respondData = new RespondData();
@@ -58,6 +68,16 @@ public class ImageController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Get all favourite images",
+            summary = "This API to get all favourite images",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
     @GetMapping("/get_favourite")
     public ResponseEntity<?> getFavouriteImages(){
         RespondData respondData = new RespondData();
