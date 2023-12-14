@@ -45,11 +45,7 @@ const routes = [
     name: "auth",
     component: () => import("../views/Auth"),
   },
-  {
-    path: "/image/:id",
-    name: "image",
-    component: () => import("../views/ImageDetails"),
-  },
+
   {
     path: "/introduction/",
     name: "intro",
