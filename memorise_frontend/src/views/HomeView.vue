@@ -7,24 +7,36 @@
       <div class="home-gallery">
         <div
           v-for="date in createdDateList"
-          style="margin-bottom: 20px"
+          style="margin-bottom: 2rem"
           :key="date"
         >
-          <p style="margin-top: 100px">
+          <p
+            style="
+              margin-top: 2rem;
+              margin-bottom: 0.75rem;
+              text-transform: capitalize;
+            "
+            class="text-title"
+          >
             {{ dayjs(date, "DD-MM-YYYY").locale("vi").format("MMMM") }}
           </p>
-          <p v-if="dayjs(date, 'YYYY') != '2023'">
+          <p
+            v-if="
+              dayjs(date, 'DD-MM-YYYY').locale('vi').format('YYYY') === '2023'
+            "
+            class="text-upper text-sub-3-title"
+          >
             {{
               dayjs(date, "DD-MM-YYYY")
                 .locale("vi")
-                .format("dddd, [ngày] DD MMMM")
+                .format("dddd, [ngày] DD [tháng] M")
             }}
           </p>
-          <p v-else>
+          <p v-else class="text-upper text-sub-3-title">
             {{
               dayjs(date, "DD-MM-YYYY")
                 .locale("vi")
-                .format("dddd, [ngày] DD MMMM [năm] YYYY")
+                .format("dddd, [ngày] DD [tháng] M [năm] YYYY")
             }}
           </p>
           <ImageList :imageList="getImageListByDate(date)" />
@@ -110,4 +122,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.text-upper {
+  margin-bottom: 1rem;
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
 </style>
