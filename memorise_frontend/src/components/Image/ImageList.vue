@@ -1,5 +1,5 @@
 <template>
-  <a-row>
+  <a-row :gutter="[16, 16]">
     <ImageItem v-for="item in imageList" :key="item.id" :image="item" />
   </a-row>
 </template>

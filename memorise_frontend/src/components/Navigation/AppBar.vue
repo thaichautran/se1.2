@@ -112,6 +112,7 @@
         }"
       >
         <router-view></router-view>
+        <a-back-top />
       </a-layout-content>
       <the-footer></the-footer>
     </a-layout>
