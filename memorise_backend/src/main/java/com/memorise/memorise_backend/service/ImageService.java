@@ -1,5 +1,6 @@
 package com.memorise.memorise_backend.service;
 
+import com.cloudinary.Url;
 import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.entity.Image;
 import com.memorise.memorise_backend.entity.User;
@@ -7,9 +8,12 @@ import com.memorise.memorise_backend.imp.ImageServiceImp;
 import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,6 +111,19 @@ public class ImageService implements ImageServiceImp {
                 imageDTOS.add(imageDTO);
             }
             return imageDTOS;
+        }
+        return null;
+    }
+
+    @Override
+    public Resource downloadImage(String url) {
+        try {
+            UrlResource resource = new UrlResource(url);
+            if (resource.exists() && resource.isReadable()) {
+                return resource;
+            }
+        } catch (Exception e) {
+            System.out.println("Can't download file");
         }
         return null;
     }

@@ -114,7 +114,13 @@ public class CloudinaryService implements CloudinaryServiceImp {
             // Try to get Exif metadata
             ExifSubIFDDirectory exifDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             if (exifDirectory != null) {
-                originCreatedDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                 Date tempDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                 int hour = tempDate.getHours();
+//                System.out.println("Hour: " + hour);
+                tempDate.setHours(hour - 7);
+//                System.out.println("Temp date after: " + tempDate);
+                originCreatedDate = tempDate;
+//                System.out.println("Origin date: " + originCreatedDate);
             } else {
                 originCreatedDate = new Date();
             }
@@ -175,7 +181,10 @@ public class CloudinaryService implements CloudinaryServiceImp {
             // Try to get Exif metadata
             Mp4Directory mp4Directory = metadata.getFirstDirectoryOfType(Mp4Directory.class);
             if (mp4Directory != null) {
-                originCreatedDate = mp4Directory.getDate(Mp4Directory.TAG_CREATION_TIME);
+                Date tempDate = mp4Directory.getDate(Mp4Directory.TAG_CREATION_TIME);
+                int hour = tempDate.getHours();
+                tempDate.setHours(hour - 7);
+                originCreatedDate = tempDate;
 //                System.out.println("Creation date: " + originCreatedDate);
             } else {
                 originCreatedDate = new Date();
