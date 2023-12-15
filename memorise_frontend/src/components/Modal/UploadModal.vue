@@ -117,6 +117,7 @@ import { UploadOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { uploadImage, uploadVideo } from "@/apis/images";
 import { useStore } from "vuex";
+
 export default {
   components: {
     UploadOutlined,
@@ -137,6 +138,7 @@ export default {
       desc: "",
     });
     const token = computed(() => store.state.user.userLogin.token);
+
     //show modal
     const showModal = () => {
       if (token.value) {
@@ -216,6 +218,10 @@ export default {
 
     const handleRemove = () => {
       imageUrl.value = "";
+      videoUrl.value = "";
+      formState.name = "";
+      formState.desc = "";
+      formState.location = "";
     };
 
     function handleDrop(e) {
@@ -255,6 +261,11 @@ export default {
           loading.value = false;
           open.value = false;
           message.error("Tải lên thất bại");
+        })
+        .finally(() => {
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         });
     };
     const handleCancel = () => {

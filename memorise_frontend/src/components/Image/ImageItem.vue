@@ -6,7 +6,7 @@
         image.url.includes('.png') ||
         image.url.includes('.jpeg')
       "
-      style="height: 100px; width: 100%"
+      style="aspect-ratio: 1 / 1; width: 100%"
       :src="image?.url"
     />
     <video
