@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/images")
-@Tag(name = "Get images and videos")
+@Tag(name = "Process images and videos")
 @SecurityRequirement(name = "bearerAuth")
 public class ImageController {
 
@@ -87,4 +89,27 @@ public class ImageController {
         respondData.setDesc("Get favourite images successfully!");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+
+    @Operation(
+            description = "Download images and videos",
+            summary = "This API to download images and videos",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/download")
+    public ResponseEntity<?> downloadImage(@RequestParam String url) {
+        RespondData respondData = new RespondData();
+        Resource resource = imageServiceImp.downloadImage(url);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+    }
+
+
+
 }
