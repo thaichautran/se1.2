@@ -1,5 +1,5 @@
--- set global time_zone = “+7:00” ?
--- set time_zone = 'Asia/Ho_Chi_Minh';
+-- set global time_zone = '+00:00';
+-- set global time_zone = 'Asia/Ho_Chi_Minh';
 -- select now();
 -- SELECT @@global.time_zone, @@session.time_zone; 
 
