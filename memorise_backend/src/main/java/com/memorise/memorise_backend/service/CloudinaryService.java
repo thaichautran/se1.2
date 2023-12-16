@@ -1,8 +1,8 @@
 package com.memorise.memorise_backend.service;
 
 
-
 import com.cloudinary.Cloudinary;
+import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -20,6 +20,7 @@ import com.memorise.memorise_backend.imp.CloudinaryServiceImp;
 import com.memorise.memorise_backend.payload.request.UploadRequest;
 import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
+import jakarta.mail.Folder;
 import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -105,7 +106,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
     @Override
     public ImageDTO uploadImage(UploadRequest uploadRequest) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Date originCreatedDate = null;
 
         try {
@@ -114,8 +115,8 @@ public class CloudinaryService implements CloudinaryServiceImp {
             // Try to get Exif metadata
             ExifSubIFDDirectory exifDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             if (exifDirectory != null) {
-                 Date tempDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-                 int hour = tempDate.getHours();
+                Date tempDate = exifDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+                int hour = tempDate.getHours();
 //                System.out.println("Hour: " + hour);
                 tempDate.setHours(hour - 7);
 //                System.out.println("Temp date after: " + tempDate);
@@ -166,7 +167,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
     @Override
     public ImageDTO uploadVideo(UploadRequest uploadRequest) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Date originCreatedDate = null;
 
         try {
@@ -231,7 +232,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
     @Override
     public boolean isUploadImage(MultipartFile file, UploadRequest uploadRequest) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Date originCreatedDate = null;
 
         try {
@@ -284,7 +285,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
     @Override
     public boolean isUploadImage(MultipartFile file, String name, String location, String description) {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int userId = Integer.parseInt(authenValue.split(" - " )[1]);
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Date originCreatedDate = null;
 
         try {
@@ -334,5 +335,41 @@ public class CloudinaryService implements CloudinaryServiceImp {
         }
     }
 
+    @Override
+    public void createFolder(String folderName) {
+        // Tạo "public_id" dạng thư mục
+        String publicId = folderName + "/";
+
+        // Sử dụng Cloudinary API để tạo thư mục trên Cloudinary
+        try {
+            Map result = cloudinary.api().createFolder(publicId, ObjectUtils.emptyMap());
+            System.out.println("Folder created: " + result);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String uploadImageToFolder(MultipartFile imageFile, String folderName) {
+        // Tạo public_id bằng cách kết hợp đường dẫn thư mục và tên hình ảnh
+        String publicId = folderName + "/" + imageFile.getOriginalFilename();
+
+        // Sử dụng Cloudinary API để tải lên hình ảnh vào thư mục cụ thể
+        try {
+            Map result = cloudinary.uploader().upload(imageFile.getBytes(), ObjectUtils.asMap(
+                    "public_id", publicId
+            ));
+
+            // Lấy URL từ kết quả upload
+            String imageUrl = (String) result.get("secure_url");
+            System.out.println("Image uploaded to folder: " + imageUrl);
+
+            return imageUrl;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
