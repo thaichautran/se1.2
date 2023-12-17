@@ -14,4 +14,6 @@ public interface CloudinaryServiceImp {
     ImageDTO uploadVideo(UploadRequest uploadRequest);
     boolean isUploadImage(MultipartFile file, UploadRequest uploadRequest);
     boolean isUploadImage(MultipartFile file, String name, String location, String description);
+    void createFolder(String folderName);
+    String uploadImageToFolder(MultipartFile imageFile, String folderName);
 }
