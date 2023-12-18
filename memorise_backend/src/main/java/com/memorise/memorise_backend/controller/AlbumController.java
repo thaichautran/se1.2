@@ -102,6 +102,24 @@ public class AlbumController {
     }
 
     @Operation(
+            description = "Get albums",
+            summary = "This API to get all albums",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/get_albums")
+    public ResponseEntity<?> getAlbums(){
+        RespondData respondData = new RespondData();
+        respondData.setData(albumServiceImp.getAlbums());
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
             description = "Delete a album",
             summary = "This API to delete an album",
             responses = {
