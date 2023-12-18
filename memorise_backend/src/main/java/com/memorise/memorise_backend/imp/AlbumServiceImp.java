@@ -12,9 +12,10 @@ public interface AlbumServiceImp {
     boolean addImageToAlbum(int albumId, int imageId);
     boolean uploadImageToAlbum(UploadRequest uploadRequest, int albumId);
     List<ImageDTO> getImagesInAlbum(int albumId);
-
     boolean deleteAlbum(int albumId);
-
     List<AlbumDTO> getAlbums();
+
+
+
 
 }

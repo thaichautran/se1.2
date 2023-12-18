@@ -93,7 +93,7 @@ public class ImageService implements ImageServiceImp {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Optional<User> user = userRepository.findById(userId);
-        if(user != null){
+        if (user != null) {
             List<ImageDTO> imageDTOS = new ArrayList<>();
             List<Image> images = imageRepository.findByFavouriteAndUser(true, user.get());
             for (Image img : images) {
@@ -127,6 +127,38 @@ public class ImageService implements ImageServiceImp {
         } catch (Exception e) {
             System.out.println("Can't download file");
         }
+        return null;
+    }
+
+    @Override
+    public ImageDTO moveImageToTrashBin(int imageId) {
+
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image != null) {
+            Image img = image.get();
+            img.setRemove(true);
+            imageRepository.save(img);
+
+            ImageDTO imageDTO = new ImageDTO();
+
+            imageDTO.setId(img.getId());
+            imageDTO.setUrl(img.getUrl());
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setCreateDate(img.getCreateDate());
+            imageDTO.setUpdateDate(img.getUpdateDate());
+            imageDTO.setFavourite(img.isFavourite());
+            imageDTO.setPublic(img.isPublic());
+            imageDTO.setRemove(img.isRemove());
+
+            return imageDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public List<ImageDTO> getImagesFromTrashBin() {
         return null;
     }
 

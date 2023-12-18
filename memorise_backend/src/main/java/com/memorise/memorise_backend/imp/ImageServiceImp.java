@@ -9,8 +9,9 @@ public interface ImageServiceImp {
     List<ImageDTO> getAllImages();
     ImageDTO updateFavouriteImage(int id);
     List<ImageDTO> getFavouriteImages();
-
     Resource downloadImage(String url);
+    ImageDTO moveImageToTrashBin(int imageId);
+    List<ImageDTO> getImagesFromTrashBin();
 
 
 }

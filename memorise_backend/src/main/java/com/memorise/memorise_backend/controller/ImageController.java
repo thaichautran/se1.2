@@ -110,6 +110,42 @@ public class ImageController {
                 "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
     }
 
+    @Operation(
+            description = "Move to trash bin",
+            summary = "This API to move an image to trash bin",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/trash")
+    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int imageId){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.moveImageToTrashBin(imageId));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Get images from trash bin",
+            summary = "This API get images which is moved trash bin",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/get_trash")
+    public ResponseEntity<?> getImagesFromTrashBin(){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.getImagesFromTrashBin());
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
 
 
 }
