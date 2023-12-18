@@ -46,6 +46,17 @@ public class AlbumController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+
+    @Operation(
+            description = "Add image from home page to album",
+            summary = "This API to add image from home page to album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
     @PostMapping("/upload/home")
     public ResponseEntity<?> uploadImageFromHomePage(@RequestParam int albumId, @RequestParam int imageId){
         RespondData respondData = new RespondData();
@@ -54,6 +65,16 @@ public class AlbumController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Add image from device to album",
+            summary = "This API to upload image from device to album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
     @PutMapping(value="/upload/device", consumes = {"multipart/form-data"})
     public ResponseEntity<?> uploadImageFromDevice(@ModelAttribute UploadRequest uploadRequest, @RequestParam int albumId){
         RespondData respondData = new RespondData();
@@ -62,10 +83,56 @@ public class AlbumController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Get all images from album",
+            summary = "This API to get all images from album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
     @GetMapping("/get_images")
     public ResponseEntity<?> getImagesInAlbum(@RequestParam int albumId){
         RespondData respondData = new RespondData();
         respondData.setData(albumServiceImp.getImagesInAlbum(albumId));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Get albums",
+            summary = "This API to get all albums",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/get_albums")
+    public ResponseEntity<?> getAlbums(){
+        RespondData respondData = new RespondData();
+        respondData.setData(albumServiceImp.getAlbums());
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Delete a album",
+            summary = "This API to delete an album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @DeleteMapping("/delete_album")
+    public ResponseEntity<?> deleteAlbum(@RequestParam int albumId){
+        RespondData respondData = new RespondData();
+        respondData.setData(albumServiceImp.deleteAlbum(albumId));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
