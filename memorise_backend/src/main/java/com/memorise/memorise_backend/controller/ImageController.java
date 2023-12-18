@@ -164,6 +164,23 @@ public class ImageController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Restore an image from trash bin",
+            summary = "This API to restore an image from trash bin to home page",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/restore")
+    public ResponseEntity<?> restoreImageFromTrash(@RequestParam int imageId){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.restoreImageFromTrash(imageId));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
 
 
 }

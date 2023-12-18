@@ -132,7 +132,6 @@ public class ImageService implements ImageServiceImp {
 
     @Override
     public ImageDTO moveImageToTrashBin(int imageId) {
-
         Optional<Image> image = imageRepository.findById(imageId);
         if (image != null) {
             Image img = image.get();
@@ -189,6 +188,32 @@ public class ImageService implements ImageServiceImp {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public ImageDTO restoreImageFromTrash(int imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image != null) {
+            Image img = image.get();
+            img.setRemove(false);
+            imageRepository.save(img);
+
+            ImageDTO imageDTO = new ImageDTO();
+
+            imageDTO.setId(img.getId());
+            imageDTO.setUrl(img.getUrl());
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setCreateDate(img.getCreateDate());
+            imageDTO.setUpdateDate(img.getUpdateDate());
+            imageDTO.setFavourite(img.isFavourite());
+            imageDTO.setPublic(img.isPublic());
+            imageDTO.setRemove(img.isRemove());
+
+            return imageDTO;
+        }
+        return null;
     }
 
 
