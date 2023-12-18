@@ -210,4 +210,38 @@ public class AlbumService implements AlbumServiceImp {
 
         return imageDTOS;
     }
+
+    @Override
+    public boolean deleteAlbum(int albumId) {
+        try {
+
+            List<ImageAlbum> imageAlbums = imageAlbumRepository.findByKeyAlbumId(albumId);
+            imageAlbumRepository.deleteAll(imageAlbums);
+
+            albumRepository.deleteById(albumId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public List<AlbumDTO> getAlbums() {
+        List<Album> albums = albumRepository.findAll();
+        List<AlbumDTO> albumDTOS = new ArrayList<>();
+
+        for (Album album : albums){
+            AlbumDTO albumDTO = new AlbumDTO();
+            albumDTO.setId(album.getId());
+            albumDTO.setName(album.getName());
+            albumDTO.setUrl(album.getCoverPhoto());
+            albumDTO.setDescription(album.getDescription());
+            albumDTO.setCreateDate(album.getCreateDate());
+            albumDTO.setUpdateDate(album.getUpdateDate());
+
+            albumDTOS.add(albumDTO);
+        }
+        return albumDTOS;
+    }
 }
