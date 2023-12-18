@@ -32,10 +32,10 @@ public class Album {
     private String coverPhoto;
 
     @Column(name = "is_public")
-    private boolean isPublic;
+    private boolean isPublic = false;
 
     @Column(name = "sharing_url")
-    private String sharingUrl;
+    private String sharingUrl = null;
 
 
     @ManyToOne
