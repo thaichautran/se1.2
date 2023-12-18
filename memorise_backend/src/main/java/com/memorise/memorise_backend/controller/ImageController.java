@@ -146,6 +146,24 @@ public class ImageController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Delete an image permanently",
+            summary = "This API to delete an image permanently",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @DeleteMapping("/delete_image")
+    public ResponseEntity<?> deleteImage(@RequestParam int imageId){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.deleteImage(imageId));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
 
 
 }

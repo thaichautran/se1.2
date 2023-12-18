@@ -161,7 +161,7 @@ public class ImageService implements ImageServiceImp {
     public List<ImageDTO> getImagesFromTrashBin() {
         List<Image> images = imageRepository.findByIsRemove(true);
         List<ImageDTO> imageDTOS = new ArrayList<>();
-        for(Image img : images){
+        for (Image img : images) {
             ImageDTO imageDTO = new ImageDTO();
 
             imageDTO.setId(img.getId());
@@ -178,6 +178,17 @@ public class ImageService implements ImageServiceImp {
             imageDTOS.add(imageDTO);
         }
         return imageDTOS;
+    }
+
+    @Override
+    public boolean deleteImage(int imageId) {
+        try {
+            imageRepository.deleteById(imageId);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
