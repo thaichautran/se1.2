@@ -52,7 +52,7 @@ public class ImageController {
 
     @Operation(
             description = "Update a favourite image",
-            summary = "This API to make a favourite image",
+            summary = "This API to update a favourite image or not",
             responses = {
                     @ApiResponse(
                             description = "Request is successful!",
@@ -113,8 +113,8 @@ public class ImageController {
     }
 
     @Operation(
-            description = "Move to trash bin",
-            summary = "This API to move an image to trash bin",
+            description = "Move to trash bin and restore",
+            summary = "This API to move or restore an image to trash bin",
             responses = {
                     @ApiResponse(
                             description = "Request is successful!",
@@ -123,9 +123,9 @@ public class ImageController {
             }
     )
     @PutMapping("/trash")
-    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int id){
+    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int id, @RequestParam boolean status){
         RespondData respondData = new RespondData();
-        respondData.setData(imageServiceImp.moveImageToTrashBin(id));
+        respondData.setData(imageServiceImp.moveImageToTrashBin(id, status));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
@@ -162,24 +162,6 @@ public class ImageController {
     public ResponseEntity<?> deleteImage(@RequestParam int id){
         RespondData respondData = new RespondData();
         respondData.setData(imageServiceImp.deleteImage(id));
-        respondData.setDesc("Request is successfully");
-        return new ResponseEntity<>(respondData, HttpStatus.OK);
-    }
-
-    @Operation(
-            description = "Restore an image from trash bin",
-            summary = "This API to restore an image from trash bin to home page",
-            responses = {
-                    @ApiResponse(
-                            description = "Request is successful!",
-                            responseCode = "200"
-                    )
-            }
-    )
-    @PutMapping("/restore")
-    public ResponseEntity<?> restoreImageFromTrash(@RequestParam int id){
-        RespondData respondData = new RespondData();
-        respondData.setData(imageServiceImp.restoreImageFromTrash(id));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }

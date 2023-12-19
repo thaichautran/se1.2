@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface ImageServiceImp {
     ImageDTO updateFavouriteImage(int id, boolean status);
-    ImageDTO moveImageToTrashBin(int id);
-    ImageDTO restoreImageFromTrash(int id);
+    ImageDTO moveImageToTrashBin(int id, boolean status);
     List<ImageDTO> getAllImages();
     List<ImageDTO> getFavouriteImages();
     List<ImageDTO> getImagesFromTrashBin();
