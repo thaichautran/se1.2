@@ -1,6 +1,8 @@
 <template>
   <a-col :span="3" @click.prevent="showModal" style="cursor: pointer">
-    <a-modal v-model:open="open" title="Title" @ok="handleOk"> </a-modal>
+    <a-modal v-model:open="open" @ok="handleOk">
+      <ImageModal :image="image"></ImageModal>
+    </a-modal>
     <img
       v-if="
         image.url.includes('.jpg') ||
@@ -23,11 +25,16 @@
 
 <script>
 import { onMounted, ref } from "vue";
+import ImageModal from "../Modal/ImageModal.vue";
+
 export default {
   props: {
     image: {
       type: Object,
     },
+  },
+  components: {
+    ImageModal,
   },
   setup() {
     const open = ref(false);
@@ -45,6 +52,7 @@ export default {
         document.body.style.overflow = "unset";
       }
     });
+
     return {
       showModal,
       handleOk,

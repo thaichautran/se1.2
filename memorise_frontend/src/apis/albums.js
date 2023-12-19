@@ -48,10 +48,10 @@ const deleteAlbum = (albumId, token) => {
   });
 };
 export {
-  uploadImage,
-  uploadVideo,
-  getAllImageByUser,
-  favouriteImage,
-  getFavouriteImage,
-  downloadImage,
+  uploadImageToAlbumFromDevice,
+  uploadImageToAlbumFromHome,
+  createAlbum,
+  getImagesFromAlbum,
+  getAlbums,
+  deleteAlbum,
 };

@@ -154,6 +154,8 @@ export default {
       reader.readAsDataURL(img);
     }
     const beforeUpload = (file) => {
+      formState.name = file.name;
+      console.log(file);
       const isJpgOrPng =
         file.type === "image/jpeg" ||
         file.type === "image/png" ||
@@ -194,6 +196,8 @@ export default {
         return false;
       }
       fileUpload.value = file;
+      formState.name = file.name;
+
       return false;
     };
     const handleChange = (info) => {
