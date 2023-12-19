@@ -30,8 +30,8 @@ const getFavouriteImage = (token) => {
   });
 };
 
-const favouriteImage = (imageId, token) => {
-  return axios.put(`${FAVOURITE_IMAGE}?id=${imageId}`, {
+const favouriteImage = (imageId, status, token) => {
+  return axios.put(`${FAVOURITE_IMAGE}?id=${imageId}&status=${status}`, null, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

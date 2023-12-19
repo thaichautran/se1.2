@@ -5,7 +5,19 @@
         <div style="text-align: -webkit-right">
           <div class="ant-footer-custom">
             <a-button
-              key="favourite"
+              v-if="isFavourite"
+              key="favourite0"
+              style="
+                border-radius: 18px;
+                color: rgb(202, 202, 3);
+                border-color: rgb(202, 202, 3);
+              "
+              @click="handleFavourite"
+              ><StarOutlined /> Yêu thích</a-button
+            >
+            <a-button
+              v-else
+              key="favourite1"
               style="border-radius: 18px"
               @click="handleFavourite"
               ><StarOutlined /> Yêu thích</a-button
@@ -42,9 +54,11 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import ImageModal from "../Modal/ImageModal.vue";
 import { StarOutlined, ShareAltOutlined } from "@ant-design/icons-vue";
+import { favouriteImage } from "@/apis/images";
+import { useStore } from "vuex";
 export default {
   props: {
     image: {
@@ -56,12 +70,29 @@ export default {
     StarOutlined,
     ShareAltOutlined,
   },
-  setup() {
+  setup(props) {
+    const store = useStore();
+    const token = computed(() => store.state.user.userLogin.token);
     const open = ref(false);
     const showModal = () => {
       open.value = true;
     };
-
+    const isFavourite = ref();
+    const handleFavourite = async () => {
+      if (isFavourite.value) {
+        await favouriteImage(props.image.id, false, token.value)
+          .then((res) => {
+            isFavourite.value = res.data.favourite;
+          })
+          .catch((err) => console.log(err));
+      } else {
+        await favouriteImage(props.image.id, true, token.value)
+          .then((res) => {
+            isFavourite.value = res.data.favourite;
+          })
+          .catch((err) => console.log(err));
+      }
+    };
     onMounted(() => {
       if (!open.value) {
         document.body.style.overflow = "unset";
@@ -71,6 +102,9 @@ export default {
     return {
       showModal,
       open,
+      handleFavourite,
+      favouriteImage,
+      isFavourite,
     };
   },
 };
