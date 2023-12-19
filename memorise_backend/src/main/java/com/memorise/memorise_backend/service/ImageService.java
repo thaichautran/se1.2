@@ -36,20 +36,22 @@ public class ImageService implements ImageServiceImp {
         Optional<User> user = userRepository.findById(userId);
         if (user != null) {
             for (Image img : user.get().getListImage()) {
-                ImageDTO imageDTO = new ImageDTO();
+                if(img.isRemove() == false){
+                    ImageDTO imageDTO = new ImageDTO();
 
-                imageDTO.setId(img.getId());
-                imageDTO.setUrl(img.getUrl());
-                imageDTO.setDescription(img.getDescription());
-                imageDTO.setName(img.getName());
-                imageDTO.setFavourite(img.isFavourite());
-                imageDTO.setLocation(img.getLocation());
-                imageDTO.setPublic(img.isPublic());
-                imageDTO.setRemove(img.isRemove());
-                imageDTO.setCreateDate(img.getCreateDate());
-                imageDTO.setUpdateDate(img.getUpdateDate());
+                    imageDTO.setId(img.getId());
+                    imageDTO.setUrl(img.getUrl());
+                    imageDTO.setDescription(img.getDescription());
+                    imageDTO.setName(img.getName());
+                    imageDTO.setFavourite(img.isFavourite());
+                    imageDTO.setLocation(img.getLocation());
+                    imageDTO.setPublic(img.isPublic());
+                    imageDTO.setRemove(img.isRemove());
+                    imageDTO.setCreateDate(img.getCreateDate());
+                    imageDTO.setUpdateDate(img.getUpdateDate());
 
-                imageDTOS.add(imageDTO);
+                    imageDTOS.add(imageDTO);
+                }
             }
             return imageDTOS;
         }
