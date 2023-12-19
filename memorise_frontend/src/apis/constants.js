@@ -12,7 +12,8 @@ const GET_ALL_IMAGES_BY_USER = "/images/get_all";
 const FAVOURITE_IMAGE = "/images/favourite";
 const GET_FAVORITE_IMAGE = "/images/get_favourite";
 const DOWNLOAD_IMAGE = "/images/download";
-
+const REMOVE_TO_TRASH = "/images/trash";
+const GET_TRASH_IMAGE = "/images/get_trash";
 //album
 const UPLOAD_IMAGE_ALBUM_FROM_DEVICE = "/albums/upload/device";
 const UPLOAD_IMAGE_ALBUM_FROM_HOME = "/albums/upload/home";
@@ -39,4 +40,6 @@ export {
   GET_IMAGES_BY_ALBUM,
   GET_ALBUMS,
   DELETE_ALBUM,
+  REMOVE_TO_TRASH,
+  GET_TRASH_IMAGE,
 };

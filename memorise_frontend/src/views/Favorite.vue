@@ -137,7 +137,6 @@ export default {
       await getFavouriteImage(token.value)
         .then((res) => {
           imageList.value = [...res.data];
-          store.dispatch("image/getAllImagesAction", { data: imageList.value });
         })
         .catch((err) => {
           console.log(err);

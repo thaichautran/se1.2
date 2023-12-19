@@ -6,6 +6,8 @@ import {
   FAVOURITE_IMAGE,
   GET_FAVORITE_IMAGE,
   DOWNLOAD_IMAGE,
+  REMOVE_TO_TRASH,
+  GET_TRASH_IMAGE,
 } from "./constants";
 
 const uploadImage = (data, token) => {
@@ -35,7 +37,17 @@ const favouriteImage = (imageId, status, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const removeImageToTrash = (imageId, status, token) => {
+  return axios.put(`${REMOVE_TO_TRASH}?id=${imageId}&status=${status}`, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 
+const getTrashImage = (token) => {
+  return axios.get(`${GET_TRASH_IMAGE}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 const downloadImage = (url, token) => {
   return axios.get(`${DOWNLOAD_IMAGE}?url=${url}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -48,4 +60,6 @@ export {
   favouriteImage,
   getFavouriteImage,
   downloadImage,
+  removeImageToTrash,
+  getTrashImage,
 };

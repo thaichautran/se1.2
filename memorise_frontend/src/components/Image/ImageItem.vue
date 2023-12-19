@@ -17,7 +17,7 @@
             >
             <a-button
               v-else
-              key="favourite1"
+              key="favourite2"
               style="border-radius: 18px"
               @click="handleFavourite"
               ><StarOutlined /> Yêu thích</a-button
@@ -77,7 +77,7 @@ export default {
     const showModal = () => {
       open.value = true;
     };
-    const isFavourite = ref();
+    const isFavourite = ref(props.image.favourite);
     const handleFavourite = async () => {
       if (isFavourite.value) {
         await favouriteImage(props.image.id, false, token.value)

@@ -29,7 +29,7 @@
               <template #overlay>
                 <a-menu>
                   <a-menu-item key="0">
-                    <span class="icon-delete"
+                    <span class="icon-delete" @click="handleRemoveImage"
                       ><img
                         class="image-modal-icon"
                         src="../../assets/image/Photo_delete.svg"
@@ -38,7 +38,7 @@
                       Xóa ảnh</span
                     >
                   </a-menu-item>
-                  <a-menu-item key="1">
+                  <!-- <a-menu-item key="1">
                     <span class="icon-delete"
                       ><img
                         class="image-modal-icon"
@@ -47,7 +47,7 @@
                       />
                       Xóa kỷ niệm</span
                     >
-                  </a-menu-item>
+                  </a-menu-item> -->
                   <a-menu-item key="2">
                     <span
                       ><img
@@ -134,6 +134,9 @@
 import { EllipsisOutlined } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import { removeImageToTrash } from "@/apis/images";
+import { computed, ref } from "vue";
+import { useStore } from "vuex";
 export default {
   components: {
     EllipsisOutlined,
@@ -143,8 +146,26 @@ export default {
       type: Object,
     },
   },
-  setup() {
-    return { dayjs };
+  setup(props) {
+    const store = useStore();
+    const token = computed(() => store.state.user.userLogin.token);
+    const isRemove = ref(props.image.remove);
+    const handleRemoveImage = async () => {
+      if (isRemove.value) {
+        await removeImageToTrash(props.image.id, false, token.value)
+          .then((res) => {
+            isRemove.value = res.data.remove;
+          })
+          .catch((err) => console.log(err));
+      } else {
+        await removeImageToTrash(props.image.id, true, token.value)
+          .then((res) => {
+            isRemove.value = res.data.remove;
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+    return { handleRemoveImage, dayjs };
   },
 };
 </script>
