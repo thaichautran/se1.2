@@ -36,7 +36,7 @@ public class ImageService implements ImageServiceImp {
         Optional<User> user = userRepository.findById(userId);
         if (user != null) {
             for (Image img : user.get().getListImage()) {
-                if(img.isRemove() == false){
+                if (img.isRemove() == false) {
                     ImageDTO imageDTO = new ImageDTO();
 
                     imageDTO.setId(img.getId());
@@ -192,6 +192,20 @@ public class ImageService implements ImageServiceImp {
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllImages() {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            imageRepository.deleteAll(images);
+            return true;
         }
         return false;
     }

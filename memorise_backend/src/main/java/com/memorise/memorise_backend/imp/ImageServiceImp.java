@@ -13,6 +13,7 @@ public interface ImageServiceImp {
     List<ImageDTO> getImagesFromTrashBin();
     Resource downloadImage(String url);
     boolean deleteImage(int id);
+    boolean deleteAllImages();
 
 
 }
