@@ -228,20 +228,27 @@ public class AlbumService implements AlbumServiceImp {
 
     @Override
     public List<AlbumDTO> getAlbums() {
-        List<Album> albums = albumRepository.findAll();
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
         List<AlbumDTO> albumDTOS = new ArrayList<>();
 
-        for (Album album : albums){
-            AlbumDTO albumDTO = new AlbumDTO();
-            albumDTO.setId(album.getId());
-            albumDTO.setName(album.getName());
-            albumDTO.setUrl(album.getCoverPhoto());
-            albumDTO.setDescription(album.getDescription());
-            albumDTO.setCreateDate(album.getCreateDate());
-            albumDTO.setUpdateDate(album.getUpdateDate());
+        if (user != null) {
+            List<Album> albums = albumRepository.findByUser(user.get());
 
-            albumDTOS.add(albumDTO);
+            for (Album album : albums) {
+                AlbumDTO albumDTO = new AlbumDTO();
+                albumDTO.setId(album.getId());
+                albumDTO.setName(album.getName());
+                albumDTO.setUrl(album.getCoverPhoto());
+                albumDTO.setDescription(album.getDescription());
+                albumDTO.setCreateDate(album.getCreateDate());
+                albumDTO.setUpdateDate(album.getUpdateDate());
+
+                albumDTOS.add(albumDTO);
+            }
         }
+
         return albumDTOS;
     }
 }
