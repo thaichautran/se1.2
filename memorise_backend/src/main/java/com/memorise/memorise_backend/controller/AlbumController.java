@@ -37,7 +37,7 @@ public class AlbumController {
                     )
             }
     )
-    @PostMapping("/create_album")
+    @PostMapping(value="/create_album",  consumes = {"multipart/form-data"})
     public ResponseEntity<?> createFolder(@RequestParam MultipartFile file, @RequestParam String name, @RequestParam String desc){
         RespondData respondData = new RespondData();
         respondData.setDesc("Request is successful!");
