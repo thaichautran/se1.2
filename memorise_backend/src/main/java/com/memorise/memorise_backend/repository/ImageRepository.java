@@ -12,4 +12,5 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
     Image findTopByUrlOrderByUpdateDateDesc(String url);
     List<Image> findByFavouriteAndUser(boolean isFavourite, User user);
     List<Image> findByIsRemoveAndUser(boolean status, User user);
+    List<Image> findByUserAndLocationContainingOrUserAndNameContaining(User user, String inforLocation, User user1, String inforName);
 }

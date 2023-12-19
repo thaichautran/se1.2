@@ -250,6 +250,37 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
+    public List<ImageDTO> findImages(String information) {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        List<Image> images = imageRepository.findByUserAndLocationContainingOrUserAndNameContaining(
+                user.get(), information, user.get(),information);
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        if(images.size() > 0){
+            for(Image img : images){
+
+                ImageDTO imageDTO = new ImageDTO();
+
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
+
+                imageDTOS.add(imageDTO);
+            }
+        }
+        return imageDTOS;
+    }
+
+    @Override
     public boolean deleteImage(int id) {
         try {
             imageRepository.deleteById(id);

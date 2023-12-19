@@ -221,5 +221,23 @@ public class ImageController {
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
 
+    @Operation(
+            description = "Find images belong to location or name",
+            summary = "This API to find images belong to location or name",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/find_images")
+    public ResponseEntity<?> findImages(@RequestParam String information){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.findImages(information));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
 
 }
