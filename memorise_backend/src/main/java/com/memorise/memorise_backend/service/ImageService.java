@@ -5,6 +5,7 @@ import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.entity.Image;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.ImageServiceImp;
+import com.memorise.memorise_backend.payload.request.UpdateImageRequest;
 import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +37,22 @@ public class ImageService implements ImageServiceImp {
         Optional<User> user = userRepository.findById(userId);
         if (user != null) {
             for (Image img : user.get().getListImage()) {
-                ImageDTO imageDTO = new ImageDTO();
+                if (img.isRemove() == false) {
+                    ImageDTO imageDTO = new ImageDTO();
 
-                imageDTO.setId(img.getId());
-                imageDTO.setUrl(img.getUrl());
-                imageDTO.setDescription(img.getDescription());
-                imageDTO.setName(img.getName());
-                imageDTO.setFavourite(img.isFavourite());
-                imageDTO.setLocation(img.getLocation());
-                imageDTO.setPublic(img.isPublic());
-                imageDTO.setRemove(img.isRemove());
-                imageDTO.setCreateDate(img.getCreateDate());
-                imageDTO.setUpdateDate(img.getUpdateDate());
+                    imageDTO.setId(img.getId());
+                    imageDTO.setUrl(img.getUrl());
+                    imageDTO.setDescription(img.getDescription());
+                    imageDTO.setName(img.getName());
+                    imageDTO.setFavourite(img.isFavourite());
+                    imageDTO.setLocation(img.getLocation());
+                    imageDTO.setPublic(img.isPublic());
+                    imageDTO.setRemove(img.isRemove());
+                    imageDTO.setCreateDate(img.getCreateDate());
+                    imageDTO.setUpdateDate(img.getUpdateDate());
 
-                imageDTOS.add(imageDTO);
+                    imageDTOS.add(imageDTO);
+                }
             }
             return imageDTOS;
         }
@@ -155,6 +158,36 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
+    public ImageDTO updateImage(UpdateImageRequest updateImageRequest) {
+        Optional<Image> image = imageRepository.findById(updateImageRequest.getId());
+        if(image != null){
+            Image img = image.get();
+            img.setName(updateImageRequest.getName());
+            img.setDescription(updateImageRequest.getDescription());
+            img.setLocation(updateImageRequest.getLocation());
+            img.setUpdateDate(new Date());
+
+            imageRepository.save(img);
+
+            ImageDTO imageDTO = new ImageDTO();
+
+            imageDTO.setId(img.getId());
+            imageDTO.setUrl(img.getUrl());
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setCreateDate(img.getCreateDate());
+            imageDTO.setUpdateDate(img.getUpdateDate());
+            imageDTO.setFavourite(img.isFavourite());
+            imageDTO.setPublic(img.isPublic());
+            imageDTO.setRemove(img.isRemove());
+
+            return imageDTO;
+        }
+        return null;
+    }
+
+    @Override
     public List<ImageDTO> getImagesFromTrashBin() {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - ")[1]);
@@ -184,12 +217,59 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
+    public List<ImageDTO> restoreAllImages() {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            for(Image img : images){
+                img.setRemove(false);
+
+                ImageDTO imageDTO = new ImageDTO();
+
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
+
+                imageDTOS.add(imageDTO);
+            }
+            imageRepository.saveAll(images);
+
+        }
+        return imageDTOS;
+    }
+
+    @Override
     public boolean deleteImage(int id) {
         try {
             imageRepository.deleteById(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteAllImages() {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            imageRepository.deleteAll(images);
+            return true;
         }
         return false;
     }
