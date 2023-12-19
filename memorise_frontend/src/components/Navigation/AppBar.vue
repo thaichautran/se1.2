@@ -52,7 +52,10 @@
           </span>
           <span class="menu-item-text">Chia sẻ</span>
         </a-menu-item>
-        <p class="app-bar-text-space text-sub-3-title">Thư viện</p>
+        <p v-if="!collapsed" class="app-bar-text-space text-sub-3-title">
+          Thư viện
+        </p>
+        <p v-else class="app-bar-text-space text-sub-3-title"></p>
         <a-menu-item
           key="3"
           @click="
