@@ -1,6 +1,24 @@
 <template>
   <a-col :span="3" @click.prevent="showModal" style="cursor: pointer">
-    <a-modal v-model:open="open" @ok="handleOk">
+    <a-modal v-model:open="open" style="width: 1100px">
+      <template #footer>
+        <div style="text-align: -webkit-right">
+          <div class="ant-footer-custom">
+            <a-button
+              key="favourite"
+              style="border-radius: 18px"
+              @click="handleFavourite"
+              ><StarOutlined /> Yêu thích</a-button
+            >
+            <a-button
+              key="share"
+              style="border-radius: 18px"
+              @click="handleShare"
+              ><ShareAltOutlined /> Chia sẻ</a-button
+            >
+          </div>
+        </div>
+      </template>
       <ImageModal :image="image"></ImageModal>
     </a-modal>
     <img
@@ -26,7 +44,7 @@
 <script>
 import { onMounted, ref } from "vue";
 import ImageModal from "../Modal/ImageModal.vue";
-
+import { StarOutlined, ShareAltOutlined } from "@ant-design/icons-vue";
 export default {
   props: {
     image: {
@@ -35,6 +53,8 @@ export default {
   },
   components: {
     ImageModal,
+    StarOutlined,
+    ShareAltOutlined,
   },
   setup() {
     const open = ref(false);
@@ -42,11 +62,6 @@ export default {
       open.value = true;
     };
 
-    const handleOk = (e) => {
-      console.log(e);
-
-      open.value = false;
-    };
     onMounted(() => {
       if (!open.value) {
         document.body.style.overflow = "unset";
@@ -55,12 +70,18 @@ export default {
 
     return {
       showModal,
-      handleOk,
       open,
     };
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.ant-modal-content {
+  .ant-footer-custom {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+  }
+}
 </style>
