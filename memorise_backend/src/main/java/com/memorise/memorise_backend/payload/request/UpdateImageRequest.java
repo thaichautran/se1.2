@@ -1,10 +1,10 @@
 package com.memorise.memorise_backend.payload.request;
 
 public class UpdateImageRequest {
-    int id;
-    String name;
-    String description;
-    String location;
+    private int id;
+    private String name;
+    private String description;
+    private String location;
 
     public int getId() {
         return id;

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadRequest {
-    MultipartFile file;
+    private MultipartFile file;
     private String name;
     private String description;
     private String location;
