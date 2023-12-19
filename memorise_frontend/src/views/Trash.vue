@@ -1,10 +1,14 @@
 <template>
-  <section id="home">
+  <section id="trash">
     <div v-if="token">
-      <div class="home-slider" style="margin-bottom: 3rem">
-        <SwipSlider />
+      <div class="trash-button" style="margin-bottom: 3rem">
+        <a-button
+          style="border-radius: 18px; background-color: #e05858; color: #ffffff"
+        >
+          <DeleteOutlined /> Xóa toàn bộ</a-button
+        >
       </div>
-      <div class="home-gallery">
+      <div class="trash-gallery">
         <div v-for="year in createdYearList" :key="year">
           <p
             v-if="dayjs(today, 'DD-MM-YYYY').format('YYYY') != year"
@@ -95,7 +99,6 @@
   </section>
 </template>
 <script>
-import SwipSlider from "../components/Slider/SwipSlider.vue";
 import { useStore } from "vuex";
 import { computed, ref, watchEffect } from "vue";
 import { getTrashImage } from "@/apis/images";
@@ -103,10 +106,10 @@ import ImageList from "../components/Image/ImageList.vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-
+import { DeleteOutlined } from "@ant-design/icons-vue";
 export default {
   components: {
-    SwipSlider,
+    DeleteOutlined,
     ImageList,
   },
 

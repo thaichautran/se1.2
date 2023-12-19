@@ -1,10 +1,7 @@
 <template>
-  <section id="home">
+  <section id="favourite">
     <div v-if="token">
-      <div class="home-slider" style="margin-bottom: 3rem">
-        <SwipSlider />
-      </div>
-      <div class="home-gallery">
+      <div class="favourite-gallery">
         <div v-for="year in createdYearList" :key="year">
           <p
             v-if="dayjs(today, 'DD-MM-YYYY').format('YYYY') != year"
@@ -95,7 +92,6 @@
   </section>
 </template>
 <script>
-import SwipSlider from "../components/Slider/SwipSlider.vue";
 import { useStore } from "vuex";
 import { computed, ref, watchEffect } from "vue";
 import { getFavouriteImage } from "@/apis/images";
@@ -106,7 +102,6 @@ import "dayjs/locale/vi";
 
 export default {
   components: {
-    SwipSlider,
     ImageList,
   },
 
