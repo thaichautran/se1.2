@@ -158,23 +158,29 @@ public class ImageService implements ImageServiceImp {
 
     @Override
     public List<ImageDTO> getImagesFromTrashBin() {
-        List<Image> images = imageRepository.findByIsRemove(true);
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
         List<ImageDTO> imageDTOS = new ArrayList<>();
-        for (Image img : images) {
-            ImageDTO imageDTO = new ImageDTO();
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            for (Image img : images) {
+                ImageDTO imageDTO = new ImageDTO();
 
-            imageDTO.setId(img.getId());
-            imageDTO.setUrl(img.getUrl());
-            imageDTO.setName(img.getName());
-            imageDTO.setLocation(img.getLocation());
-            imageDTO.setDescription(img.getDescription());
-            imageDTO.setCreateDate(img.getCreateDate());
-            imageDTO.setUpdateDate(img.getUpdateDate());
-            imageDTO.setFavourite(img.isFavourite());
-            imageDTO.setPublic(img.isPublic());
-            imageDTO.setRemove(img.isRemove());
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
 
-            imageDTOS.add(imageDTO);
+                imageDTOS.add(imageDTO);
+            }
         }
         return imageDTOS;
     }
