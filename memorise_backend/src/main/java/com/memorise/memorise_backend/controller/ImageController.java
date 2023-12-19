@@ -61,14 +61,16 @@ public class ImageController {
             }
     )
     @PutMapping("/favourite")
-    public ResponseEntity<?> updateFavouriteImage(@RequestParam int id){
+    public ResponseEntity<?> updateFavouriteImage(@RequestParam int id, @RequestParam boolean status){
         RespondData respondData = new RespondData();
 
-        ImageDTO imageDTO = imageServiceImp.updateFavouriteImage(id);
+        ImageDTO imageDTO = imageServiceImp.updateFavouriteImage(id, status);
         respondData.setData(imageDTO);
-        respondData.setDesc("Update image favourite successfully!");
+        respondData.setDesc("Update image favourite status successfully!");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+
 
     @Operation(
             description = "Get all favourite images",
@@ -121,9 +123,9 @@ public class ImageController {
             }
     )
     @PutMapping("/trash")
-    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int imageId){
+    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int id){
         RespondData respondData = new RespondData();
-        respondData.setData(imageServiceImp.moveImageToTrashBin(imageId));
+        respondData.setData(imageServiceImp.moveImageToTrashBin(id));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
@@ -157,9 +159,9 @@ public class ImageController {
             }
     )
     @DeleteMapping("/delete_image")
-    public ResponseEntity<?> deleteImage(@RequestParam int imageId){
+    public ResponseEntity<?> deleteImage(@RequestParam int id){
         RespondData respondData = new RespondData();
-        respondData.setData(imageServiceImp.deleteImage(imageId));
+        respondData.setData(imageServiceImp.deleteImage(id));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
@@ -175,9 +177,9 @@ public class ImageController {
             }
     )
     @PutMapping("/restore")
-    public ResponseEntity<?> restoreImageFromTrash(@RequestParam int imageId){
+    public ResponseEntity<?> restoreImageFromTrash(@RequestParam int id){
         RespondData respondData = new RespondData();
-        respondData.setData(imageServiceImp.restoreImageFromTrash(imageId));
+        respondData.setData(imageServiceImp.restoreImageFromTrash(id));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }

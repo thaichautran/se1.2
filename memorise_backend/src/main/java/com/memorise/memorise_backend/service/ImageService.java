@@ -59,11 +59,11 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
-    public ImageDTO updateFavouriteImage(int id) {
+    public ImageDTO updateFavouriteImage(int id, boolean status) {
         Optional<Image> image = imageRepository.findById(id);
         if (image != null) {
             Image img = image.get();
-            img.setFavourite(true);
+            img.setFavourite(status);
 
             Date now = new Date();
             img.setUpdateDate(now);
@@ -131,8 +131,8 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
-    public ImageDTO moveImageToTrashBin(int imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
+    public ImageDTO moveImageToTrashBin(int id) {
+        Optional<Image> image = imageRepository.findById(id);
         if (image != null) {
             Image img = image.get();
             img.setRemove(true);
@@ -180,9 +180,9 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
-    public boolean deleteImage(int imageId) {
+    public boolean deleteImage(int id) {
         try {
-            imageRepository.deleteById(imageId);
+            imageRepository.deleteById(id);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,9 +190,10 @@ public class ImageService implements ImageServiceImp {
         return false;
     }
 
+
     @Override
-    public ImageDTO restoreImageFromTrash(int imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
+    public ImageDTO restoreImageFromTrash(int id) {
+        Optional<Image> image = imageRepository.findById(id);
         if (image != null) {
             Image img = image.get();
             img.setRemove(false);

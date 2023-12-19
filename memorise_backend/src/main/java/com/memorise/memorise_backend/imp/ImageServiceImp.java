@@ -6,14 +6,14 @@ import org.springframework.core.io.Resource;
 import java.util.List;
 
 public interface ImageServiceImp {
-    ImageDTO updateFavouriteImage(int id);
-    ImageDTO moveImageToTrashBin(int imageId);
-    ImageDTO restoreImageFromTrash(int imageId);
+    ImageDTO updateFavouriteImage(int id, boolean status);
+    ImageDTO moveImageToTrashBin(int id);
+    ImageDTO restoreImageFromTrash(int id);
     List<ImageDTO> getAllImages();
     List<ImageDTO> getFavouriteImages();
     List<ImageDTO> getImagesFromTrashBin();
     Resource downloadImage(String url);
-    boolean deleteImage(int imageId);
+    boolean deleteImage(int id);
 
 
 }
