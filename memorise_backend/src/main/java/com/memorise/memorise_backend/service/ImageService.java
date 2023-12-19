@@ -186,6 +186,39 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
+    public List<ImageDTO> restoreAllImages() {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            for(Image img : images){
+                img.setRemove(false);
+
+                ImageDTO imageDTO = new ImageDTO();
+
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
+
+                imageDTOS.add(imageDTO);
+            }
+            imageRepository.saveAll(images);
+
+        }
+        return imageDTOS;
+    }
+
+    @Override
     public boolean deleteImage(int id) {
         try {
             imageRepository.deleteById(id);

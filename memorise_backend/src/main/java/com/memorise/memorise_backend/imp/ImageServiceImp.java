@@ -11,6 +11,7 @@ public interface ImageServiceImp {
     List<ImageDTO> getAllImages();
     List<ImageDTO> getFavouriteImages();
     List<ImageDTO> getImagesFromTrashBin();
+    List<ImageDTO> restoreAllImages();
     Resource downloadImage(String url);
     boolean deleteImage(int id);
     boolean deleteAllImages();
