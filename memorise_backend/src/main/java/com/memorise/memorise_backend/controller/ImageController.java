@@ -52,7 +52,7 @@ public class ImageController {
 
     @Operation(
             description = "Update a favourite image",
-            summary = "This API to make a favourite image",
+            summary = "This API to update a favourite image or not",
             responses = {
                     @ApiResponse(
                             description = "Request is successful!",
@@ -61,14 +61,16 @@ public class ImageController {
             }
     )
     @PutMapping("/favourite")
-    public ResponseEntity<?> updateFavouriteImage(@RequestParam int id){
+    public ResponseEntity<?> updateFavouriteImage(@RequestParam int id, @RequestParam boolean status){
         RespondData respondData = new RespondData();
 
-        ImageDTO imageDTO = imageServiceImp.updateFavouriteImage(id);
+        ImageDTO imageDTO = imageServiceImp.updateFavouriteImage(id, status);
         respondData.setData(imageDTO);
-        respondData.setDesc("Update image favourite successfully!");
+        respondData.setDesc("Update image favourite status successfully!");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+
 
     @Operation(
             description = "Get all favourite images",
@@ -110,6 +112,59 @@ public class ImageController {
                 "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
     }
 
+    @Operation(
+            description = "Move to trash bin and restore",
+            summary = "This API to move or restore an image to trash bin",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/trash")
+    public ResponseEntity<?> moveImageToTrashBin(@RequestParam int id, @RequestParam boolean status){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.moveImageToTrashBin(id, status));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Get images from trash bin",
+            summary = "This API get images which is moved trash bin",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @GetMapping("/get_trash")
+    public ResponseEntity<?> getImagesFromTrashBin(){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.getImagesFromTrashBin());
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Delete an image permanently",
+            summary = "This API to delete an image permanently",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @DeleteMapping("/delete_image")
+    public ResponseEntity<?> deleteImage(@RequestParam int id){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.deleteImage(id));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
 
 
 }

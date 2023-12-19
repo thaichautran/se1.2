@@ -59,11 +59,11 @@ public class ImageService implements ImageServiceImp {
     }
 
     @Override
-    public ImageDTO updateFavouriteImage(int id) {
+    public ImageDTO updateFavouriteImage(int id, boolean status) {
         Optional<Image> image = imageRepository.findById(id);
         if (image != null) {
             Image img = image.get();
-            img.setFavourite(true);
+            img.setFavourite(status);
 
             Date now = new Date();
             img.setUpdateDate(now);
@@ -93,7 +93,7 @@ public class ImageService implements ImageServiceImp {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Optional<User> user = userRepository.findById(userId);
-        if(user != null){
+        if (user != null) {
             List<ImageDTO> imageDTOS = new ArrayList<>();
             List<Image> images = imageRepository.findByFavouriteAndUser(true, user.get());
             for (Image img : images) {
@@ -130,5 +130,70 @@ public class ImageService implements ImageServiceImp {
         return null;
     }
 
+    @Override
+    public ImageDTO moveImageToTrashBin(int id, boolean status) {
+        Optional<Image> image = imageRepository.findById(id);
+        if (image != null) {
+            Image img = image.get();
+            img.setRemove(status);
+            imageRepository.save(img);
+
+            ImageDTO imageDTO = new ImageDTO();
+
+            imageDTO.setId(img.getId());
+            imageDTO.setUrl(img.getUrl());
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setCreateDate(img.getCreateDate());
+            imageDTO.setUpdateDate(img.getUpdateDate());
+            imageDTO.setFavourite(img.isFavourite());
+            imageDTO.setPublic(img.isPublic());
+            imageDTO.setRemove(img.isRemove());
+
+            return imageDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public List<ImageDTO> getImagesFromTrashBin() {
+        String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = Integer.parseInt(authenValue.split(" - ")[1]);
+        Optional<User> user = userRepository.findById(userId);
+
+        List<ImageDTO> imageDTOS = new ArrayList<>();
+        if (user != null) {
+            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+            for (Image img : images) {
+                ImageDTO imageDTO = new ImageDTO();
+
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
+
+                imageDTOS.add(imageDTO);
+            }
+        }
+        return imageDTOS;
+    }
+
+    @Override
+    public boolean deleteImage(int id) {
+        try {
+            imageRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }
