@@ -14,7 +14,7 @@ public interface AlbumServiceImp {
     List<ImageDTO> getImagesInAlbum(int albumId);
     boolean deleteAlbum(int albumId);
     List<AlbumDTO> getAlbums();
-
+    boolean removeImageFromAlbum(int albumId, int imageId);
 
 
 

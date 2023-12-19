@@ -49,8 +49,6 @@ public class ImageService implements ImageServiceImp {
                 imageDTO.setCreateDate(img.getCreateDate());
                 imageDTO.setUpdateDate(img.getUpdateDate());
 
-                Date temp = img.getCreateDate();
-                System.out.println(temp);
                 imageDTOS.add(imageDTO);
             }
             return imageDTOS;
