@@ -136,4 +136,22 @@ public class AlbumController {
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+    @Operation(
+            description = "Remove an image from album",
+            summary = "This API to remove an image from album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/remove_image")
+    public ResponseEntity<?> removeImageFromAlbum(@RequestParam int albumId, @RequestParam int imageId){
+        RespondData respondData = new RespondData();
+        respondData.setData(albumServiceImp.removeImageFromAlbum(albumId, imageId));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
 }

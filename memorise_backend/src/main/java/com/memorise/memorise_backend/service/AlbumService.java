@@ -251,4 +251,18 @@ public class AlbumService implements AlbumServiceImp {
 
         return albumDTOS;
     }
+
+    @Override
+    public boolean removeImageFromAlbum(int albumId, int imageId) {
+        try{
+            ImageAlbum imageAlbum = imageAlbumRepository.findByKeyAlbumIdAndImageId(albumId, imageId);
+            if(imageAlbum != null){
+                imageAlbumRepository.delete(imageAlbum);
+            }
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
