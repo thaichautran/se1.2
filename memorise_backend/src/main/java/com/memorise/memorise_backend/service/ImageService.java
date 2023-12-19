@@ -5,6 +5,7 @@ import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.entity.Image;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.ImageServiceImp;
+import com.memorise.memorise_backend.payload.request.UpdateImageRequest;
 import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +137,36 @@ public class ImageService implements ImageServiceImp {
         if (image != null) {
             Image img = image.get();
             img.setRemove(status);
+            imageRepository.save(img);
+
+            ImageDTO imageDTO = new ImageDTO();
+
+            imageDTO.setId(img.getId());
+            imageDTO.setUrl(img.getUrl());
+            imageDTO.setName(img.getName());
+            imageDTO.setLocation(img.getLocation());
+            imageDTO.setDescription(img.getDescription());
+            imageDTO.setCreateDate(img.getCreateDate());
+            imageDTO.setUpdateDate(img.getUpdateDate());
+            imageDTO.setFavourite(img.isFavourite());
+            imageDTO.setPublic(img.isPublic());
+            imageDTO.setRemove(img.isRemove());
+
+            return imageDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public ImageDTO updateImage(UpdateImageRequest updateImageRequest) {
+        Optional<Image> image = imageRepository.findById(updateImageRequest.getId());
+        if(image != null){
+            Image img = image.get();
+            img.setName(updateImageRequest.getName());
+            img.setDescription(updateImageRequest.getDescription());
+            img.setLocation(updateImageRequest.getLocation());
+            img.setUpdateDate(new Date());
+
             imageRepository.save(img);
 
             ImageDTO imageDTO = new ImageDTO();

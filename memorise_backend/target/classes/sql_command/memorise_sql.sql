@@ -98,6 +98,12 @@ modify column update_date timestamp not null default now();
 alter table image 
 modify column favourite boolean;
 
+alter table image 
+modify column name varchar(255);
+
+alter table image 
+modify column description text;
+
 alter table album 
 modify column create_date timestamp not null default now(),
 modify column update_date timestamp not null default now();
@@ -109,5 +115,7 @@ insert into image(url) value("Test date");
 -- Select
 select * from user;
 select * from image;
+select * from album;
+select * from image_album;
 
 -- DELETE FROM image WHERE id >=0 and id <= 55;

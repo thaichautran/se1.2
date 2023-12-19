@@ -3,6 +3,7 @@ package com.memorise.memorise_backend.controller;
 import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.imp.ImageServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
+import com.memorise.memorise_backend.payload.request.UpdateImageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -198,6 +199,24 @@ public class ImageController {
     public ResponseEntity<?> restoreAllImages(){
         RespondData respondData = new RespondData();
         respondData.setData(imageServiceImp.restoreAllImages());
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
+    @Operation(
+            description = "Update information of image",
+            summary = "This API to update information of image",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/update_image")
+    public ResponseEntity<?> updateImage(@RequestBody UpdateImageRequest updateImageRequest){
+        RespondData respondData = new RespondData();
+        respondData.setData(imageServiceImp.updateImage(updateImageRequest));
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
