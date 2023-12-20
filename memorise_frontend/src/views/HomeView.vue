@@ -1,6 +1,6 @@
 <template>
   <section id="home">
-    <div v-if="token">
+    <div v-if="imageList.length > 0">
       <div class="home-slider" style="margin-bottom: 3rem">
         <SwipSlider />
       </div>
@@ -95,6 +95,8 @@
         </div>
       </div>
     </div>
+
+    <EmptyView v-else />
   </section>
 </template>
 <script>
@@ -106,11 +108,12 @@ import ImageList from "../components/Image/ImageList.vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-
+import EmptyView from "./EmptyView.vue";
 export default {
   components: {
     SwipSlider,
     ImageList,
+    EmptyView,
   },
 
   setup() {

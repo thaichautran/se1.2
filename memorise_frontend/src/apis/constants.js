@@ -14,6 +14,8 @@ const GET_FAVORITE_IMAGE = "/images/get_favourite";
 const DOWNLOAD_IMAGE = "/images/download";
 const REMOVE_TO_TRASH = "/images/trash";
 const GET_TRASH_IMAGE = "/images/get_trash";
+const REMOVE_ALL = "/images/delete_all";
+const RESTORE_ALL = "/images/restore_all";
 //album
 const UPLOAD_IMAGE_ALBUM_FROM_DEVICE = "/albums/upload/device";
 const UPLOAD_IMAGE_ALBUM_FROM_HOME = "/albums/upload/home";
@@ -42,4 +44,6 @@ export {
   DELETE_ALBUM,
   REMOVE_TO_TRASH,
   GET_TRASH_IMAGE,
+  REMOVE_ALL,
+  RESTORE_ALL,
 };

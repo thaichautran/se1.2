@@ -1,6 +1,15 @@
 <template>
   <section id="modal-upload">
-    <span style="font-size: 16px" class="interactive" @click="showModal">
+    <span
+      style="
+        font-size: 16px;
+        background-color: #f3f4f6;
+        border-radius: 18px;
+        padding: 0.5rem 1rem;
+      "
+      class="interactive"
+      @click="showModal"
+    >
       <UploadOutlined />
       Tải lên
     </span>
