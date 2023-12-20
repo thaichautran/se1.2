@@ -1,11 +1,22 @@
 <template>
   <section id="trash">
-    <div>
-      <div class="trash-button" style="margin-bottom: 3rem">
+    <div v-if="imageList.length > 0">
+      <div class="trash-button" style="margin-bottom: 3rem; text-align: right">
         <a-button
+          style="border-radius: 18px; margin-right: 1rem"
+          @click="restoreAll"
+          :disabled="imageList.length === 0"
+          :loading="loading"
+        >
+          <HistoryOutlined /> Khôi phục tất cả</a-button
+        >
+        <a-button
+          @click="removeAll"
+          :loading="loading"
+          :disabled="imageList.length === 0"
           style="border-radius: 18px; background-color: #e05858; color: #ffffff"
         >
-          <DeleteOutlined /> Xóa toàn bộ</a-button
+          <DeleteOutlined /> Xóa tất cả</a-button
         >
       </div>
       <div class="trash-gallery">
@@ -104,6 +115,7 @@
         </div>
       </div>
     </div>
+    <EmptyView v-else></EmptyView>
   </section>
 </template>
 <script>
@@ -114,11 +126,19 @@ import ImageList from "../components/Image/ImageList.vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { DeleteOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { DeleteOutlined, HistoryOutlined } from "@ant-design/icons-vue";
+import EmptyView from "./EmptyView.vue";
+import {
+  removeAllImageFromTrash,
+  restoreAllImageFromTrash,
+} from "@/apis/images";
 export default {
   components: {
+    EmptyView,
     DeleteOutlined,
     ImageList,
+    HistoryOutlined,
   },
 
   setup() {
@@ -132,7 +152,7 @@ export default {
     const imageListByDate = ref([]);
     const today = ref(new Date());
     const yesterday = ref();
-
+    const loading = ref(false);
     const getToday = () => {
       today.value = dayjs().format("DD-MM-YYYY");
     };
@@ -195,7 +215,6 @@ export default {
         return formatDate(image.createDate) === date;
       });
     };
-
     watchEffect(() => {
       getCreatedDateList();
       getMonth();
@@ -204,6 +223,37 @@ export default {
       getYesterday();
     });
 
+    const removeAll = async () => {
+      loading.value = true;
+      await removeAllImageFromTrash(token.value)
+        .then((res) => {
+          imageList.value = [];
+          loading.value = false;
+          message.success("Đã xóa tất cả ảnh!");
+          console.log(res);
+        })
+        .catch((err) => {
+          loading.value = false;
+          message.error("Xóa tất cả ảnh thất bại!");
+          console.log(err);
+        });
+    };
+
+    const restoreAll = async () => {
+      loading.value = true;
+      await restoreAllImageFromTrash(token.value)
+        .then((res) => {
+          imageList.value = [];
+          loading.value = false;
+          message.success("Đã khôi phục tất cả ảnh!");
+          console.log(res);
+        })
+        .catch((err) => {
+          loading.value = false;
+          message.error("Khôi phục tất cả ảnh thất bại!");
+          console.log(err);
+        });
+    };
     return {
       yesterday,
       today,
@@ -220,7 +270,9 @@ export default {
       imageListByDate,
       createdMonthList,
       createdYearList,
-
+      restoreAll,
+      removeAll,
+      loading,
       getToday,
       getYesterday,
       getCreatedDateList,

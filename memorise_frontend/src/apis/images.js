@@ -8,6 +8,8 @@ import {
   DOWNLOAD_IMAGE,
   REMOVE_TO_TRASH,
   GET_TRASH_IMAGE,
+  REMOVE_ALL,
+  RESTORE_ALL,
 } from "./constants";
 
 const uploadImage = (data, token) => {
@@ -53,6 +55,18 @@ const downloadImage = (url, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+const removeAllImageFromTrash = (token) => {
+  return axios.delete(`${REMOVE_ALL}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+const restoreAllImageFromTrash = (token) => {
+  return axios.put(`${RESTORE_ALL}`, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export {
   uploadImage,
   uploadVideo,
@@ -62,4 +76,6 @@ export {
   downloadImage,
   removeImageToTrash,
   getTrashImage,
+  removeAllImageFromTrash,
+  restoreAllImageFromTrash,
 };

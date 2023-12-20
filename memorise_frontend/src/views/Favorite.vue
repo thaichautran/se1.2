@@ -1,6 +1,6 @@
 <template>
   <section id="favourite">
-    <div v-if="token">
+    <div v-if="imageList.length > 0">
       <div class="favourite-gallery">
         <div v-for="year in createdYearList" :key="year">
           <p
@@ -92,6 +92,7 @@
         </div>
       </div>
     </div>
+    <EmptyView v-else></EmptyView>
   </section>
 </template>
 <script>
@@ -100,12 +101,14 @@ import { computed, ref, watchEffect } from "vue";
 import { getFavouriteImage } from "@/apis/images";
 import ImageList from "../components/Image/ImageList.vue";
 import { useRouter } from "vue-router";
+import EmptyView from "./EmptyView.vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
 
 export default {
   components: {
     ImageList,
+    EmptyView,
   },
 
   setup() {
