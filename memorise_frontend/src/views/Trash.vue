@@ -1,6 +1,6 @@
 <template>
   <section id="trash">
-    <div v-if="token">
+    <div>
       <div class="trash-button" style="margin-bottom: 3rem">
         <a-button
           style="border-radius: 18px; background-color: #e05858; color: #ffffff"
@@ -11,7 +11,9 @@
       <div class="trash-gallery">
         <div v-for="year in createdYearList" :key="year">
           <p
-            v-if="dayjs(today, 'DD-MM-YYYY').format('YYYY') != year"
+            v-if="
+              dayjs(today, 'DD-MM-YYYY').format('YYYY') != year && imageList
+            "
             style="
               margin-top: 2rem;
               margin-bottom: 2rem;
@@ -21,6 +23,7 @@
           >
             {{ dayjs(year).locale("vi").format("YYYY") }}
           </p>
+          <p v-else></p>
           <div v-for="month in createdMonthList" :key="month">
             <p
               class="text-sub-title text-upper"
@@ -29,6 +32,7 @@
             >
               {{ dayjs(month, "MM-YYYY").locale("vi").format("MMMM") }}
             </p>
+            <p v-else></p>
             <div v-for="date in createdDateList" :key="date">
               <p
                 class="text-sub-3-title text-upper"
@@ -46,6 +50,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -65,6 +70,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -89,8 +95,10 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
+              <p v-else></p>
             </div>
           </div>
         </div>
@@ -134,12 +142,15 @@ export default {
       preDay.setDate(today.getDate() - 1);
 
       yesterday.value = dayjs(preDay).format("DD-MM-YYYY");
-      console.log(yesterday.value);
     };
     const getImageList = async () => {
       await getTrashImage(token.value)
         .then((res) => {
           imageList.value = [...res.data];
+
+          store.dispatch("image/getTrashImagesAction", {
+            data: imageList.value,
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -150,9 +161,11 @@ export default {
       return dayjs(date).format("DD-MM-YYYY");
     };
     const getCreatedDateList = () => {
+      createdDateList.value = [];
       imageList.value.forEach((image) => {
         createdDateList.value.push(image.createDate);
       });
+
       createdDateList.value.sort();
       createdDateList.value = createdDateList.value.map((createdDate) => {
         return formatDate(createdDate);
@@ -207,6 +220,10 @@ export default {
       imageListByDate,
       createdMonthList,
       createdYearList,
+
+      getToday,
+      getYesterday,
+      getCreatedDateList,
     };
   },
   created() {

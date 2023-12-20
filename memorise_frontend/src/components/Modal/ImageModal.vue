@@ -28,7 +28,7 @@
               </a>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="0">
+                  <a-menu-item key="0" v-if="route.path != '/trash'">
                     <span class="icon-delete" @click="handleRemoveImage"
                       ><img
                         class="image-modal-icon"
@@ -36,6 +36,16 @@
                         alt=""
                       />
                       Xóa ảnh</span
+                    >
+                  </a-menu-item>
+                  <a-menu-item key="4" v-else>
+                    <span @click="handleRemoveImage"
+                      ><img
+                        class="image-modal-icon"
+                        src="../../assets/image/Restore.svg"
+                        alt=""
+                      />
+                      Khôi phục</span
                     >
                   </a-menu-item>
                   <!-- <a-menu-item key="1">
@@ -137,6 +147,7 @@ import "dayjs/locale/vi";
 import { removeImageToTrash } from "@/apis/images";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 export default {
   components: {
     EllipsisOutlined,
@@ -146,8 +157,9 @@ export default {
       type: Object,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
+    const route = useRoute();
     const token = computed(() => store.state.user.userLogin.token);
     const isRemove = ref(props.image.remove);
     const handleRemoveImage = async () => {
@@ -155,17 +167,23 @@ export default {
         await removeImageToTrash(props.image.id, false, token.value)
           .then((res) => {
             isRemove.value = res.data.remove;
+            emit("closeModal");
+            emit("getNewList");
+            store.dispatch("image/getTrashImagesAction", { data: res.data });
           })
           .catch((err) => console.log(err));
       } else {
         await removeImageToTrash(props.image.id, true, token.value)
           .then((res) => {
             isRemove.value = res.data.remove;
+            emit("closeModal");
+            emit("getNewList");
+            store.dispatch("image/getTrashImagesAction", { data: res.data });
           })
           .catch((err) => console.log(err));
       }
     };
-    return { handleRemoveImage, dayjs };
+    return { handleRemoveImage, dayjs, route };
   },
 };
 </script>
@@ -180,5 +198,8 @@ export default {
 }
 .image-modal-content {
   padding: 0.5rem;
+}
+:deep(.ant-image) {
+  height: 100%;
 }
 </style>

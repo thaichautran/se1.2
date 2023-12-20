@@ -31,7 +31,11 @@
           </div>
         </div>
       </template>
-      <ImageModal :image="image"></ImageModal>
+      <ImageModal
+        :image="image"
+        @closeModal="closeModal"
+        @getNewList="getNewList"
+      ></ImageModal>
     </a-modal>
     <img
       v-if="
@@ -70,12 +74,18 @@ export default {
     StarOutlined,
     ShareAltOutlined,
   },
-  setup(props) {
+  setup(props, { emit }) {
     const store = useStore();
     const token = computed(() => store.state.user.userLogin.token);
     const open = ref(false);
     const showModal = () => {
       open.value = true;
+    };
+    const closeModal = () => {
+      open.value = false;
+    };
+    const getNewList = () => {
+      emit("getNewList");
     };
     const isFavourite = ref(props.image.favourite);
     const handleFavourite = async () => {
@@ -83,12 +93,14 @@ export default {
         await favouriteImage(props.image.id, false, token.value)
           .then((res) => {
             isFavourite.value = res.data.favourite;
+            emit("getNewList");
           })
           .catch((err) => console.log(err));
       } else {
         await favouriteImage(props.image.id, true, token.value)
           .then((res) => {
             isFavourite.value = res.data.favourite;
+            emit("getNewList");
           })
           .catch((err) => console.log(err));
       }
@@ -105,6 +117,8 @@ export default {
       handleFavourite,
       favouriteImage,
       isFavourite,
+      closeModal,
+      getNewList,
     };
   },
 };

@@ -117,7 +117,7 @@ import { UploadOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { uploadImage, uploadVideo } from "@/apis/images";
 import { useStore } from "vuex";
-
+import { getAllImageByUser } from "@/apis/images";
 export default {
   components: {
     UploadOutlined,
@@ -221,6 +221,7 @@ export default {
     };
 
     const handleRemove = () => {
+      fileUpload.value = "";
       imageUrl.value = "";
       videoUrl.value = "";
       formState.name = "";
@@ -258,6 +259,7 @@ export default {
           loading.value = false;
           open.value = false;
           message.success("Tải lên thành công");
+          getImageList();
         })
         .catch((err) => {
           console.log(err);
@@ -265,11 +267,15 @@ export default {
           loading.value = false;
           open.value = false;
           message.error("Tải lên thất bại");
+        });
+    };
+    const getImageList = async () => {
+      await getAllImageByUser(token.value)
+        .then((res) => {
+          store.dispatch("image/getAllImagesAction", { data: res.data });
         })
-        .finally(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+        .catch((err) => {
+          console.log(err);
         });
     };
     const handleCancel = () => {
