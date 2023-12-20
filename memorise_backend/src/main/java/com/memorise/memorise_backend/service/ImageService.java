@@ -96,7 +96,7 @@ public class ImageService implements ImageServiceImp {
         Optional<User> user = userRepository.findById(userId);
         if (user != null) {
             List<ImageDTO> imageDTOS = new ArrayList<>();
-            List<Image> images = imageRepository.findByFavouriteAndUser(true, user.get());
+            List<Image> images = imageRepository.findByFavouriteAndUserAndIsRemove(true, user.get(), false);
             for (Image img : images) {
                 ImageDTO imageDTO = new ImageDTO();
 

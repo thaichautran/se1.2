@@ -10,7 +10,7 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, Integer> {
     Image findByUrl(String url);
     Image findTopByUrlOrderByUpdateDateDesc(String url);
-    List<Image> findByFavouriteAndUser(boolean isFavourite, User user);
+    List<Image> findByFavouriteAndUserAndIsRemove(boolean isFavourite, User user, boolean isRemove);
     List<Image> findByIsRemoveAndUser(boolean status, User user);
     List<Image> findByUserAndLocationContainingOrUserAndNameContaining(User user, String inforLocation, User user1, String inforName);
 }
