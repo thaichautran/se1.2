@@ -1,6 +1,11 @@
 <template>
   <a-row :gutter="[16, 16]">
-    <ImageItem v-for="item in imageList" :key="item.id" :image="item" />
+    <ImageItem
+      v-for="item in imageList"
+      :key="item.id"
+      :image="item"
+      @getNewList="getNewList"
+    />
   </a-row>
 </template>
 
@@ -18,15 +23,17 @@ export default {
   components: {
     ImageItem,
   },
-  setup(props) {
+  setup(props, { emit }) {
     watch(
       () => props.imageList,
       (newVal) => {
         console.log(newVal);
       }
     );
-
-    return {};
+    const getNewList = () => {
+      emit("getNewList");
+    };
+    return { getNewList };
   },
 };
 </script>

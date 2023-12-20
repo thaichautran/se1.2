@@ -42,6 +42,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -61,6 +62,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -85,6 +87,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
             </div>
@@ -114,7 +117,7 @@ export default {
     const store = useStore();
     const router = useRouter();
     const token = computed(() => store.state.user.userLogin.token);
-    const imageList = ref([]);
+    const imageList = ref([...store.state.image.imageList]);
     const createdDateList = ref([]);
     const createdMonthList = ref([]);
     const createdYearList = ref([]);
@@ -122,6 +125,9 @@ export default {
     const today = ref(new Date());
     const yesterday = ref();
 
+    watchEffect(() => {
+      imageList.value = [...store.state.image.imageList];
+    });
     const getToday = () => {
       today.value = dayjs().format("DD-MM-YYYY");
     };
@@ -148,6 +154,7 @@ export default {
       return dayjs(date).format("DD-MM-YYYY");
     };
     const getCreatedDateList = () => {
+      createdDateList.value = [];
       imageList.value.forEach((image) => {
         createdDateList.value.push(image.createDate);
       });

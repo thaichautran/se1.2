@@ -39,6 +39,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -58,6 +59,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
@@ -82,6 +84,7 @@
                 <ImageList
                   style="margin-top: 2rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
             </div>
@@ -142,6 +145,7 @@ export default {
       return dayjs(date).format("DD-MM-YYYY");
     };
     const getCreatedDateList = () => {
+      createdDateList.value = [];
       imageList.value.forEach((image) => {
         createdDateList.value.push(image.createDate);
       });
