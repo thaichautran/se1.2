@@ -64,7 +64,7 @@ Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo
 **Hiệu suất tải ảnh lên:**
 Đối với người dùng có tốc độ mạng trên 10 Mbps, cần đảm bảo tốc độ tải ảnh và video lên như sau:
 - **Ảnh có dung lượng thấp** (<500 KB) cần đảm bảo thời gian tải lên hệ thống không quá 3 giây.
-- **Ảnh có dung lượng cao **(> 5MB) cần đảm bảo thời gian tải lên hệ thống không quá 7 giây
+- **Ảnh có dung lượng cao** (> 5MB) cần đảm bảo thời gian tải lên hệ thống không quá 7 giây
 - Với **video có độ phân giải dưới 720p và độ dài 1 phút**, cần đảm bảo thời gian tải lên dưới 1 phút
 - Với **video có độ phân giải 4K và độ dài 1 phút**, cần đảm bảo thời gian tải lên dưới 5 phút.
 
@@ -81,8 +81,8 @@ Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo
 
 ### Phân loại mức độ nghiêm trọng của lỗi:
 1. Cao:
-- **Mô tả: **Những lỗi này ảnh hưởng nghiêm trọng tới toàn bộ hệ thống, khiến hệ thống không thể sử dụng được. Những lỗi này có thể gây mất dữ liệu, làm hệ thống bị treo, gây ra các lỗi nghiêm trọng về bảo mật.
-- Ví dụ: Hệ thống không xác thực được người dùng
+- **Mô tả:** Những lỗi này ảnh hưởng nghiêm trọng tới toàn bộ hệ thống, khiến hệ thống không thể sử dụng được. Những lỗi này có thể gây mất dữ liệu, làm hệ thống bị treo, gây ra các lỗi nghiêm trọng về bảo mật.
+- **Ví dụ:** Hệ thống không xác thực được người dùng
 2. Trung bình:
 - **Mô tả:** Những lỗi này ảnh hưởng đến những chức năng quan trọng trong hệ thống nhưng những phần còn lại của hệ thống không bị ảnh hưởng. Những lỗi này có thể gây ra những vấn đề về hiệu suất hoặc tạo ra sự khó chịu với người dùng.
 - **Ví dụ:** Khi người dùng nhập thông tin vào phần điền thông tin không đúng yêu cầu của hệ thống, người dùng không nhận được thông báo lỗi trả về.
