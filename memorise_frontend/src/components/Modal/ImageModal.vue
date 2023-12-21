@@ -74,7 +74,7 @@
                       src="../../assets/image/Data download.svg"
                       alt=""
                     />
-                    <span> Tải xuống</span></a-menu-item
+                    <span @click="handleDownload"> Tải xuống</span></a-menu-item
                   >
                 </a-menu>
               </template>
@@ -144,7 +144,7 @@
 import { EllipsisOutlined } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { removeImageToTrash } from "@/apis/images";
+import { downloadImage, removeImageToTrash } from "@/apis/images";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -183,7 +183,38 @@ export default {
           .catch((err) => console.log(err));
       }
     };
-    return { handleRemoveImage, dayjs, route };
+    function convertToHttps(httpLink) {
+      // Kiểm tra nếu đường link đã có HTTPS, không thay đổi
+      if (httpLink.startsWith("https://")) {
+        return httpLink;
+      }
+
+      // Nếu không có HTTPS, thay thế HTTP bằng HTTPS
+      return httpLink.replace(/^http:/, "https:");
+    }
+    async function downloadImages(imageSrc, nameOfDownload) {
+      const response = await fetch(convertToHttps(imageSrc));
+
+      const blobImage = await response.blob();
+
+      const href = URL.createObjectURL(blobImage);
+
+      const anchorElement = document.createElement("a");
+      anchorElement.href = href;
+      anchorElement.download = nameOfDownload;
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    }
+
+    const handleDownload = () => {
+      downloadImages(props.image.url, props.image.name);
+    };
+
+    return { handleRemoveImage, dayjs, route, handleDownload, downloadImage };
   },
 };
 </script>
