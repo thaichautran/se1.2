@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,8 +110,23 @@ public class ImageController {
         RespondData respondData = new RespondData();
         Resource resource = imageServiceImp.downloadImage(url);
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
+
+        String contentType;
+        if (resource.getFilename().toLowerCase().endsWith(".jpg") || resource.getFilename().toLowerCase().endsWith(".jpeg")) {
+            contentType = MediaType.IMAGE_JPEG_VALUE;
+        } else if (resource.getFilename().toLowerCase().endsWith(".png")) {
+            contentType = MediaType.IMAGE_PNG_VALUE;
+        } else if (resource.getFilename().toLowerCase().endsWith(".mp4")) {
+            contentType = "video/mp4";
+        } else {
+            // Mặc định là application/octet-stream nếu loại file không được hỗ trợ
+            contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 
     @Operation(
