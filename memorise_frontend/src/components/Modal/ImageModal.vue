@@ -183,35 +183,46 @@ export default {
           .catch((err) => console.log(err));
       }
     };
-    function convertToHttps(httpLink) {
-      // Kiểm tra nếu đường link đã có HTTPS, không thay đổi
-      if (httpLink.startsWith("https://")) {
-        return httpLink;
-      }
+    // function convertToHttps(httpLink) {
 
-      // Nếu không có HTTPS, thay thế HTTP bằng HTTPS
-      return httpLink.replace(/^http:/, "https:");
-    }
-    async function downloadImages(imageSrc, nameOfDownload) {
-      const response = await fetch(convertToHttps(imageSrc));
+    //   if (httpLink.startsWith("https://")) {
+    //     return httpLink;
+    //   }
 
-      const blobImage = await response.blob();
+    //   return httpLink.replace(/^http:/, "https:");
+    // }
+    // async function downloadImages(imageSrc, nameOfDownload) {
+    //   const response = await fetch(convertToHttps(imageSrc));
 
-      const href = URL.createObjectURL(blobImage);
+    //   const blobImage = await response.blob();
+
+    //   const href = URL.createObjectURL(blobImage);
+
+    //   const anchorElement = document.createElement("a");
+    //   anchorElement.href = href;
+    //   anchorElement.download = nameOfDownload;
+
+    //   document.body.appendChild(anchorElement);
+    //   anchorElement.click();
+
+    //   document.body.removeChild(anchorElement);
+    //   window.URL.revokeObjectURL(href);
+    // }
+
+    const handleDownload = async () => {
+      const res = await downloadImage(props.image.url, token.value);
+
+      const href = URL.createObjectURL(new Blob([res]));
 
       const anchorElement = document.createElement("a");
       anchorElement.href = href;
-      anchorElement.download = nameOfDownload;
+      anchorElement.download = props.image.name;
 
       document.body.appendChild(anchorElement);
       anchorElement.click();
 
       document.body.removeChild(anchorElement);
       window.URL.revokeObjectURL(href);
-    }
-
-    const handleDownload = () => {
-      downloadImages(props.image.url, props.image.name);
     };
 
     return { handleRemoveImage, dayjs, route, handleDownload, downloadImage };

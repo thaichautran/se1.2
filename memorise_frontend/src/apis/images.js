@@ -53,6 +53,7 @@ const getTrashImage = (token) => {
 const downloadImage = (url, token) => {
   return axios.get(`${DOWNLOAD_IMAGE}?url=${url}`, {
     headers: { Authorization: `Bearer ${token}` },
+    responseType: "blob",
   });
 };
 
