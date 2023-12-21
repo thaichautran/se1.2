@@ -20,7 +20,7 @@
           <div v-for="month in createdMonthList" :key="month">
             <p
               class="text-sub-title text-upper"
-              style="font-size: 24px"
+              style="font-size: 24px; margin-bottom: 0"
               v-if="dayjs(month, 'MM-YYYY').locale('vi').format('YYYY') == year"
             >
               {{ dayjs(month, "MM-YYYY").locale("vi").format("MMMM") }}
@@ -28,7 +28,7 @@
             <div v-for="date in createdDateList" :key="date">
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -40,7 +40,7 @@
               >
                 Hôm nay
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 1rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
                 />
@@ -48,7 +48,7 @@
 
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -60,7 +60,7 @@
               >
                 Hôm qua
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
                 />
@@ -68,7 +68,7 @@
 
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-else-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -85,7 +85,7 @@
                     .format("dddd, [ngày] DD")
                 }}
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
                 />

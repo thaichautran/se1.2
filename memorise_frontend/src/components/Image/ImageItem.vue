@@ -43,7 +43,12 @@
         image.url.includes('.png') ||
         image.url.includes('.jpeg')
       "
-      style="aspect-ratio: 1 / 1; width: 100%"
+      style="
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+      "
       :src="image?.url"
     />
     <div v-else-if="image.url.includes('.mp4')">
