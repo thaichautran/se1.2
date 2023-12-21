@@ -71,7 +71,11 @@ export default {
 
     const handleResetPassword = async () => {
       loading.value = true;
-      await resetPassword(otp, formState.password)
+      const requestBoday = {
+        otp: otp,
+        newPassword: formState.password,
+      };
+      await resetPassword(requestBoday)
         .then(() => {
           router.push("/authentication/login");
         })
