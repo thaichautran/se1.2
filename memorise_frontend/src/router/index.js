@@ -34,6 +34,11 @@ const routes = [
         component: () => import("../views/CreateAlbum"),
       },
       {
+        path: "/album",
+        name: "album2",
+        component: () => import("../views/AlbumDetail"),
+      },
+      {
         path: "/favorites",
         name: "favorites",
         component: () => import("../views/Favorite"),

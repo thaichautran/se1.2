@@ -15,8 +15,7 @@ export default {
       type: Array,
     },
   },
-  setup(props) {
-    console.log(props.albumList.value);
+  setup() {
     return {};
   },
 };

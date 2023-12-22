@@ -26,8 +26,8 @@ const uploadImageToAlbumFromHome = (albumId, imageId, token) => {
     }
   );
 };
-const createAlbum = (name, desc, token) => {
-  return axios.post(`${CREATE_ALBUM}?name=${name}&desc=${desc}`, {
+const createAlbum = (name, desc, data, token) => {
+  return axios.post(`${CREATE_ALBUM}?name=${name}&desc=${desc}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

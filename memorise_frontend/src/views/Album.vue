@@ -29,7 +29,7 @@
 
 <script>
 import { getAlbums } from "@/apis/albums";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import EmptyView from "./EmptyView.vue";
 import AlbumList from "../components/Album/AlbumList.vue";
 import { useStore } from "vuex";
@@ -43,10 +43,10 @@ export default {
     const store = useStore();
     const router = useRouter();
     const token = computed(() => store.state.user.userLogin.token);
-    const albumList = ref([]);
-    // watchEffect(() => {
-    //   albumList.value = [...store.state.album.albumList];
-    // });
+    const albumList = ref([...store.state.album.albumList]);
+    watchEffect(() => {
+      albumList.value = [...store.state.album.albumList];
+    });
 
     const getAlbumList = async () => {
       await getAlbums(token.value)

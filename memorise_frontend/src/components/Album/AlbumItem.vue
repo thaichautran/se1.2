@@ -1,5 +1,20 @@
 <template>
-  <a-col :span="4">
+  <a-col
+    class="album-item-hover"
+    :span="4"
+    style="cursor: pointer"
+    @click="
+      router.push({
+        path: `/album`,
+        query: {
+          name: album.name,
+          id: album.id,
+          date: album.createDate,
+          desc: album.description,
+        },
+      })
+    "
+  >
     <div class="album-item">
       <EllipsisOutlined
         style="
@@ -21,6 +36,7 @@
 
 <script>
 import { EllipsisOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 export default {
   components: {
     EllipsisOutlined,
@@ -31,7 +47,8 @@ export default {
     },
   },
   setup() {
-    return {};
+    const router = useRouter();
+    return { router };
   },
 };
 </script>
@@ -47,6 +64,7 @@ export default {
   aspect-ratio: 1/1;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   border-radius: 8px;
+  object-fit: cover;
 }
 .album-title {
   margin-top: 0.5rem;
@@ -56,5 +74,12 @@ export default {
 .album-length {
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.album-item-hover {
+  transition: all 0.5s;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 </style>
