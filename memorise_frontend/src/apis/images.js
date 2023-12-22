@@ -10,6 +10,7 @@ import {
   GET_TRASH_IMAGE,
   REMOVE_ALL,
   RESTORE_ALL,
+  UPDATE_IMAGE,
 } from "./constants";
 
 const uploadImage = (data, token) => {
@@ -53,6 +54,7 @@ const getTrashImage = (token) => {
 const downloadImage = (url, token) => {
   return axios.get(`${DOWNLOAD_IMAGE}?url=${url}`, {
     headers: { Authorization: `Bearer ${token}` },
+    responseType: "blob",
   });
 };
 
@@ -67,7 +69,13 @@ const restoreAllImageFromTrash = (token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const updateImage = (requestBody, token) => {
+  return axios.put(`${UPDATE_IMAGE}`, requestBody, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export {
+  updateImage,
   uploadImage,
   uploadVideo,
   getAllImageByUser,

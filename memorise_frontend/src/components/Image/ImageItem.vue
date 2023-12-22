@@ -43,7 +43,12 @@
         image.url.includes('.png') ||
         image.url.includes('.jpeg')
       "
-      style="aspect-ratio: 1 / 1; width: 100%"
+      style="
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+      "
       :src="image?.url"
     />
     <div v-else-if="image.url.includes('.mp4')">
@@ -63,6 +68,8 @@ import ImageModal from "../Modal/ImageModal.vue";
 import { StarOutlined, ShareAltOutlined } from "@ant-design/icons-vue";
 import { favouriteImage } from "@/apis/images";
 import { useStore } from "vuex";
+import useClipboard from "vue-clipboard3";
+import { message } from "ant-design-vue";
 export default {
   props: {
     image: {
@@ -78,6 +85,7 @@ export default {
     const store = useStore();
     const token = computed(() => store.state.user.userLogin.token);
     const open = ref(false);
+    const { toClipboard } = useClipboard();
     const showModal = () => {
       open.value = true;
     };
@@ -111,6 +119,15 @@ export default {
       }
     });
 
+    const handleShare = async () => {
+      try {
+        await toClipboard(props.image.url);
+        message.success("Đã sao chép đường dẫn vào bộ nhớ tạm!");
+      } catch (e) {
+        console.error(e);
+        message.error("Sao chép đường dẫn thất bại!");
+      }
+    };
     return {
       showModal,
       open,
@@ -119,6 +136,7 @@ export default {
       isFavourite,
       closeModal,
       getNewList,
+      handleShare,
     };
   },
 };

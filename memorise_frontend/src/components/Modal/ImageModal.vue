@@ -74,7 +74,7 @@
                       src="../../assets/image/Data download.svg"
                       alt=""
                     />
-                    <span> Tải xuống</span></a-menu-item
+                    <span @click="handleDownload"> Tải xuống</span></a-menu-item
                   >
                 </a-menu>
               </template>
@@ -85,10 +85,18 @@
               style="
                 display: flex;
                 justify-content: space-between;
-                margin-top: 2rem;
+                margin-top: 1rem;
               "
             >
-              <a-button style="border-radius: 18px; font-size: 16px">
+              <a-button
+                class="image-modal-button"
+                style="border-radius: 18px; font-size: 16px"
+                @click="
+                  () => {
+                    isUpdate = true;
+                  }
+                "
+              >
                 <img
                   style="margin-right: 0.25rem; margin-bottom: 0.25rem"
                   src="../../assets/image/userEdit.svg"
@@ -109,14 +117,14 @@
               </a-button>
             </div>
           </div>
-          <div class="image-modal-content">
-            <h1 style="font-weight: bold">{{ image.name }}</h1>
+          <div class="image-modal-content" v-if="!isUpdate">
+            <h1 style="font-weight: bold">{{ formState.name }}</h1>
             <p
               v-if="image.location != ''"
               style="font-size: 18px; font-weight: bold; color: #565e6c"
             >
               <img src="../../assets/image/destination.svg" alt="" />
-              {{ image.location }}
+              {{ formState.location }}
             </p>
             <p
               v-else
@@ -132,7 +140,67 @@
                   .format("Ngày D MMMM [năm] YYYY, [lúc] HH [giờ] mm [phút]")
               }}
             </p>
-            <p>{{ image.description }}</p>
+            <p>{{ formState.description }}</p>
+          </div>
+          <div class="image-modal-content" v-else>
+            <a-form
+              :model="formState"
+              name="basic"
+              @finish="onFinish"
+              @finishFailed="onFinishFailed"
+            >
+              <a-form-item name="name">
+                <a-input
+                  placeholder="Tên ảnh"
+                  v-model:value="formState.name"
+                  :bordered="false"
+                  style="border-bottom: solid 1px #9095a0; border-radius: 0"
+                />
+              </a-form-item>
+              <a-form-item name="location">
+                <a-input
+                  placeholder="Vị trí"
+                  v-model:value="formState.location"
+                  style="border-bottom: solid 1px #9095a0; border-radius: 0"
+                  :bordered="false"
+                >
+                  <template #prefix>
+                    <img src="../../assets/image/destination.svg" alt="" />
+                  </template>
+                </a-input>
+              </a-form-item>
+              <p style="color: #565e6c; font-weight: 700">
+                {{
+                  dayjs(image.createDate)
+                    .locale("vi")
+                    .format("Ngày D MMMM [năm] YYYY, [lúc] HH [giờ] mm [phút]")
+                }}
+              </p>
+              <a-form-item name="description">
+                <a-textarea
+                  style="height: 170px"
+                  v-model:value="formState.description"
+                  placeholder="Mô tả"
+                />
+              </a-form-item>
+              <a-form-item style="text-align: right">
+                <a-button
+                  style="border-radius: 18px; margin-right: 0.5rem"
+                  @click="
+                    () => {
+                      isUpdate = false;
+                    }
+                  "
+                  >Hủy</a-button
+                >
+                <a-button
+                  style="border-radius: 18px"
+                  html-type="submit"
+                  :loading="loading"
+                  >Hoàn tất</a-button
+                >
+              </a-form-item>
+            </a-form>
           </div>
         </div>
       </a-col>
@@ -144,10 +212,11 @@
 import { EllipsisOutlined } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { removeImageToTrash } from "@/apis/images";
-import { computed, ref } from "vue";
+import { downloadImage, removeImageToTrash, updateImage } from "@/apis/images";
+import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+
 export default {
   components: {
     EllipsisOutlined,
@@ -162,6 +231,13 @@ export default {
     const route = useRoute();
     const token = computed(() => store.state.user.userLogin.token);
     const isRemove = ref(props.image.remove);
+    const isUpdate = ref(false);
+    const loading = ref(false);
+    const formState = reactive({
+      name: props.image.name,
+      location: props.image.location,
+      description: props.image.description,
+    });
     const handleRemoveImage = async () => {
       if (isRemove.value) {
         await removeImageToTrash(props.image.id, false, token.value)
@@ -183,7 +259,79 @@ export default {
           .catch((err) => console.log(err));
       }
     };
-    return { handleRemoveImage, dayjs, route };
+    // function convertToHttps(httpLink) {
+
+    //   if (httpLink.startsWith("https://")) {
+    //     return httpLink;
+    //   }
+
+    //   return httpLink.replace(/^http:/, "https:");
+    // }
+    // async function downloadImages(imageSrc, nameOfDownload) {
+    //   const response = await fetch(convertToHttps(imageSrc));
+
+    //   const blobImage = await response.blob();
+
+    //   const href = URL.createObjectURL(blobImage);
+
+    //   const anchorElement = document.createElement("a");
+    //   anchorElement.href = href;
+    //   anchorElement.download = nameOfDownload;
+
+    //   document.body.appendChild(anchorElement);
+    //   anchorElement.click();
+
+    //   document.body.removeChild(anchorElement);
+    //   window.URL.revokeObjectURL(href);
+    // }
+
+    const handleDownload = async () => {
+      const res = await downloadImage(props.image.url, token.value);
+
+      const href = URL.createObjectURL(new Blob([res]));
+
+      const anchorElement = document.createElement("a");
+      anchorElement.href = href;
+      anchorElement.download = props.image.name;
+
+      document.body.appendChild(anchorElement);
+      anchorElement.click();
+
+      document.body.removeChild(anchorElement);
+      window.URL.revokeObjectURL(href);
+    };
+    const onFinish = async () => {
+      loading.value = true;
+      const requestBody = {
+        id: props.image.id,
+        name: formState.name,
+        location: formState.location,
+        description: formState.description,
+      };
+      await updateImage(requestBody, token.value)
+        .then((res) => {
+          formState.name = res.data.name;
+          formState.description = res.data.description;
+          formState.location = res.data.location;
+          isUpdate.value = false;
+          loading.value = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          loading.value = false;
+        });
+    };
+    return {
+      handleRemoveImage,
+      dayjs,
+      route,
+      handleDownload,
+      downloadImage,
+      isUpdate,
+      formState,
+      onFinish,
+      loading,
+    };
   },
 };
 </script>
@@ -197,9 +345,12 @@ export default {
   color: #e05858;
 }
 .image-modal-content {
+  margin-top: 1rem;
   padding: 0.5rem;
 }
 :deep(.ant-image) {
   height: 100%;
+}
+.image-modal-button {
 }
 </style>
