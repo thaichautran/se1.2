@@ -20,14 +20,14 @@ const uploadImageToAlbumFromDevice = (albumId, data, token) => {
 const uploadImageToAlbumFromHome = (albumId, imageId, token) => {
   return axios.post(
     `${UPLOAD_IMAGE_ALBUM_FROM_HOME}?albumId=${albumId}&imageId=${imageId}`,
-    data,
+    null,
     {
       headers: { Authorization: `Bearer ${token}` },
     }
   );
 };
-const createAlbum = (name, desc, token) => {
-  return axios.post(`${CREATE_ALBUM}?name=${name}&desc=${desc}`, {
+const createAlbum = (name, desc, data, token) => {
+  return axios.post(`${CREATE_ALBUM}?name=${name}&desc=${desc}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

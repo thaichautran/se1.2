@@ -106,7 +106,10 @@
                 Chỉnh sửa kỷ niệm
               </a-button>
 
-              <a-button style="border-radius: 18px; font-size: 16px">
+              <a-button
+                style="border-radius: 18px; font-size: 16px"
+                @click="showModal"
+              >
                 <img
                   style="margin-right: 0.25rem; margin-bottom: 0.25rem"
                   src="../../assets/image/Photo album.svg"
@@ -205,6 +208,16 @@
         </div>
       </a-col>
     </a-row>
+    <a-modal v-model:open="open" style="width: 100%">
+      <div class="album-modal-title">
+        <span>Chọn Album</span>
+      </div>
+      <AlbumListModal
+        @closeModal="handleUploadImageToAlbum"
+        @setImage="setImage"
+        style="margin-top: 1rem"
+      ></AlbumListModal>
+    </a-modal>
   </div>
 </template>
 
@@ -216,10 +229,13 @@ import { downloadImage, removeImageToTrash, updateImage } from "@/apis/images";
 import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-
+import AlbumListModal from "./AlbumListModal.vue";
+import { uploadImageToAlbumFromHome } from "@/apis/albums";
+import { message } from "ant-design-vue";
 export default {
   components: {
     EllipsisOutlined,
+    AlbumListModal,
   },
   props: {
     image: {
@@ -233,11 +249,19 @@ export default {
     const isRemove = ref(props.image.remove);
     const isUpdate = ref(false);
     const loading = ref(false);
+    const open = ref(false);
+    const albumId = ref();
     const formState = reactive({
       name: props.image.name,
       location: props.image.location,
       description: props.image.description,
     });
+    const showModal = () => {
+      open.value = true;
+    };
+    const setImage = (image) => {
+      albumId.value = image.id;
+    };
     const handleRemoveImage = async () => {
       if (isRemove.value) {
         await removeImageToTrash(props.image.id, false, token.value)
@@ -321,7 +345,27 @@ export default {
           loading.value = false;
         });
     };
+    const handleUploadImageToAlbum = async () => {
+      loading.value = true;
+      await uploadImageToAlbumFromHome(
+        albumId.value,
+        props.image.id,
+        token.value
+      )
+        .then((res) => {
+          console.log(res);
+          open.value = false;
+          loading.value = false;
+          message.success("Thêm ảnh vào album thành công");
+        })
+        .catch((err) => {
+          console.log(err);
+          loading.value = false;
+          message.error("Thêm ảnh vào album thất bại");
+        });
+    };
     return {
+      handleUploadImageToAlbum,
       handleRemoveImage,
       dayjs,
       route,
@@ -331,6 +375,9 @@ export default {
       formState,
       onFinish,
       loading,
+      open,
+      showModal,
+      setImage,
     };
   },
 };
@@ -352,5 +399,12 @@ export default {
   height: 100%;
 }
 .image-modal-button {
+}
+.album-modal-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 1.5rem;
 }
 </style>

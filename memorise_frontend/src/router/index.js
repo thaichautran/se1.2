@@ -29,6 +29,16 @@ const routes = [
         component: () => import("../views/Album"),
       },
       {
+        path: "/albums/create_album",
+        name: "album",
+        component: () => import("../views/CreateAlbum"),
+      },
+      {
+        path: "/album",
+        name: "album2",
+        component: () => import("../views/AlbumDetail"),
+      },
+      {
         path: "/favorites",
         name: "favorites",
         component: () => import("../views/Favorite"),
@@ -47,7 +57,7 @@ const routes = [
   },
 
   {
-    path: "/introduction/",
+    path: "/introduction",
     name: "intro",
     component: () => import("../views/Introduction"),
   },

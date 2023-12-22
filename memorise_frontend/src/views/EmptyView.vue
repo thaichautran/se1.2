@@ -16,6 +16,16 @@
 
       <p class="empty-desc">Hãy thêm những kỷ niệm yêu thích của bạn!</p>
     </div>
+    <div class="empty-container" v-else-if="route.path == '/albums'">
+      <div class="empty-image">
+        <img src="../assets/image/Images_empty.svg" alt="empty" />
+      </div>
+      <h1 class="empty-title">Không có album nào</h1>
+
+      <p class="empty-desc">
+        Hãy tạo những album của bạn để trình chiếu đỉnh cao!
+      </p>
+    </div>
     <div class="empty-container" v-else>
       <div class="empty-image">
         <img src="../assets/image/Images_empty.svg" alt="empty" />

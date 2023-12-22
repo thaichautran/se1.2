@@ -1,5 +1,10 @@
 <template>
-  <a-col :span="3" @click.prevent="showModal" style="cursor: pointer">
+  <a-col
+    :span="3"
+    @click.prevent="showModal"
+    style="cursor: pointer"
+    class="image-item-hover"
+  >
     <a-modal v-model:open="open" style="width: 1100px">
       <template #footer>
         <div style="text-align: -webkit-right">
@@ -49,11 +54,12 @@
         object-fit: cover;
         object-position: center;
       "
-      :src="image?.url"
+      v-lazy="image.url"
+      :src="image.url"
     />
     <div v-else-if="image.url.includes('.mp4')">
       <video
-        :src="image?.url"
+        :src="image.url"
         style="aspect-ratio: 1 / 1; width: 100%"
         controls
       ></video>
@@ -148,6 +154,12 @@ export default {
     display: flex;
     justify-content: space-between;
     width: 50%;
+  }
+}
+.image-item-hover {
+  transition: all 0.5s;
+  &:hover {
+    opacity: 0.7;
   }
 }
 </style>
