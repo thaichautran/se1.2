@@ -2,6 +2,7 @@ package com.memorise.memorise_backend.imp;
 
 import com.memorise.memorise_backend.dto.AlbumDTO;
 import com.memorise.memorise_backend.dto.ImageDTO;
+import com.memorise.memorise_backend.payload.request.UpdateAlbumRequest;
 import com.memorise.memorise_backend.payload.request.UploadRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 public interface AlbumServiceImp {
     AlbumDTO createAlbum(MultipartFile file, String desc, String name);
+    AlbumDTO updateInforAlbum(UpdateAlbumRequest updateAlbumRequest);
     boolean addImageToAlbum(int albumId, int imageId);
     boolean uploadImageToAlbum(UploadRequest uploadRequest, int albumId);
     List<ImageDTO> getImagesInAlbum(int albumId);
