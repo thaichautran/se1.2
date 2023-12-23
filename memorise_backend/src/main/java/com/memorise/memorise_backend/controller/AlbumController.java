@@ -4,6 +4,7 @@ import com.memorise.memorise_backend.dto.AlbumDTO;
 import com.memorise.memorise_backend.imp.AlbumServiceImp;
 import com.memorise.memorise_backend.imp.CloudinaryServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
+import com.memorise.memorise_backend.payload.request.UpdateAlbumRequest;
 import com.memorise.memorise_backend.payload.request.UploadRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -154,4 +155,23 @@ public class AlbumController {
         respondData.setDesc("Request is successfully");
         return new ResponseEntity<>(respondData, HttpStatus.OK);
     }
+
+    @Operation(
+            description = "Update ìnformation of album",
+            summary = "This API to update ìnformation of album",
+            responses = {
+                    @ApiResponse(
+                            description = "Request is successful!",
+                            responseCode = "200"
+                    )
+            }
+    )
+    @PutMapping("/update_album")
+    public ResponseEntity<?> updateInforAlbum(@RequestBody UpdateAlbumRequest updateAlbumRequest) {
+        RespondData respondData = new RespondData();
+        respondData.setData(albumServiceImp.updateInforAlbum(updateAlbumRequest));
+        respondData.setDesc("Request is successfully");
+        return new ResponseEntity<>(respondData, HttpStatus.OK);
+    }
+
 }

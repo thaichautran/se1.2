@@ -11,6 +11,7 @@ import com.memorise.memorise_backend.entity.ImageAlbum;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.entity.key.KeyImageAlbum;
 import com.memorise.memorise_backend.imp.AlbumServiceImp;
+import com.memorise.memorise_backend.payload.request.UpdateAlbumRequest;
 import com.memorise.memorise_backend.payload.request.UploadRequest;
 import com.memorise.memorise_backend.repository.AlbumRepository;
 import com.memorise.memorise_backend.repository.ImageAlbumRepository;
@@ -96,6 +97,30 @@ public class AlbumService implements AlbumServiceImp {
         imageAlbumRepository.save(imageAlbum);
 
 
+        return albumDTO;
+    }
+
+    @Override
+    public AlbumDTO updateInforAlbum(UpdateAlbumRequest updateAlbumRequest) {
+        Optional<Album> album = albumRepository.findById(updateAlbumRequest.getId());
+        AlbumDTO albumDTO = new AlbumDTO();
+
+        if(album != null){
+            album.get().setName(updateAlbumRequest.getName());
+            album.get().setDescription(updateAlbumRequest.getDesc());
+            album.get().setCoverPhoto(updateAlbumRequest.getCoverPhoto());
+            Date updateDate = new Date();
+            album.get().setUpdateDate(updateDate);
+
+            albumRepository.save(album.get());
+
+            albumDTO.setId(updateAlbumRequest.getId());
+            albumDTO.setName(updateAlbumRequest.getName());
+            albumDTO.setDescription(updateAlbumRequest.getDesc());
+            albumDTO.setUrl(updateAlbumRequest.getCoverPhoto());
+            albumDTO.setCreateDate(album.get().getCreateDate());
+            albumDTO.setUpdateDate(updateDate);
+        }
         return albumDTO;
     }
 
