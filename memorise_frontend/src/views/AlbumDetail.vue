@@ -12,7 +12,17 @@
               .format("Ngày D MMMM [năm] YYYY, [lúc] HH [giờ] mm [phút]")
           }}
         </p>
-        <a-button class="album-detail-btn">
+        <a-button
+          class="album-detail-btn"
+          @click="
+            () => {
+              router.push({
+                name: 'slideshow',
+                query: { id: route.query.id, name: route.query.name },
+              });
+            }
+          "
+        >
           <PlayCircleOutlined /> Trình chiếu
         </a-button>
       </div>
@@ -415,6 +425,7 @@ export default {
       loading,
       setImage,
       handleRemoveAlbum,
+      router,
     };
   },
   created() {

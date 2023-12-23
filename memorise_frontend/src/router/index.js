@@ -61,6 +61,11 @@ const routes = [
     name: "intro",
     component: () => import("../views/Introduction"),
   },
+  {
+    path: "/slideshow",
+    name: "slideshow",
+    component: () => import("../views/Slideshow"),
+  },
 ];
 
 const router = createRouter({
