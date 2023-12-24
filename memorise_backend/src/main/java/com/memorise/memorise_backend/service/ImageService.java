@@ -3,9 +3,11 @@ package com.memorise.memorise_backend.service;
 import com.cloudinary.Url;
 import com.memorise.memorise_backend.dto.ImageDTO;
 import com.memorise.memorise_backend.entity.Image;
+import com.memorise.memorise_backend.entity.ImageAlbum;
 import com.memorise.memorise_backend.entity.User;
 import com.memorise.memorise_backend.imp.ImageServiceImp;
 import com.memorise.memorise_backend.payload.request.UpdateImageRequest;
+import com.memorise.memorise_backend.repository.ImageAlbumRepository;
 import com.memorise.memorise_backend.repository.ImageRepository;
 import com.memorise.memorise_backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ImageService implements ImageServiceImp {
 
     @Autowired
     ImageRepository imageRepository;
+
+    @Autowired
+    ImageAlbumRepository imageAlbumRepository;
 
     @Override
     public List<ImageDTO> getAllImages() {
@@ -296,10 +301,20 @@ public class ImageService implements ImageServiceImp {
         String authenValue = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int userId = Integer.parseInt(authenValue.split(" - ")[1]);
         Optional<User> user = userRepository.findById(userId);
+        List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
+        List<ImageAlbum> imageAlbums = new ArrayList<>();
+        for(Image img : images){
+            ImageAlbum imageAlbum = imageAlbumRepository.findByKeyImageId(img.getId());
+            if(imageAlbum != null){
+                imageAlbums.add(imageAlbum);
+            }
+        }
+
+        imageAlbumRepository.deleteAll(imageAlbums);
 
         if (user != null) {
-            List<Image> images = imageRepository.findByIsRemoveAndUser(true, user.get());
-            imageRepository.deleteAll(images);
+            List<Image> imageList = imageRepository.findByIsRemoveAndUser(true, user.get());
+            imageRepository.deleteAll(imageList);
             return true;
         }
         return false;
