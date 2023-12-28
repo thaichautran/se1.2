@@ -151,7 +151,17 @@ public class ImageService implements ImageServiceImp {
         if (image != null) {
             Image img = image.get();
             img.setRemove(status);
+
+            if(img.isFavourite()){
+                img.setFavourite(false);
+            }
+
             imageRepository.save(img);
+
+            List<ImageAlbum> imageAlbums = imageAlbumRepository.findAllByKeyImageId(img.getId());
+            if(imageAlbums != null){
+                imageAlbumRepository.deleteAll(imageAlbums);
+            }
 
             ImageDTO imageDTO = new ImageDTO();
 
