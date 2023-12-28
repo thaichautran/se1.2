@@ -72,7 +72,17 @@
         Ảnh <span style="font-weight: bold">{{ current }}</span> /
         {{ imageList.length }}
       </p>
-      <button id="close" @click="router.back"><CloseOutlined /></button>
+      <button
+        id="close"
+        @click="
+          () => {
+            router.back();
+            toggleFullscreen();
+          }
+        "
+      >
+        <CloseOutlined />
+      </button>
       <div class="buttons">
         <button
           id="prev"
@@ -106,7 +116,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { getImagesFromAlbum } from "@/apis/albums";
@@ -173,6 +183,39 @@ export default {
       clearInterval(interval.value);
       isPlay.value = false;
     };
+
+    const resizeObserver = ref(null);
+
+    // Thực hiện các thao tác cần thiết khi component được mount
+    onMounted(() => {
+      try {
+        // Tạo một instance của ResizeObserver
+        resizeObserver.value = new ResizeObserver((entries) => {
+          // Xử lý sự kiện thay đổi kích thước ở đây
+          console.log("Resize event detected:", entries);
+        });
+
+        // Gắn ResizeObserver vào phần tử bạn muốn theo dõi
+        const targetElement = document.getElementsByTagName("image");
+        resizeObserver.value.observe(targetElement);
+      } catch (error) {
+        console.error("Error initializing ResizeObserver:", error);
+      }
+    });
+
+    // Hủy đăng ký ResizeObserver khi component bị unmount
+    onUnmounted(() => {
+      if (resizeObserver.value) {
+        resizeObserver.value.disconnect();
+      }
+    });
+    const toggleFullscreen = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    };
     return {
       albumId,
       getImageList,
@@ -186,10 +229,12 @@ export default {
       isPlay,
       handlePause,
       router,
+      toggleFullscreen,
     };
   },
   created() {
     this.getImageList();
+    this.toggleFullscreen();
   },
 };
 </script>
@@ -315,20 +360,24 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid #555;
+
   transition: 0.5s;
+  transition: 0.5s;
+  background-color: #fff;
+  opacity: 0.5;
 }
 #close {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 1px solid #000;
   margin-left: 1rem;
   transition: 0.5s;
   background-color: #fff;
   opacity: 0.5;
 }
-
+#close:hover {
+  background-color: #bac383;
+}
 .buttons button:hover {
   background-color: #bac383;
 }
