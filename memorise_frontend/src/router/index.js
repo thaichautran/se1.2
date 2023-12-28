@@ -51,6 +51,11 @@ const routes = [
     ],
   },
   {
+    path: "/album/pick_item",
+    name: "album3",
+    component: () => import("../views/PickItem"),
+  },
+  {
     path: "/authentication/:name",
     name: "auth",
     component: () => import("../views/Auth"),

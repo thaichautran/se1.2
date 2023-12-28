@@ -25,7 +25,8 @@ const CREATE_ALBUM = "/albums/create_album";
 const GET_IMAGES_BY_ALBUM = "/albums/get_images";
 const GET_ALBUMS = "/albums/get_albums";
 const DELETE_ALBUM = "/albums/delete_album";
-
+const UPDATE_ALBUM = "/albums/update_album";
+const REMOVE_IMAGE_FROM_ALBUM = "/albums/remove_image";
 export {
   USER_REGISTER,
   USER_LOGIN,
@@ -49,4 +50,6 @@ export {
   REMOVE_ALL,
   RESTORE_ALL,
   UPDATE_IMAGE,
+  UPDATE_ALBUM,
+  REMOVE_IMAGE_FROM_ALBUM,
 };

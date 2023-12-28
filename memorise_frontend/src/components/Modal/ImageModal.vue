@@ -59,7 +59,7 @@
                     >
                   </a-menu-item> -->
                   <a-menu-item key="2">
-                    <span
+                    <span @click="handleRemoveImageFromAlbum"
                       ><img
                         class="image-modal-icon"
                         src="../../assets/image/Photo album.svg"
@@ -209,6 +209,7 @@
       </a-col>
     </a-row>
     <a-modal v-model:open="open" style="width: 100%">
+      <template #footer> </template>
       <div class="album-modal-title">
         <span>Chọn Album</span>
       </div>
@@ -230,7 +231,10 @@ import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import AlbumListModal from "./AlbumListModal.vue";
-import { uploadImageToAlbumFromHome } from "@/apis/albums";
+import {
+  uploadImageToAlbumFromHome,
+  removeImageFromAlbum,
+} from "@/apis/albums";
 import { message } from "ant-design-vue";
 export default {
   components: {
@@ -282,6 +286,23 @@ export default {
           })
           .catch((err) => console.log(err));
       }
+    };
+    const handleRemoveImageFromAlbum = async () => {
+      await removeImageFromAlbum(
+        props.image.albumId,
+        props.image.id,
+        token.value
+      )
+        .then((res) => {
+          open.value = false;
+          message.success("Loại bỏ ảnh khỏi album thành công!");
+          console.log(res);
+        })
+        .catch((err) => {
+          open.value = false;
+          message.error("Loại bỏ ảnh khỏi album thất bại!");
+          console.log(err);
+        });
     };
     // function convertToHttps(httpLink) {
 
@@ -365,6 +386,7 @@ export default {
         });
     };
     return {
+      handleRemoveImageFromAlbum,
       handleUploadImageToAlbum,
       handleRemoveImage,
       dayjs,

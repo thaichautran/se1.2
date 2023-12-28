@@ -183,30 +183,6 @@
 
       <EmptyView v-else />
     </div>
-    <a-modal v-model:open="open" style="width: 100%">
-      <div class="album-modal-title">
-        <span>Chọn ảnh</span>
-        <a-upload
-          name="file2"
-          :multiple="false"
-          :max-count="1"
-          :before-upload="beforeUpload"
-          @change="handleChange"
-          @remove="handleRemove"
-          style="display: block; width: 150px"
-          :height="150"
-        >
-          <a-button style="border-radius: 18px">
-            Chọn ảnh từ thiết bị
-          </a-button>
-        </a-upload>
-      </div>
-      <ImageListModal
-        @closeModal="handleUploadImage"
-        @setImage="setImage"
-        style="margin-top: 1rem"
-      ></ImageListModal>
-    </a-modal>
   </div>
 </template>
 
@@ -220,14 +196,14 @@ import dayjs from "dayjs";
 import "dayjs/locale/vi";
 import ImageList from "../components/Image/ImageList.vue";
 import EmptyView from "./EmptyView.vue";
-import ImageListModal from "../components/Modal/ImageListModal.vue";
 import { message } from "ant-design-vue";
-import { uploadImageToAlbumFromHome, deleteAlbum } from "@/apis/albums";
+import { deleteAlbum } from "@/apis/albums";
 import {
   PlayCircleOutlined,
   EllipsisOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons-vue";
+
 export default {
   components: {
     ImageList,
@@ -235,7 +211,6 @@ export default {
     PlayCircleOutlined,
     EllipsisOutlined,
     PlusCircleOutlined,
-    ImageListModal,
   },
   setup() {
     const route = useRoute();
@@ -252,8 +227,12 @@ export default {
     const fileUpload = ref("");
     const loading = ref(false);
     const imageId = ref();
-    const showModal = () => {
+    const showModal = async () => {
       open.value = true;
+      await router.push({
+        path: "/album/pick_item",
+        query: { id: route.query.id },
+      });
     };
     const getImageList = async () => {
       await getImagesFromAlbum(route.query.id, token.value)
@@ -327,72 +306,8 @@ export default {
       getYesterday();
     });
 
-    const beforeUpload = (file) => {
-      const isJpgOrPng =
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/jpg";
-      if (!isJpgOrPng) {
-        message.error("Chỉ có thể tải lên ảnh!");
-        fileUpload.value = "";
-
-        return false;
-      }
-      if (
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/jpg"
-      ) {
-        const isLt10M = file.size / 1024 / 1024 < 10;
-        if (!isLt10M) {
-          message.error("Ảnh phải nhỏ hơn 10MB!");
-
-          fileUpload.value = "";
-          return false;
-        }
-        fileUpload.value = file;
-        return false;
-      }
-      fileUpload.value = file;
-      return false;
-    };
-    const handleChange = (info) => {
-      console.log(info);
-      //   if (info.fileList.length > 0) {
-      //     if (
-      //       info.file.type == "image/jpeg" ||
-      //       info.file.type == "image/png" ||
-      //       info.file.type == "image/jpg"
-      //     ) {
-      //     }
-      //   }
-    };
-    const handleRemove = () => {
-      fileUpload.value = "";
-    };
     const setImage = (image) => {
       imageId.value = image.id;
-    };
-    const handleUploadImage = async () => {
-      loading.value = true;
-      await uploadImageToAlbumFromHome(
-        route.query.id,
-        imageId.value,
-        token.value
-      )
-        .then((res) => {
-          console.log(res);
-          loading.value = false;
-          message.success("Thêm ảnh thành công!");
-          open.value = false;
-          getImageList();
-        })
-        .catch((err) => {
-          console.log(err);
-          message.error("Thêm ảnh thất bại!");
-          loading.value = false;
-          open.value = false;
-        });
     };
     const handleRemoveAlbum = async () => {
       await deleteAlbum(route.query.id, token.value)
@@ -416,12 +331,8 @@ export default {
       createdYearList,
       createdMonthList,
       showModal,
-      handleChange,
-      beforeUpload,
-      handleRemove,
       fileUpload,
       open,
-      handleUploadImage,
       loading,
       setImage,
       handleRemoveAlbum,
