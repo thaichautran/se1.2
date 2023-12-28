@@ -40,6 +40,12 @@
                   style="margin-top: 1rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
+                  @setImage="setImage"
+                  @closeModal="
+                    () => {
+                      $emit('closeModal');
+                    }
+                  "
                 />
               </p>
 
@@ -60,6 +66,12 @@
                   style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
+                  @setImage="setImage"
+                  @closeModal="
+                    () => {
+                      $emit('closeModal');
+                    }
+                  "
                 />
               </p>
 
@@ -85,6 +97,12 @@
                   style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
                   @getNewList="getImageList"
+                  @setImage="setImage"
+                  @closeModal="
+                    () => {
+                      $emit('closeModal');
+                    }
+                  "
                 />
               </p>
             </div>
@@ -111,7 +129,7 @@ export default {
     EmptyView,
   },
 
-  setup() {
+  setup(props, { emit }) {
     const store = useStore();
     const router = useRouter();
     const token = computed(() => store.state.user.userLogin.token);
@@ -185,7 +203,9 @@ export default {
         return formatDate(image.createDate) === date;
       });
     };
-
+    const setImage = (item) => {
+      emit("setImage", item);
+    };
     watchEffect(() => {
       getCreatedDateList();
       getMonth();
@@ -195,6 +215,7 @@ export default {
     });
 
     return {
+      setImage,
       yesterday,
       today,
       token,

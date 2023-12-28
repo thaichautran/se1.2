@@ -58,7 +58,7 @@
                       Xóa kỷ niệm</span
                     >
                   </a-menu-item> -->
-                  <a-menu-item key="2">
+                  <a-menu-item key="2" v-if="route.path == '/album'">
                     <span @click="handleRemoveImageFromAlbum"
                       ><img
                         class="image-modal-icon"
@@ -245,6 +245,9 @@ export default {
     image: {
       type: Object,
     },
+    albumId: {
+      type: Number,
+    },
   },
   setup(props, { emit }) {
     const store = useStore();
@@ -261,6 +264,7 @@ export default {
       description: props.image.description,
     });
     const showModal = () => {
+      console.log(props);
       open.value = true;
     };
     const setImage = (image) => {
@@ -288,11 +292,7 @@ export default {
       }
     };
     const handleRemoveImageFromAlbum = async () => {
-      await removeImageFromAlbum(
-        props.image.albumId,
-        props.image.id,
-        token.value
-      )
+      await removeImageFromAlbum(props.albumId, props.image.id, token.value)
         .then((res) => {
           open.value = false;
           message.success("Loại bỏ ảnh khỏi album thành công!");

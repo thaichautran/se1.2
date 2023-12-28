@@ -12,13 +12,12 @@
           :before-upload="beforeUpload"
           @change="handleChange"
           @remove="handleRemove"
-          style="display: block; margin-right: 1rem"
+          style="display: block"
           :height="150"
+          :show-upload-list="false"
         >
-          <a-button class="pick-modal-btn">
-            <UploadOutlined /> Tải lên
-          </a-button>
         </a-upload>
+        <UploadModal :albumId="route.query.id" />
         <a-button class="pick-modal-btn" @click="router.back()"
           >Hoàn tất</a-button
         >
@@ -36,22 +35,21 @@
 <script>
 import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { message } from "ant-design-vue";
+import UploadModal from "@/components/Modal/UploadModal.vue";
 import ImageListModal from "@/components/Modal/ImageListModal.vue";
 import { uploadImageToAlbumFromHome } from "@/apis/albums";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
-import { UploadOutlined } from "@ant-design/icons-vue";
 import TheSearch from "@/components/Search/TheSearch.vue";
 export default {
   components: {
     ImageListModal,
-    UploadOutlined,
     TheSearch,
+    UploadModal,
   },
   setup() {
     const imageId = ref();
-    const fileUpload = ref();
     const loading = ref(false);
     const store = useStore();
     const router = useRouter();
@@ -81,50 +79,6 @@ export default {
           router.back();
         });
     };
-    const beforeUpload = (file) => {
-      const isJpgOrPng =
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/jpg";
-      if (!isJpgOrPng) {
-        message.error("Chỉ có thể tải lên ảnh!");
-        fileUpload.value = "";
-
-        return false;
-      }
-      if (
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/jpg"
-      ) {
-        const isLt10M = file.size / 1024 / 1024 < 10;
-        if (!isLt10M) {
-          message.error("Ảnh phải nhỏ hơn 10MB!");
-
-          fileUpload.value = "";
-          return false;
-        }
-        fileUpload.value = file;
-        return false;
-      }
-      fileUpload.value = file;
-      return false;
-    };
-    const handleChange = (info) => {
-      console.log(info);
-      //   if (info.fileList.length > 0) {
-      //     if (
-      //       info.file.type == "image/jpeg" ||
-      //       info.file.type == "image/png" ||
-      //       info.file.type == "image/jpg"
-      //     ) {
-      //     }
-      //   }
-    };
-    const handleRemove = () => {
-      fileUpload.value = "";
-    };
-
     onMounted(() => {
       pickItem.value.style.animation = "up 0.5s ease-in-out";
     });
@@ -132,12 +86,8 @@ export default {
       pickItem.value.style.animation = "down 0.5s ease-in-out";
     });
     return {
-      handleChange,
-      handleRemove,
-      beforeUpload,
       imageId,
       handleUploadImage,
-      fileUpload,
       setImage,
       route,
       router,
@@ -178,19 +128,20 @@ export default {
   margin-top: 1.5rem;
 }
 .pick-modal-tilte-right {
+  width: 55%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .pick-modal-btn {
-  font-size: 1rem;
-  background-color: rgb(243, 244, 246);
-  border-radius: 18px;
+  font-size: 1rem !important;
+  background-color: rgb(243, 244, 246) !important;
+  border-radius: 18px !important;
 
   &:hover {
-    background-color: #171a1f;
+    background-color: #171a1f !important;
     color: #ffffff !important;
-    border: none;
+    border: none !important;
   }
 }
 </style>

@@ -7,9 +7,15 @@
         </h1>
         <p style="color: #565e6c; font-weight: 700">
           {{
-            dayjs(route.query.date)
+            dayjs(createdDateList[createdDateList.length - 1], "DD-MM-YYYY")
               .locale("vi")
-              .format("Ngày D MMMM [năm] YYYY, [lúc] HH [giờ] mm [phút]")
+              .format("Ngày D MMMM [năm] YYYY")
+          }}
+          -
+          {{
+            dayjs(createdDateList[0], "DD-MM-YYYY")
+              .locale("vi")
+              .format("Ngày D MMMM [năm] YYYY")
           }}
         </p>
         <a-button
@@ -173,6 +179,7 @@
                     style="margin-top: 2rem; margin-bottom: 3rem"
                     :imageList="getImageListByDate(date)"
                     @getNewList="getImageList"
+                    :albumId="route.query.id"
                   />
                 </p>
               </div>
