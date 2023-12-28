@@ -45,6 +45,14 @@ public class ImageService implements ImageServiceImp {
                 if (img.isRemove() == false) {
                     ImageDTO imageDTO = new ImageDTO();
 
+                    List<Integer> albumIds = new ArrayList<>();
+                    List<ImageAlbum> imageAlbums = imageAlbumRepository.findAllByKeyImageId(img.getId());
+                    if(imageAlbums != null){
+                        for(ImageAlbum imgA : imageAlbums){
+                            albumIds.add(imgA.getAlbum().getId());
+                        }
+                    }
+
                     imageDTO.setId(img.getId());
                     imageDTO.setUrl(img.getUrl());
                     imageDTO.setDescription(img.getDescription());
@@ -55,6 +63,7 @@ public class ImageService implements ImageServiceImp {
                     imageDTO.setRemove(img.isRemove());
                     imageDTO.setCreateDate(img.getCreateDate());
                     imageDTO.setUpdateDate(img.getUpdateDate());
+                    imageDTO.setAlbumIds(albumIds);
 
                     imageDTOS.add(imageDTO);
                 }
@@ -142,7 +151,17 @@ public class ImageService implements ImageServiceImp {
         if (image != null) {
             Image img = image.get();
             img.setRemove(status);
+
+            if(img.isFavourite()){
+                img.setFavourite(false);
+            }
+
             imageRepository.save(img);
+
+            List<ImageAlbum> imageAlbums = imageAlbumRepository.findAllByKeyImageId(img.getId());
+            if(imageAlbums != null){
+                imageAlbumRepository.deleteAll(imageAlbums);
+            }
 
             ImageDTO imageDTO = new ImageDTO();
 
