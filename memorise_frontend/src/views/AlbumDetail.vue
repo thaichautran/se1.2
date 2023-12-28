@@ -5,7 +5,10 @@
         <h1 class="text-title" style="margin-bottom: 1rem">
           {{ route.query.name }}
         </h1>
-        <p style="color: #565e6c; font-weight: 700">
+        <p
+          v-if="createdDateList.length >= 2"
+          style="color: #565e6c; font-weight: 700"
+        >
           {{
             dayjs(createdDateList[createdDateList.length - 1], "DD-MM-YYYY")
               .locale("vi")
@@ -14,6 +17,26 @@
           -
           {{
             dayjs(createdDateList[0], "DD-MM-YYYY")
+              .locale("vi")
+              .format("Ngày D MMMM [năm] YYYY")
+          }}
+        </p>
+        <p
+          style="color: #565e6c; font-weight: 700"
+          v-else-if="createdDateList.length == 1"
+        >
+          {{
+            dayjs(createdDateList[0], "DD-MM-YYYY")
+              .locale("vi")
+              .format("Ngày D MMMM [năm] YYYY")
+          }}
+        </p>
+        <p
+          style="color: #565e6c; font-weight: 700"
+          v-else-if="createdDateList.length <= 0"
+        >
+          {{
+            dayjs(route.query.date)
               .locale("vi")
               .format("Ngày D MMMM [năm] YYYY")
           }}
