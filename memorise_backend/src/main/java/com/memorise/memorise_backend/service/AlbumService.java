@@ -217,20 +217,23 @@ public class AlbumService implements AlbumServiceImp {
 
         List<ImageDTO> imageDTOS = new ArrayList<>();
         for (Image img : images) {
-            ImageDTO imageDTO = new ImageDTO();
 
-            imageDTO.setId(img.getId());
-            imageDTO.setUrl(img.getUrl());
-            imageDTO.setName(img.getName());
-            imageDTO.setLocation(img.getLocation());
-            imageDTO.setDescription(img.getDescription());
-            imageDTO.setCreateDate(img.getCreateDate());
-            imageDTO.setUpdateDate(img.getUpdateDate());
-            imageDTO.setFavourite(img.isFavourite());
-            imageDTO.setPublic(img.isPublic());
-            imageDTO.setRemove(img.isRemove());
+            if(img.isRemove() == false){
+                ImageDTO imageDTO = new ImageDTO();
 
-            imageDTOS.add(imageDTO);
+                imageDTO.setId(img.getId());
+                imageDTO.setUrl(img.getUrl());
+                imageDTO.setName(img.getName());
+                imageDTO.setLocation(img.getLocation());
+                imageDTO.setDescription(img.getDescription());
+                imageDTO.setCreateDate(img.getCreateDate());
+                imageDTO.setUpdateDate(img.getUpdateDate());
+                imageDTO.setFavourite(img.isFavourite());
+                imageDTO.setPublic(img.isPublic());
+                imageDTO.setRemove(img.isRemove());
+
+                imageDTOS.add(imageDTO);
+            }
         }
 
         return imageDTOS;
