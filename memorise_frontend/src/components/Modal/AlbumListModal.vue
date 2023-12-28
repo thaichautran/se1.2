@@ -13,7 +13,12 @@
       "
     >
       <img
-        style="width: 100%; aspect-ratio: 1/1; object-fit: cover"
+        style="
+          width: 100%;
+          aspect-ratio: 1/1;
+          object-fit: cover;
+          border-radius: 8px;
+        "
         v-lazy="item.url"
         :src="item.url"
       />

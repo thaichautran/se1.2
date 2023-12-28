@@ -1,13 +1,13 @@
 <template>
   <section id="modal-upload">
     <span
+      class="interactive"
       style="
         font-size: 16px;
         background-color: #f3f4f6;
         border-radius: 18px;
         padding: 0.5rem 1rem;
       "
-      class="interactive"
       @click="showModal"
     >
       <UploadOutlined />
@@ -28,7 +28,17 @@
         >
 
         <a-button
+          v-if="route.path == '/album/pick_item'"
           key="submit"
+          style="border-radius: 18px"
+          :loading="loading"
+          @click="handleOkToAlbum"
+          :disabled="fileUpload == ''"
+          >Tải lên</a-button
+        >
+        <a-button
+          v-else
+          key="submit2"
           style="border-radius: 18px"
           :loading="loading"
           @click="handleOk"
@@ -127,12 +137,19 @@ import { message } from "ant-design-vue";
 import { uploadImage, uploadVideo } from "@/apis/images";
 import { useStore } from "vuex";
 import { getAllImageByUser } from "@/apis/images";
+import { uploadImageToAlbumFromDevice } from "@/apis/albums";
+import { useRoute } from "vue-router";
 export default {
   components: {
     UploadOutlined,
     CloudUploadOutlined,
   },
-  setup() {
+  props: {
+    albumId: {
+      type: Number,
+    },
+  },
+  setup(props) {
     const store = useStore();
     const open = ref(false);
     const loading = ref(false);
@@ -147,7 +164,7 @@ export default {
       desc: "",
     });
     const token = computed(() => store.state.user.userLogin.token);
-
+    const route = useRoute();
     //show modal
     const showModal = () => {
       if (token.value) {
@@ -164,7 +181,6 @@ export default {
     }
     const beforeUpload = (file) => {
       formState.name = file.name;
-      console.log(file);
       const isJpgOrPng =
         file.type === "image/jpeg" ||
         file.type === "image/png" ||
@@ -278,6 +294,36 @@ export default {
           message.error("Tải lên thất bại");
         });
     };
+    const handleOkToAlbum = async () => {
+      let bodyFormData = new FormData();
+      bodyFormData.append("file", fileUpload.value);
+      bodyFormData.append("name", formState.name);
+      bodyFormData.append("description", formState.desc);
+      bodyFormData.append("location", formState.location);
+
+      confirmLoading.value = true;
+      loading.value = true;
+      await uploadImageToAlbumFromDevice(
+        props.albumId,
+        bodyFormData,
+        token.value
+      )
+        .then((res) => {
+          console.log(res);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.success("Tải lên thành công");
+          getImageList();
+        })
+        .catch((err) => {
+          console.log(err);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.error("Tải lên thất bại");
+        });
+    };
     const getImageList = async () => {
       await getAllImageByUser(token.value)
         .then((res) => {
@@ -297,6 +343,8 @@ export default {
       showModal,
       handleOk,
       handleCancel,
+      handleOkToAlbum,
+      route,
       formState,
       fileList,
       loading,

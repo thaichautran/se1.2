@@ -1,5 +1,44 @@
 <template>
   <a-col
+    v-if="
+      route.path == '/album/pick_item' || route.path == '/albums/create_album'
+    "
+    :span="3"
+    @click="
+      () => {
+        $emit('setImage', image);
+        $emit('closeModal');
+      }
+    "
+    style="cursor: pointer"
+    class="image-item-hover"
+  >
+    <img
+      v-if="
+        image.url.includes('.jpg') ||
+        image.url.includes('.png') ||
+        image.url.includes('.jpeg')
+      "
+      style="
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+      "
+      v-lazy="image.url"
+      :src="image.url"
+    />
+    <div v-else-if="image.url.includes('.mp4')">
+      <video
+        :src="image.url"
+        style="aspect-ratio: 1 / 1; width: 100%"
+        controls
+      ></video>
+    </div>
+    <div v-else></div>
+  </a-col>
+  <a-col
+    v-else
     :span="3"
     @click.prevent="showModal"
     style="cursor: pointer"
@@ -40,6 +79,7 @@
         :image="image"
         @closeModal="closeModal"
         @getNewList="getNewList"
+        :albumId="albumId"
       ></ImageModal>
     </a-modal>
     <img
@@ -76,10 +116,14 @@ import { favouriteImage } from "@/apis/images";
 import { useStore } from "vuex";
 import useClipboard from "vue-clipboard3";
 import { message } from "ant-design-vue";
+import { useRoute } from "vue-router";
 export default {
   props: {
     image: {
       type: Object,
+    },
+    albumId: {
+      type: Number,
     },
   },
   components: {
@@ -88,6 +132,7 @@ export default {
     ShareAltOutlined,
   },
   setup(props, { emit }) {
+    const route = useRoute();
     const store = useStore();
     const token = computed(() => store.state.user.userLogin.token);
     const open = ref(false);
@@ -143,6 +188,7 @@ export default {
       closeModal,
       getNewList,
       handleShare,
+      route,
     };
   },
 };

@@ -153,7 +153,7 @@
     <a-modal v-model:open="open" style="width: 100%">
       <div class="album-modal-title">
         <span>Chọn ảnh</span>
-        <a-upload
+        <!-- <a-upload
           name="file2"
           :multiple="false"
           :max-count="1"
@@ -166,7 +166,7 @@
           <a-button style="border-radius: 18px">
             Chọn ảnh từ thiết bị
           </a-button>
-        </a-upload>
+        </a-upload> -->
       </div>
       <ImageListModal
         @closeModal="
@@ -315,6 +315,7 @@ export default {
     }
 
     const setImage = (image) => {
+      console.log(image);
       imageId.value = image.id;
       imageUrlImage.value = image.url;
     };

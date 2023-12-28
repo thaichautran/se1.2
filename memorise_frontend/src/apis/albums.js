@@ -6,6 +6,8 @@ import {
   GET_IMAGES_BY_ALBUM,
   GET_ALBUMS,
   DELETE_ALBUM,
+  UPDATE_ALBUM,
+  REMOVE_IMAGE_FROM_ALBUM,
 } from "./constants";
 
 const uploadImageToAlbumFromDevice = (albumId, data, token) => {
@@ -47,7 +49,24 @@ const deleteAlbum = (albumId, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+const updateAlbum = (data, token) => {
+  return axios.put(`${UPDATE_ALBUM}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+const removeImageFromAlbum = (albumId, imageId, token) => {
+  return axios.put(
+    `${REMOVE_IMAGE_FROM_ALBUM}?albumId=${albumId}&imageId=${imageId}`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+};
 export {
+  updateAlbum,
+  removeImageFromAlbum,
   uploadImageToAlbumFromDevice,
   uploadImageToAlbumFromHome,
   createAlbum,

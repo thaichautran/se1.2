@@ -4,7 +4,14 @@
       v-for="item in imageList"
       :key="item.id"
       :image="item"
+      :albumId="albumId"
       @getNewList="getNewList"
+      @setImage="setImage"
+      @closeModal="
+        () => {
+          $emit('closeModal');
+        }
+      "
     />
   </a-row>
 </template>
@@ -17,6 +24,9 @@ export default {
   props: {
     imageList: {
       type: Array,
+    },
+    albumId: {
+      type: Number,
     },
   },
 
@@ -33,7 +43,10 @@ export default {
     const getNewList = () => {
       emit("getNewList");
     };
-    return { getNewList };
+    const setImage = (item) => {
+      emit("setImage", item);
+    };
+    return { getNewList, setImage };
   },
 };
 </script>
