@@ -296,6 +296,7 @@ export default {
         .then((res) => {
           open.value = false;
           message.success("Loại bỏ ảnh khỏi album thành công!");
+          emit("getNewList");
           console.log(res);
         })
         .catch((err) => {
