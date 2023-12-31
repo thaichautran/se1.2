@@ -30,7 +30,10 @@
         <SearchOutlined />
       </template>
     </a-input>
-    <div class="search-list">
+    <div
+      class="search-list"
+      v-if="imageSearchList.length > 0 && imageSearchList.length <= 8"
+    >
       <ul
         class="search-ul"
         v-if="imageSearchList.length > 0 && keySearch && !isBlur"
@@ -41,6 +44,66 @@
           @click="handleClickSearchItem(key)"
         >
           <span class="search-list-title">{{ key }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="search-list" v-if="imageSearchList.length > 8 && !isFull">
+      <ul
+        class="search-ul"
+        v-if="imageSearchList.length > 0 && keySearch && !isBlur"
+      >
+        <li
+          v-for="(key, index) in imageSearchList.slice(0, 9)"
+          :key="index"
+          @click="handleClickSearchItem(key)"
+        >
+          <span class="search-list-title">{{ key }}</span>
+        </li>
+        <li
+          style="
+            color: #565e6c;
+            font-weight: 700;
+            box-shadow: 0px 4px 9px 0px rgba(23, 26, 31, 0.11),
+              0px 0px 2px 0px rgba(23, 26, 31, 0.12);
+          "
+          @click.stop="
+            (e) => {
+              e.stopImmediatePropagation();
+              handleFull(e, true);
+            }
+          "
+        >
+          Hiển thị toàn bộ kết quả tìm kiếm
+        </li>
+      </ul>
+    </div>
+    <div class="search-list" v-if="imageSearchList.length > 8 && isFull">
+      <ul
+        class="search-ul"
+        v-if="imageSearchList.length > 0 && keySearch && !isBlur"
+      >
+        <li
+          v-for="(key, index) in imageSearchList"
+          :key="index"
+          @click="handleClickSearchItem(key)"
+        >
+          <span class="search-list-title">{{ key }}</span>
+        </li>
+        <li
+          style="
+            color: #565e6c;
+            font-weight: 700;
+            box-shadow: 0px 4px 9px 0px rgba(23, 26, 31, 0.11),
+              0px 0px 2px 0px rgba(23, 26, 31, 0.12);
+          "
+          @click.stop="
+            (e) => {
+              e.stopImmediatePropagation();
+              handleFull(false);
+            }
+          "
+        >
+          Ẩn bớt kết quả tìm kiếm
         </li>
       </ul>
     </div>
@@ -65,8 +128,11 @@ export default {
     const router = useRouter();
     const token = computed(() => store.state.user.userLogin.token);
     const imageSearchList = ref([...store.state.image.imageSearchList]);
+    const imageSearchListShort = ref(
+      [...store.state.image.imageSearchList].slice(0, 9)
+    );
     const isBlur = ref(false);
-
+    const isFull = ref(false);
     watchEffect(() => {
       imageSearchList.value = [...store.state.image.imageSearchList];
     });
@@ -89,6 +155,7 @@ export default {
             }),
           ];
           imageSearchList.value = new Set(imageSearchList.value);
+          imageSearchListShort.value = [...imageSearchList.value].slice(0, 9);
           store.dispatch("image/getSearchListAction", {
             data: imageSearchList.value,
           });
@@ -103,6 +170,16 @@ export default {
         isBlur.value = true;
       }, 200);
     };
+    const handleFull = (value) => {
+      isBlur.value = false;
+      setTimeout(() => {
+        isBlur.value = false;
+      }, 0);
+      if (isBlur.value == false) {
+        isFull.value = value;
+      }
+    };
+
     const handleClickSearchItem = (key) => {
       router.push({
         path: `/search`,
@@ -119,6 +196,9 @@ export default {
       handleBlur,
       isBlur,
       router,
+      imageSearchListShort,
+      isFull,
+      handleFull,
     };
   },
 };
