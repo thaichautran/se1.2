@@ -17,7 +17,7 @@ const GET_TRASH_IMAGE = "/images/get_trash";
 const REMOVE_ALL = "/images/delete_all";
 const RESTORE_ALL = "/images/restore_all";
 const UPDATE_IMAGE = "/images/update_image";
-
+const FIND_IMAGES = "/images/find_images";
 //album
 const UPLOAD_IMAGE_ALBUM_FROM_DEVICE = "/albums/upload/device";
 const UPLOAD_IMAGE_ALBUM_FROM_HOME = "/albums/upload/home";
@@ -52,4 +52,5 @@ export {
   UPDATE_IMAGE,
   UPDATE_ALBUM,
   REMOVE_IMAGE_FROM_ALBUM,
+  FIND_IMAGES,
 };

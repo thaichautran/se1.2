@@ -1,5 +1,10 @@
 <template>
-  <div class="slideshow">
+  <div
+    class="slideshow"
+    @keyup.right="handleNext()"
+    @keyup.space.prevent="handlePlay()"
+    @keyup.left="handlePrev()"
+  >
     <div class="container">
       <div id="slide">
         <div v-for="item in imageList" :key="item.id" class="item">
@@ -94,10 +99,20 @@
         >
           <LeftOutlined />
         </button>
-        <button id="play" v-if="!isPlay" @click="handlePlay">
+        <button
+          id="play"
+          v-if="isPlay == false"
+          @keyup.prevent.space="handlePlay"
+          @click="handlePlay"
+        >
           <CaretRightOutlined />
         </button>
-        <button id="pause" v-else @click="handlePause">
+        <button
+          v-else
+          id="pause"
+          @keydown.prevent.space="handlePause"
+          @click="handlePause"
+        >
           <PauseOutlined />
         </button>
         <button
@@ -174,6 +189,7 @@ export default {
         : (current.value = current.value - 1);
     };
     const handlePlay = () => {
+      clearInterval(interval.value);
       isPlay.value = true;
       interval.value = setInterval(() => {
         handleNext();
@@ -185,17 +201,12 @@ export default {
     };
 
     const resizeObserver = ref(null);
-
-    // Thực hiện các thao tác cần thiết khi component được mount
     onMounted(() => {
       try {
-        // Tạo một instance của ResizeObserver
         resizeObserver.value = new ResizeObserver((entries) => {
-          // Xử lý sự kiện thay đổi kích thước ở đây
           console.log("Resize event detected:", entries);
         });
 
-        // Gắn ResizeObserver vào phần tử bạn muốn theo dõi
         const targetElement = document.getElementsByTagName("image");
         resizeObserver.value.observe(targetElement);
       } catch (error) {
@@ -239,7 +250,7 @@ export default {
 };
 </script>
 
-<style  scoped>
+<style scoped>
 .container {
   position: absolute;
   left: 50%;

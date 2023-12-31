@@ -11,6 +11,7 @@ import {
   REMOVE_ALL,
   RESTORE_ALL,
   UPDATE_IMAGE,
+  FIND_IMAGES,
 } from "./constants";
 
 const uploadImage = (data, token) => {
@@ -74,6 +75,11 @@ const updateImage = (requestBody, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const findImages = (information, token) => {
+  return axios.get(`${FIND_IMAGES}?information=${information}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export {
   updateImage,
   uploadImage,
@@ -86,4 +92,5 @@ export {
   getTrashImage,
   removeAllImageFromTrash,
   restoreAllImageFromTrash,
+  findImages,
 };
