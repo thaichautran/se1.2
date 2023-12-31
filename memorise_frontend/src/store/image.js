@@ -3,6 +3,7 @@ const state = () => {
     imageList: [],
     imageTrashList: [],
     imageFavouriteList: [],
+    imageSearchList: [],
   };
 };
 const mutations = {
@@ -12,6 +13,9 @@ const mutations = {
   setTrashImages(state, payload) {
     state.imageTrashList = payload;
   },
+  setSearchList(state, payload) {
+    state.imageSearchList = payload;
+  },
 };
 const actions = {
   getAllImagesAction({ commit }, { data }) {
@@ -19,6 +23,9 @@ const actions = {
   },
   getTrashImagesAction({ commit }, { data }) {
     commit("setTrashImages", data);
+  },
+  getSearchListAction({ commit }, { data }) {
+    commit("setSearchList", data);
   },
 };
 export default {

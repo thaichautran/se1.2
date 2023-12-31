@@ -48,6 +48,11 @@ const routes = [
         name: "trash",
         component: () => import("../views/Trash"),
       },
+      {
+        path: "/search",
+        name: "search",
+        component: () => import("../views/SearchView"),
+      },
     ],
   },
   {

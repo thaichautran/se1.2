@@ -26,6 +26,28 @@
         Hãy tạo những album của bạn để trình chiếu đỉnh cao!
       </p>
     </div>
+    <div class="empty-container" v-else-if="route.path == '/album'">
+      <div class="empty-image">
+        <img
+          src="../assets/image/Images_empty.svg"
+          style="width: 300px"
+          alt="empty"
+        />
+      </div>
+      <h1 class="empty-title">Không có ảnh nào trong album</h1>
+
+      <p class="empty-desc">
+        Hãy thêm ảnh vào album của bạn để trình chiếu đỉnh cao!
+      </p>
+    </div>
+    <div class="empty-container" v-else-if="route.path == '/search'">
+      <div class="empty-image">
+        <img src="../assets/image/notsearch.png" alt="empty" />
+      </div>
+      <h1 class="empty-title">Không tìm thấy kết quả nào!</h1>
+
+      <p class="empty-desc">Hãy thử tìm kiếm với từ khóa khác</p>
+    </div>
     <div class="empty-container" v-else>
       <div class="empty-image">
         <img src="../assets/image/Images_empty.svg" alt="empty" />

@@ -42,6 +42,7 @@
           }}
         </p>
         <a-button
+          :disabled="imageAlbumList.length <= 0"
           class="album-detail-btn"
           @click="
             () => {
@@ -383,7 +384,14 @@ export default {
     background-color: #171a1f;
     color: #ffffff;
   }
+  &:disabled {
+    border-color: #d9d9d9;
+    color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.04);
+    box-shadow: none;
+  }
 }
+
 .album-detail-top {
   display: flex;
   justify-content: space-between;
