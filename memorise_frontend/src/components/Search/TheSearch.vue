@@ -142,14 +142,14 @@ export default {
           imageSearchList.value = res.data;
           imageSearchList.value = [
             ...imageSearchList.value.map((item) => {
-              if (item.name.includes(keySearch.value)) {
-                return item.name.split("\n")[0].trim();
-              } else if (item.location.includes(keySearch.value)) {
-                return item.location.split("\n")[0].trim();
+              if (item?.name?.includes(keySearch.value)) {
+                return item.name?.split("\n")[0].trim();
+              } else if (item?.location?.includes(keySearch.value)) {
+                return item?.location?.split("\n")[0].trim();
               } else {
                 return (
-                  item.name.split("\n")[0].trim(),
-                  item.location.split("\n")[0].trim()
+                  item?.name?.split("\n")[0].trim(),
+                  item?.location?.split("\n")[0].trim()
                 );
               }
             }),
@@ -181,12 +181,14 @@ export default {
     };
 
     const handleClickSearchItem = (key) => {
-      router.push({
-        path: `/search`,
-        query: {
-          key,
-        },
-      });
+      if (key) {
+        router.push({
+          path: `/search`,
+          query: {
+            key,
+          },
+        });
+      }
     };
 
     return {
