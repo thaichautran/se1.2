@@ -11,6 +11,7 @@
           id: album.id,
           date: album.createDate,
           desc: album.description,
+          url: album.url,
         },
       })
     "

@@ -24,7 +24,15 @@
       </div>
     </div>
     <ImageListModal
-      @closeModal="handleUploadImage"
+      @closeModal="
+        () => {
+          if (route.query.type == 'image') {
+            handleUploadImage();
+          } else if (route.query.type == 'coverImage') {
+            handleUpdateAlbum();
+          }
+        }
+      "
       @setImage="setImage"
       style="margin-top: 1rem; padding: 2rem"
     ></ImageListModal>
@@ -37,7 +45,7 @@ import { computed, onMounted, onBeforeUnmount, ref } from "vue";
 import { message } from "ant-design-vue";
 import UploadModal from "@/components/Modal/UploadModal.vue";
 import ImageListModal from "@/components/Modal/ImageListModal.vue";
-import { uploadImageToAlbumFromHome } from "@/apis/albums";
+import { uploadImageToAlbumFromHome, updateAlbum } from "@/apis/albums";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
@@ -50,6 +58,7 @@ export default {
   },
   setup() {
     const imageId = ref();
+    const imageUrl = ref();
     const loading = ref(false);
     const store = useStore();
     const router = useRouter();
@@ -58,6 +67,7 @@ export default {
     const token = computed(() => store.state.user.userLogin.token);
     const setImage = (image) => {
       imageId.value = image.id;
+      imageUrl.value = image.url;
     };
     const handleUploadImage = async () => {
       loading.value = true;
@@ -79,6 +89,25 @@ export default {
           router.back();
         });
     };
+    const handleUpdateAlbum = async () => {
+      const rqbd = {
+        id: route.query.id,
+        coverPhoto: imageUrl.value,
+        name: route.query.name,
+        desc: route.query.desc,
+      };
+      await updateAlbum(rqbd, token.value)
+        .then((res) => {
+          console.log(res);
+          message.success("Cập nhật ảnh bìa thành công!");
+          router.back();
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Cập nhật ảnh bìa thất bại!");
+          router.back();
+        });
+    };
     onMounted(() => {
       pickItem.value.style.animation = "up 0.5s ease-in-out";
     });
@@ -92,6 +121,7 @@ export default {
       route,
       router,
       pickItem,
+      handleUpdateAlbum,
     };
   },
 };
