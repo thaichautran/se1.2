@@ -12,6 +12,7 @@ import {
   RESTORE_ALL,
   UPDATE_IMAGE,
   FIND_IMAGES,
+  DELETE_IMAGE,
 } from "./constants";
 
 const uploadImage = (data, token) => {
@@ -80,7 +81,13 @@ const findImages = (information, token) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+const deleteImage = (id, token) => {
+  return axios.delete(`${DELETE_IMAGE}?id=${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 export {
+  deleteImage,
   updateImage,
   uploadImage,
   uploadVideo,

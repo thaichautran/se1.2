@@ -10,8 +10,28 @@
         >
           <HistoryOutlined /> Khôi phục tất cả</a-button
         >
+        <a-modal v-model:open="open" title="Bạn có muốn xóa toàn bộ thùng rác?">
+          <template #footer>
+            <a-button
+              key="back"
+              class="modal-footer"
+              style="border-radius: 18px"
+              @click="open = false"
+              >Hủy</a-button
+            >
+            <a-button
+              key="submit"
+              class="modal-footer"
+              :loading="loading"
+              style="border-radius: 18px"
+              @click="removeAll"
+              >Xóa</a-button
+            >
+          </template>
+          <p>Bạn sẽ không thể khôi phục ảnh sau khi xóa!</p>
+        </a-modal>
         <a-button
-          @click="removeAll"
+          @click="open = true"
           :loading="loading"
           :disabled="imageList.length === 0"
           style="border-radius: 18px; background-color: #e05858; color: #ffffff"
@@ -153,6 +173,7 @@ export default {
     const today = ref(new Date());
     const yesterday = ref();
     const loading = ref(false);
+    const open = ref(false);
     const getToday = () => {
       today.value = dayjs().format("DD-MM-YYYY");
     };
@@ -276,6 +297,7 @@ export default {
       getToday,
       getYesterday,
       getCreatedDateList,
+      open,
     };
   },
   created() {
@@ -287,6 +309,13 @@ export default {
 .text-upper {
   &::first-letter {
     text-transform: uppercase;
+  }
+}
+.modal-footer {
+  &:last-child:hover {
+    background-color: #e05858;
+    color: #ffffff;
+    border-color: #e05858;
   }
 }
 </style>
