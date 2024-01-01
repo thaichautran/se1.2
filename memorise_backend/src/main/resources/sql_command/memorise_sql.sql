@@ -105,6 +105,12 @@ alter table image
 modify column description text;
 
 alter table album 
+modify column name varchar(255);
+
+alter table album 
+modify column description text;
+
+alter table album 
 modify column create_date timestamp not null default now(),
 modify column update_date timestamp not null default now();
 
