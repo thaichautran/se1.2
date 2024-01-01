@@ -7,29 +7,41 @@
       :loop="true"
       class="mySwiper"
     >
-      <swiper-slide>
-        <img src="../../assets/image/bg1.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg2.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg3.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg4.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg1.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg2.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg3.jpg" alt="" />
-      </swiper-slide>
-      <swiper-slide>
-        <img src="../../assets/image/bg4.jpg" alt="" />
+      <swiper-slide
+        v-for="image in imageList2.reverse()"
+        :key="image.id"
+        style="position: relative"
+      >
+        <img :src="image.url" alt="image" style="object-fit: cover" />
+        <p
+          v-if="image.location != ''"
+          style="
+            position: absolute;
+            left: 35px;
+            bottom: 0;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            text-shadow: 0px 4px 100px rgba(0, 0, 0, 0.25);
+          "
+        >
+          {{ image.location }},
+          {{ dayjs(image.createDate).locale("vi").format("YYYY") }}
+        </p>
+        <p
+          v-else
+          style="
+            position: absolute;
+            left: 35px;
+            bottom: 0;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            text-shadow: 0px 4px 100px rgba(0, 0, 0, 0.25);
+          "
+        >
+          {{ dayjs(image.createDate).locale("vi").format("YYYY") }}
+        </p>
       </swiper-slide>
     </swiper>
   </section>
@@ -46,14 +58,28 @@ import "swiper/css/navigation";
 
 // import required modules
 import { Navigation } from "swiper/modules";
+import dayjs from "dayjs";
+import "dayjs/locale/vi";
+import { ref, watch } from "vue";
 export default {
   components: {
     Swiper,
     SwiperSlide,
   },
-  setup() {
+  props: {
+    imageList: {
+      type: Array,
+    },
+  },
+  setup(props) {
+    const imageList2 = ref([...props.imageList]);
+    watch(props.imageList, (newVal) => {
+      imageList2.value = newVal;
+    });
     return {
       modules: [Navigation],
+      dayjs,
+      imageList2,
     };
   },
 };

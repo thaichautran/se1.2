@@ -98,7 +98,7 @@
                   ></a-menu-item
                 >
                 <a-menu-item key="3">
-                  <span class="icon-delete" @click="handleRemoveAlbum"
+                  <span class="icon-delete" @click="open2 = true"
                     ><img
                       class="image-modal-icon"
                       src="../assets/image/Photo_delete.svg"
@@ -213,6 +213,26 @@
       </div>
 
       <EmptyView v-else />
+      <a-modal v-model:open="open2" title="Bạn chắc chắn muốn xóa album?">
+        <template #footer>
+          <a-button
+            key="back"
+            class="modal-footer"
+            style="border-radius: 18px"
+            @click="open = false"
+            >Hủy</a-button
+          >
+          <a-button
+            key="submit"
+            class="modal-footer"
+            :loading="loading"
+            style="border-radius: 18px"
+            @click="handleRemoveAlbum"
+            >Xóa</a-button
+          >
+        </template>
+        <p>Toàn bộ ảnh và video trong album vẫn được giữ nguyên!</p>
+      </a-modal>
     </div>
   </div>
 </template>
@@ -255,6 +275,7 @@ export default {
     const today = ref(new Date());
     const yesterday = ref();
     const open = ref(false);
+    const open2 = ref(false);
     const fileUpload = ref("");
     const loading = ref(false);
     const imageId = ref();
@@ -368,6 +389,7 @@ export default {
       setImage,
       handleRemoveAlbum,
       router,
+      open2,
     };
   },
   created() {
@@ -425,5 +447,12 @@ export default {
 .image-modal-icon {
   width: 20px;
   height: 20px;
+}
+.modal-footer {
+  &:last-child:hover {
+    background-color: #e05858;
+    color: #ffffff;
+    border-color: #e05858;
+  }
 }
 </style>

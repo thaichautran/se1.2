@@ -2,7 +2,7 @@
   <section id="home">
     <div v-if="imageList.length > 0">
       <div class="home-slider" style="margin-bottom: 3rem">
-        <SwipSlider />
+        <SwipSlider :imageList="imageList" />
       </div>
       <div class="home-gallery">
         <div v-for="year in createdYearList" :key="year">

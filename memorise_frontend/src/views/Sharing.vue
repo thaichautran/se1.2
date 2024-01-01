@@ -1,5 +1,5 @@
 <template>
-  <h1>Sharing</h1>
+  <h1 class="text-title">Tính năng đang phát triển</h1>
 </template>
 
 <script>

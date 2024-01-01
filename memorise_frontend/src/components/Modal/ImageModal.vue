@@ -28,6 +28,24 @@
               </a>
               <template #overlay>
                 <a-menu>
+                  <a-menu-item key="1" v-if="route.path == '/trash'">
+                    <a-popconfirm
+                      title="Are you sure delete this task?"
+                      ok-text="Yes"
+                      cancel-text="No"
+                      @confirm="confirm"
+                      @cancel="cancel"
+                    >
+                      <span class="icon-delete" @click="handleDeleteImage"
+                        ><img
+                          class="image-modal-icon"
+                          src="../../assets/image/Photo_delete.svg"
+                          alt=""
+                        />
+                        Xóa vĩnh viễn</span
+                      >
+                    </a-popconfirm>
+                  </a-menu-item>
                   <a-menu-item key="0" v-if="route.path != '/trash'">
                     <span class="icon-delete" @click="handleRemoveImage"
                       ><img
@@ -48,16 +66,7 @@
                       Khôi phục</span
                     >
                   </a-menu-item>
-                  <!-- <a-menu-item key="1">
-                    <span class="icon-delete"
-                      ><img
-                        class="image-modal-icon"
-                        src="../../assets/image/Restore.svg"
-                        alt=""
-                      />
-                      Xóa kỷ niệm</span
-                    >
-                  </a-menu-item> -->
+
                   <a-menu-item key="2" v-if="route.path == '/album'">
                     <span @click="handleRemoveImageFromAlbum"
                       ><img
@@ -226,7 +235,12 @@
 import { EllipsisOutlined } from "@ant-design/icons-vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { downloadImage, removeImageToTrash, updateImage } from "@/apis/images";
+import {
+  downloadImage,
+  removeImageToTrash,
+  updateImage,
+  deleteImage,
+} from "@/apis/images";
 import { computed, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
@@ -277,18 +291,25 @@ export default {
             isRemove.value = res.data.remove;
             emit("closeModal");
             emit("getNewList");
+            message.success("Ảnh đã được xóa vào thùng rác!");
             store.dispatch("image/getTrashImagesAction", { data: res.data });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
         await removeImageToTrash(props.image.id, true, token.value)
           .then((res) => {
             isRemove.value = res.data.remove;
             emit("closeModal");
             emit("getNewList");
+            message.success("Ảnh đã được xóa vào thùng rác!");
             store.dispatch("image/getTrashImagesAction", { data: res.data });
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            message.error("Xóa ảnh vào thùng rác thất bại!");
+            console.log(err);
+          });
       }
     };
     const handleRemoveImageFromAlbum = async () => {
@@ -386,6 +407,20 @@ export default {
           message.error("Thêm ảnh vào album thất bại");
         });
     };
+
+    const handleDeleteImage = async () => {
+      await deleteImage(props.image.id, token.value)
+        .then((res) => {
+          isRemove.value = res.data.remove;
+          emit("closeModal");
+          emit("getNewList");
+          message.success("Xóa ảnh thành công!");
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Xóa ảnh thất bại!");
+        });
+    };
     return {
       handleRemoveImageFromAlbum,
       handleUploadImageToAlbum,
@@ -401,6 +436,7 @@ export default {
       open,
       showModal,
       setImage,
+      handleDeleteImage,
     };
   },
 };

@@ -7,7 +7,7 @@
       border-radius: 15px;
       border-radius: 15px;
       padding: 0;
-      box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px 0px;
+      box-shadow: rgba(0, 21, 41, 0.08) -1px 10px 20px 10px;
     "
   >
     <menu-unfold-outlined

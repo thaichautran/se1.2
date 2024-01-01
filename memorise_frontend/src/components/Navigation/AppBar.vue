@@ -1,13 +1,21 @@
 <template>
   <a-layout style="min-height: 100vh; padding: 0.5rem" class="app-bar">
     <a-layout-sider
+      :style="{
+        overflow: 'hidden',
+        height: '98vh',
+        position: 'fixed',
+        left: 0,
+        bottom: '7px',
+        zIndex: 10,
+      }"
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
       style="
         background-color: #fff;
         border-radius: 15px;
-        box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px 0px;
+        box-shadow: rgba(0, 21, 41, 0.08) -1px 10px 20px 10px;
       "
     >
       <div
@@ -93,12 +101,34 @@
           <span class="anticon"
             ><img src="../../assets/image/trash_icon.svg" class="icon" alt=""
           /></span>
-          <span class="menu-item-text">Thùng rác {{ token }}</span>
+          <span class="menu-item-text">Thùng rác</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <the-header
+        v-if="!collapsed"
+        :style="{
+          position: 'fixed',
+          zIndex: 10,
+          minWidth: '85%',
+          marginLeft: '13rem',
+        }"
+        @setCollapsed="
+          (flag) => {
+            collapsed = flag;
+          }
+        "
+        :collapsedToChild="collapsed"
+      ></the-header>
+      <the-header
+        v-else
+        :style="{
+          position: 'fixed',
+          zIndex: 10,
+          marginLeft: '5rem',
+          minWidth: '93.5%',
+        }"
         @setCollapsed="
           (flag) => {
             collapsed = flag;
@@ -107,8 +137,23 @@
         :collapsedToChild="collapsed"
       ></the-header>
       <a-layout-content
+        v-if="!collapsed"
         :style="{
-          margin: '1.5rem 1rem',
+          margin: '5rem 1rem  1.5rem',
+          marginLeft: '13rem',
+          padding: '1.5rem',
+          background: '#fff',
+          minHeight: '280px',
+        }"
+      >
+        <router-view></router-view>
+        <a-back-top />
+      </a-layout-content>
+      <a-layout-content
+        v-else
+        :style="{
+          margin: '5rem 1rem  1.5rem',
+          marginLeft: '5.5rem',
           padding: '1.5rem',
           background: '#fff',
           minHeight: '280px',
