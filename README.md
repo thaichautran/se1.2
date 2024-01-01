@@ -8,7 +8,7 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 
 # Goal và Business Objective
 ## Goal
-Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo, lưu trữ và chia sẻ kỷ niệm thông qua hình ảnh và video một cách dễ dàng và linh hoạt.
+Phát triển ứng dụng web Memorise, cho phép người dùng tạo, lưu trữ và chia sẻ kỷ niệm thông qua hình ảnh và video một cách dễ dàng và linh hoạt.
 
 - **Phát triển giao diện thân thiện:** Tạo trải nghiệm người dùng tốt nhất thông qua giao diện trực quan, tương tác linh hoạt và dễ dàng trong việc tải lên, quản lý hình ảnh và tạo kỷ niệm.
 
@@ -35,7 +35,7 @@ Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo
 - Với **video có độ phân giải 4K và độ dài 1 phút**, cần đảm bảo thời gian tải lên dưới 5 phút.
 
 **Hiệu suát lưu trữ:**
-- Dung lượng lưu trữ miễn phí của mỗi người dùng là 5GB và có thể mở rộng thêm
+- Dung lượng lưu trữ miễn phí của mỗi người dùng đã tạo tài khoản là 5GB và có thể mở rộng thêm
 - Dung lượng lưu trữ của toàn bộ hệ thống là 100TB
 
 **Chia sẻ và tương tác với kỷ niệm:**
@@ -46,11 +46,12 @@ Tạo ra một ứng dụng web đa chức năng, cho phép người dùng tạo
 - Đảm bảo 100% người dùng có thể khôi phục dữ liệu ảnh đã bị xóa trong vòng 30 ngày kể từ ngày xóa.
 
 # Mô tả use case 
-Dưới đây là sơ đồ Use case của ứng dụng web Memorise với ký hiệu như sau
+Dưới đây là sơ đồ Use case của ứng dụng web Memorise, với ký hiệu như sau:
 - Các use case tô màu trắng là các use case đã hoàn thành ở trong dự án
 - Các use case tô màu đỏ là các use case dự kiến sẽ thực hiện.
 
-![image](https://github.com/thaichautran/se1.2/assets/28959114/730e32ca-52ca-4e80-a479-9943c9d91ac4)
+![Memorise Use Case Diagram-Copy of Use case tổng quan drawio](https://github.com/thaichautran/se1.2/assets/28959114/cbe49cd9-d581-4c32-9b0c-9dfe0d738774)
+
 
 
 Mô tả các use case chính:
