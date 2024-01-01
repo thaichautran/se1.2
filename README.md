@@ -1,6 +1,6 @@
 # se1.2
 Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
-### Hosting web: https://memorise-d34b0.web.app/
+### Hosting web: https://memorise-4b704.web.app/
 ### Technologies
 - Frontend: Vuejs
 - Backend: Spring boot
