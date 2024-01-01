@@ -1,18 +1,24 @@
 <template>
   <section id="slider">
-    <swiper
+    <Swiper
+      v-if="imageList.length > 0 && imageList"
       :navigation="true"
       :modules="modules"
       :slidesPerView="4"
       :loop="true"
       class="mySwiper"
     >
-      <swiper-slide
-        v-for="image in imageList2.reverse()"
+      <SwiperSlide
+        v-for="image in imageList"
         :key="image.id"
         style="position: relative"
       >
-        <img :src="image.url" alt="image" style="object-fit: cover" />
+        <img
+          v-lazy="image.url"
+          :src="image.url"
+          alt="image"
+          style="object-fit: cover"
+        />
         <p
           v-if="image.location != ''"
           style="
@@ -42,8 +48,8 @@
         >
           {{ dayjs(image.createDate).locale("vi").format("YYYY") }}
         </p>
-      </swiper-slide>
-    </swiper>
+      </SwiperSlide>
+    </Swiper>
   </section>
 </template>
 
@@ -60,7 +66,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { ref, watch } from "vue";
+
 export default {
   components: {
     Swiper,
@@ -71,15 +77,10 @@ export default {
       type: Array,
     },
   },
-  setup(props) {
-    const imageList2 = ref([...props.imageList]);
-    watch(props.imageList, (newVal) => {
-      imageList2.value = newVal;
-    });
+  setup() {
     return {
       modules: [Navigation],
       dayjs,
-      imageList2,
     };
   },
 };
