@@ -15,9 +15,9 @@
   >
     <img
       v-if="
-        image.url.includes('.jpg') ||
-        image.url.includes('.png') ||
-        image.url.includes('.jpeg')
+        image?.url?.includes('.jpg') ||
+        image?.url?.includes('.png') ||
+        image?.url?.includes('.jpeg')
       "
       style="
         aspect-ratio: 1 / 1;
@@ -28,7 +28,7 @@
       v-lazy="image.url"
       :src="image.url"
     />
-    <div v-else-if="image.url.includes('.mp4')">
+    <div v-else-if="image?.url?.includes('.mp4')">
       <video
         :src="image.url"
         style="aspect-ratio: 1 / 1; width: 100%"
@@ -84,9 +84,9 @@
     </a-modal>
     <img
       v-if="
-        image.url.includes('.jpg') ||
-        image.url.includes('.png') ||
-        image.url.includes('.jpeg')
+        image?.url?.includes('.jpg') ||
+        image?.url?.includes('.png') ||
+        image?.url?.includes('.jpeg')
       "
       style="
         aspect-ratio: 1 / 1;
@@ -97,7 +97,7 @@
       v-lazy="image.url"
       :src="image.url"
     />
-    <div v-else-if="image.url.includes('.mp4')">
+    <div v-else-if="image?.url?.includes('.mp4')">
       <video
         :src="image.url"
         style="aspect-ratio: 1 / 1; width: 100%"
