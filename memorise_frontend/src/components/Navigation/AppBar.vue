@@ -140,7 +140,7 @@
         v-if="!collapsed"
         :style="{
           margin: '5rem 1rem  1.5rem',
-          marginLeft: '13rem',
+          marginLeft: '14.2rem',
           padding: '1.5rem',
           background: '#fff',
           minHeight: '280px',
@@ -153,7 +153,7 @@
         v-else
         :style="{
           margin: '5rem 1rem  1.5rem',
-          marginLeft: '5.5rem',
+          marginLeft: '6.5rem',
           padding: '1.5rem',
           background: '#fff',
           minHeight: '280px',
