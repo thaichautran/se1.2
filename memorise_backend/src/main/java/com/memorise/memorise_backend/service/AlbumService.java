@@ -51,7 +51,7 @@ public class AlbumService implements AlbumServiceImp {
         uploadRequest.setFile(file);
         uploadRequest.setName(name);
         uploadRequest.setDescription(desc);
-        uploadRequest.setLocation("avatar");
+        uploadRequest.setLocation("");
         ImageDTO imageDTO = cloudinaryService.uploadImage(uploadRequest);
 
         Album album = new Album();
