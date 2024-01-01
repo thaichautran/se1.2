@@ -2,9 +2,23 @@
   <div class="album-detail">
     <div class="album-detail-top">
       <div class="album-detail-top-left">
-        <h1 class="text-title" style="margin-bottom: 1rem">
-          {{ route.query.name }}
+        <h1 class="text-title" style="margin-bottom: 1rem" v-if="!isUpdate">
+          {{ formState.name }}
         </h1>
+        <a-input
+          placeholder="Tên album"
+          v-model:value="formState.name"
+          :bordered="false"
+          style="
+            border-bottom: solid 1px #9095a0;
+            border-radius: 0;
+            margin-bottom: 1rem;
+          "
+          v-else
+          @keyup.enter="handleUpdateAlbum"
+        >
+          {{ route.query.name }}
+        </a-input>
         <p
           v-if="createdDateList.length >= 2"
           style="color: #565e6c; font-weight: 700"
@@ -57,7 +71,14 @@
         </a-button>
       </div>
       <div class="album-detail-top-right">
-        <p style="text-align: left">{{ route.query.desc }}</p>
+        <p style="text-align: left" v-if="!isUpdate">{{ formState.desc }}</p>
+        <a-textarea
+          v-else
+          style="height: 170px"
+          v-model:value="formState.desc"
+          placeholder="Mô tả"
+          @keyup.enter="handleUpdateAlbum"
+        />
         <div class="album-icon">
           <a-tooltip>
             <template #title>Thêm ảnh vào album</template>
@@ -78,7 +99,7 @@
             <template #overlay>
               <a-menu>
                 <a-menu-item key="0">
-                  <span class="icon-delete" @click="handleRemoveImage"
+                  <span class="icon-delete" @click="showModal2"
                     ><img
                       class="image-modal-icon"
                       src="../assets/image/Photo album.svg"
@@ -88,7 +109,7 @@
                   >
                 </a-menu-item>
                 <a-menu-item key="1">
-                  <span
+                  <span @click="isUpdate = true"
                     ><img
                       class="image-modal-icon"
                       src="../assets/image/Edit.svg"
@@ -241,14 +262,14 @@
 import { useRoute, useRouter } from "vue-router";
 import { getImagesFromAlbum } from "@/apis/albums";
 import { useStore } from "vuex";
-import { ref, watchEffect } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 import { computed } from "vue";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
 import ImageList from "../components/Image/ImageList.vue";
 import EmptyView from "./EmptyView.vue";
 import { message } from "ant-design-vue";
-import { deleteAlbum } from "@/apis/albums";
+import { deleteAlbum, updateAlbum } from "@/apis/albums";
 import {
   PlayCircleOutlined,
   EllipsisOutlined,
@@ -279,11 +300,28 @@ export default {
     const fileUpload = ref("");
     const loading = ref(false);
     const imageId = ref();
+    const isUpdate = ref(false);
+    const formState = reactive({
+      name: route.query.name,
+      desc: route.query.desc,
+    });
     const showModal = async () => {
       open.value = true;
       await router.push({
         path: "/album/pick_item",
-        query: { id: route.query.id },
+        query: { id: route.query.id, type: "image" },
+      });
+    };
+    const showModal2 = async () => {
+      open.value = true;
+      await router.push({
+        path: "/album/pick_item",
+        query: {
+          id: route.query.id,
+          type: "coverImage",
+          name: formState.name,
+          desc: formState.desc,
+        },
       });
     };
     const getImageList = async () => {
@@ -294,6 +332,27 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+        });
+    };
+    const handleUpdateAlbum = async () => {
+      const rqbd = {
+        id: route.query.id,
+        coverPhoto: route.query.url,
+        name: formState.name,
+        desc: formState.desc,
+      };
+      await updateAlbum(rqbd, token.value)
+        .then((res) => {
+          console.log(res);
+          message.success("Cập nhật album thành công!");
+          formState.name = res.data.name;
+          formState.desc = res.data.description;
+          isUpdate.value = false;
+        })
+        .catch((err) => {
+          console.log(err);
+          message.error("Cập nhật album thất bại!");
+          isUpdate.value = false;
         });
     };
 
@@ -390,6 +449,10 @@ export default {
       handleRemoveAlbum,
       router,
       open2,
+      isUpdate,
+      formState,
+      handleUpdateAlbum,
+      showModal2,
     };
   },
   created() {
