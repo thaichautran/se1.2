@@ -291,7 +291,7 @@ export default {
             isRemove.value = res.data.remove;
             emit("closeModal");
             emit("getNewList");
-            message.success("Ảnh đã được xóa vào thùng rác!");
+            message.success("Ảnh đã được khôi phục!");
             store.dispatch("image/getTrashImagesAction", { data: res.data });
           })
           .catch((err) => {
