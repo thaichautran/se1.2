@@ -6,7 +6,7 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 - Backend: Spring boot
 - Database: Mysql
 
-# Video demo sản phẩm: 
+# Video demo sản phẩm
 Link truy cập video demo sản phẩm: https://drive.google.com/file/d/11FzAYupeMeB0MzglQwyTHlaYsU9Wy6XM/view?usp=sharing
 
 
