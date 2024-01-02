@@ -7,7 +7,7 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 - Database: Mysql
 
 # Video demo sản phẩm: 
-Link truy cập video demo sản phẩm: https://drive.google.com/drive/folders/1aXlQRgh_e9Ni18r6uFiVlS3SJby8VcXE?fbclid=IwAR0hPRCGs4o3Y4m81nmHugag55Quc7g7v2ix1hfHw2Yt4pA_8KgI6EM_9i0
+Link truy cập video demo sản phẩm: https://drive.google.com/file/d/11FzAYupeMeB0MzglQwyTHlaYsU9Wy6XM/view?usp=sharing
 
 
 # Goal và Business Objective
