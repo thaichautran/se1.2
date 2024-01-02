@@ -6,6 +6,10 @@ Tìm hiểu OpenAPI và Swagger, kết hợp ReactJS hoặc VueJS
 - Backend: Spring boot
 - Database: Mysql
 
+# Video demo sản phẩm: 
+Link truy cập video demo sản phẩm: https://drive.google.com/drive/folders/1aXlQRgh_e9Ni18r6uFiVlS3SJby8VcXE?fbclid=IwAR0hPRCGs4o3Y4m81nmHugag55Quc7g7v2ix1hfHw2Yt4pA_8KgI6EM_9i0
+
+
 # Goal và Business Objective
 ## Goal
 Phát triển ứng dụng web Memorise, cho phép người dùng tạo, lưu trữ và chia sẻ kỷ niệm thông qua hình ảnh và video một cách dễ dàng và linh hoạt.
