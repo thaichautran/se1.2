@@ -20,8 +20,8 @@ spring:
         max-request-size: 100MB
     mail:
         host: smtp.gmail.com
-        username: hoangmanhdung18102003@gmail.com
-        password: kaym wtpe hnmb poic
+        username: your-email
+        password: abcd
         port: 587
         properties:
             mail:
