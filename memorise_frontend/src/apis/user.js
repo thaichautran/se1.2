@@ -20,7 +20,7 @@ const checkOTP = (otp) => {
   return axios.get(`${CHECK_OTP}?otp=${otp}`);
 };
 
-const resetPassword = (otp, newpassword) => {
-  return axios.post(`${RESET_PASSWORD}?otp=${otp}&newPassword=${newpassword}`);
+const resetPassword = (requestBody) => {
+  return axios.post(`${RESET_PASSWORD}`, requestBody);
 };
 export { register, login, sendOTP, checkOTP, resetPassword };

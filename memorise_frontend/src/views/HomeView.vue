@@ -1,8 +1,8 @@
 <template>
   <section id="home">
-    <div v-if="token">
+    <div v-if="imageList.length > 0">
       <div class="home-slider" style="margin-bottom: 3rem">
-        <SwipSlider />
+        <SwipSlider :imageList="imageList" />
       </div>
       <div class="home-gallery">
         <div v-for="year in createdYearList" :key="year">
@@ -20,7 +20,7 @@
           <div v-for="month in createdMonthList" :key="month">
             <p
               class="text-sub-title text-upper"
-              style="font-size: 24px"
+              style="font-size: 24px; margin-bottom: 0"
               v-if="dayjs(month, 'MM-YYYY').locale('vi').format('YYYY') == year"
             >
               {{ dayjs(month, "MM-YYYY").locale("vi").format("MMMM") }}
@@ -28,7 +28,7 @@
             <div v-for="date in createdDateList" :key="date">
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -40,14 +40,15 @@
               >
                 Hôm nay
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 1rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -59,14 +60,15 @@
               >
                 Hôm qua
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
 
               <p
                 class="text-sub-3-title text-upper"
-                style="font-size: 18px; margin-top: 3rem"
+                style="font-size: 18px; margin-top: 1rem"
                 v-else-if="
                   dayjs(date, 'DD-MM-YYYY').locale('vi').format('MM-YYYY') ===
                     month &&
@@ -83,8 +85,9 @@
                     .format("dddd, [ngày] DD")
                 }}
                 <ImageList
-                  style="margin-top: 2rem"
+                  style="margin-top: 2rem; margin-bottom: 3rem"
                   :imageList="getImageListByDate(date)"
+                  @getNewList="getImageList"
                 />
               </p>
             </div>
@@ -92,6 +95,8 @@
         </div>
       </div>
     </div>
+
+    <EmptyView v-else />
   </section>
 </template>
 <script>
@@ -103,17 +108,19 @@ import ImageList from "../components/Image/ImageList.vue";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import EmptyView from "./EmptyView.vue";
 export default {
   components: {
     SwipSlider,
     ImageList,
+    EmptyView,
   },
 
   setup() {
     const store = useStore();
     const router = useRouter();
     const token = computed(() => store.state.user.userLogin.token);
-    const imageList = ref([]);
+    const imageList = ref([...store.state.image.imageList]);
     const createdDateList = ref([]);
     const createdMonthList = ref([]);
     const createdYearList = ref([]);
@@ -121,6 +128,9 @@ export default {
     const today = ref(new Date());
     const yesterday = ref();
 
+    watchEffect(() => {
+      imageList.value = [...store.state.image.imageList];
+    });
     const getToday = () => {
       today.value = dayjs().format("DD-MM-YYYY");
     };
@@ -147,6 +157,7 @@ export default {
       return dayjs(date).format("DD-MM-YYYY");
     };
     const getCreatedDateList = () => {
+      createdDateList.value = [];
       imageList.value.forEach((image) => {
         createdDateList.value.push(image.createDate);
       });

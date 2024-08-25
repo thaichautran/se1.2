@@ -7,7 +7,7 @@
       border-radius: 15px;
       border-radius: 15px;
       padding: 0;
-      box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px 0px;
+      box-shadow: rgba(0, 21, 41, 0.08) -1px 10px 20px 10px;
     "
   >
     <menu-unfold-outlined
@@ -25,19 +25,7 @@
     <a-space direction="vertical" style="width: 90%; margin-left: 1rem">
       <div class="header-row">
         <div class="header-row-left">
-          <a-input
-            v-model:value="keySearch"
-            placeholder='Tìm kiếm "Thứ 7", "Thành phố Hồ Chí Minh"'
-            style="
-              width: 500px;
-              box-shadow: rgba(0, 21, 41, 0.08) 0px 1px 4px 0px;
-            "
-            size="large"
-          >
-            <template #prefix>
-              <SearchOutlined />
-            </template>
-          </a-input>
+          <TheSearch></TheSearch>
         </div>
         <div class="header-row-right">
           <UploadModal></UploadModal>
@@ -65,7 +53,6 @@
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  SearchOutlined,
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
@@ -74,14 +61,14 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import UploadModal from "../Modal/UploadModal.vue";
+import TheSearch from "../Search/TheSearch.vue";
 export default {
   components: {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    SearchOutlined,
     SettingOutlined,
     UserOutlined,
-
+    TheSearch,
     LogoutOutlined,
     UploadModal,
   },
@@ -95,7 +82,7 @@ export default {
     const router = useRouter();
     store.dispatch("user/loadFromLocalStorageAction");
     const token = computed(() => store.state.user.userLogin.token);
-    let keySearch = ref("");
+    const keySearch = ref("");
     const handleLogout = () => {
       store.dispatch("user/removeLocalStorageAction", { router });
     };

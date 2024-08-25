@@ -7,6 +7,7 @@ import com.memorise.memorise_backend.imp.AuthenticationServiceImp;
 import com.memorise.memorise_backend.imp.UserServiceImp;
 import com.memorise.memorise_backend.payload.RespondData;
 import com.memorise.memorise_backend.payload.request.LoginRequest;
+import com.memorise.memorise_backend.payload.request.ResetPasswordRequest;
 import com.memorise.memorise_backend.payload.request.SignUpRequest;
 import com.memorise.memorise_backend.repository.UserRepository;
 import com.memorise.memorise_backend.utils.JwtUtilsHelper;
@@ -249,9 +250,9 @@ public class AuthenticationController {
             }
     )
     @PostMapping("/reset_password")
-    public ResponseEntity<?> resetPassword(@RequestParam String otp, @RequestParam String newPassword){
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
         RespondData respondData = new RespondData();
-        User user = userRepository.findByOtp(otp);
+        User user = userRepository.findByOtp(resetPasswordRequest.getOtp());
         if(user == null){
             respondData.setStatus(400);
             respondData.setSuccess(false);
@@ -260,7 +261,7 @@ public class AuthenticationController {
 
             return new ResponseEntity<>(respondData, HttpStatus.BAD_REQUEST);
         }
-        boolean isSuccess = authenticationServiceImp.resetPassword(user, newPassword);
+        boolean isSuccess = authenticationServiceImp.resetPassword(user, resetPasswordRequest.getNewPassword());
         respondData.setDesc("Request is successful");
         respondData.setData("Reset password successfully!");
 

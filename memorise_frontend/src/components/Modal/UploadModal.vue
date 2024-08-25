@@ -1,6 +1,15 @@
 <template>
   <section id="modal-upload">
-    <span style="font-size: 16px" class="interactive" @click="showModal">
+    <span
+      class="interactive"
+      style="
+        font-size: 16px;
+        background-color: #f3f4f6;
+        border-radius: 18px;
+        padding: 0.5rem 1rem;
+      "
+      @click="showModal"
+    >
       <UploadOutlined />
       Tải lên
     </span>
@@ -19,7 +28,17 @@
         >
 
         <a-button
+          v-if="route.path == '/album/pick_item'"
           key="submit"
+          style="border-radius: 18px"
+          :loading="loading"
+          @click="handleOkToAlbum"
+          :disabled="fileUpload == ''"
+          >Tải lên</a-button
+        >
+        <a-button
+          v-else
+          key="submit2"
           style="border-radius: 18px"
           :loading="loading"
           @click="handleOk"
@@ -117,13 +136,20 @@ import { UploadOutlined, CloudUploadOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { uploadImage, uploadVideo } from "@/apis/images";
 import { useStore } from "vuex";
-
+import { getAllImageByUser } from "@/apis/images";
+import { uploadImageToAlbumFromDevice } from "@/apis/albums";
+import { useRoute } from "vue-router";
 export default {
   components: {
     UploadOutlined,
     CloudUploadOutlined,
   },
-  setup() {
+  props: {
+    albumId: {
+      type: Number,
+    },
+  },
+  setup(props) {
     const store = useStore();
     const open = ref(false);
     const loading = ref(false);
@@ -138,7 +164,7 @@ export default {
       desc: "",
     });
     const token = computed(() => store.state.user.userLogin.token);
-
+    const route = useRoute();
     //show modal
     const showModal = () => {
       if (token.value) {
@@ -154,6 +180,7 @@ export default {
       reader.readAsDataURL(img);
     }
     const beforeUpload = (file) => {
+      formState.name = file.name;
       const isJpgOrPng =
         file.type === "image/jpeg" ||
         file.type === "image/png" ||
@@ -194,6 +221,8 @@ export default {
         return false;
       }
       fileUpload.value = file;
+      formState.name = file.name;
+
       return false;
     };
     const handleChange = (info) => {
@@ -217,6 +246,7 @@ export default {
     };
 
     const handleRemove = () => {
+      fileUpload.value = "";
       imageUrl.value = "";
       videoUrl.value = "";
       formState.name = "";
@@ -254,6 +284,7 @@ export default {
           loading.value = false;
           open.value = false;
           message.success("Tải lên thành công");
+          getImageList();
         })
         .catch((err) => {
           console.log(err);
@@ -261,11 +292,45 @@ export default {
           loading.value = false;
           open.value = false;
           message.error("Tải lên thất bại");
+        });
+    };
+    const handleOkToAlbum = async () => {
+      let bodyFormData = new FormData();
+      bodyFormData.append("file", fileUpload.value);
+      bodyFormData.append("name", formState.name);
+      bodyFormData.append("description", formState.desc);
+      bodyFormData.append("location", formState.location);
+
+      confirmLoading.value = true;
+      loading.value = true;
+      await uploadImageToAlbumFromDevice(
+        props.albumId,
+        bodyFormData,
+        token.value
+      )
+        .then((res) => {
+          console.log(res);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.success("Tải lên thành công");
+          getImageList();
         })
-        .finally(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+        .catch((err) => {
+          console.log(err);
+          confirmLoading.value = false;
+          loading.value = false;
+          open.value = false;
+          message.error("Tải lên thất bại");
+        });
+    };
+    const getImageList = async () => {
+      await getAllImageByUser(token.value)
+        .then((res) => {
+          store.dispatch("image/getAllImagesAction", { data: res.data });
+        })
+        .catch((err) => {
+          console.log(err);
         });
     };
     const handleCancel = () => {
@@ -278,6 +343,8 @@ export default {
       showModal,
       handleOk,
       handleCancel,
+      handleOkToAlbum,
+      route,
       formState,
       fileList,
       loading,

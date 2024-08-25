@@ -364,8 +364,7 @@ public class CloudinaryService implements CloudinaryServiceImp {
 
             // Lấy URL từ kết quả upload
             String imageUrl = (String) result.get("secure_url");
-            System.out.println("Image uploaded to folder: " + imageUrl);
-
+//            System.out.println("Image uploaded to folder: " + imageUrl);
             return imageUrl;
         } catch (IOException e) {
             throw new RuntimeException(e);

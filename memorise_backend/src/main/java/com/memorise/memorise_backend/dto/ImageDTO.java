@@ -1,6 +1,7 @@
 package com.memorise.memorise_backend.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class ImageDTO {
     private int id;
@@ -14,6 +15,7 @@ public class ImageDTO {
     private boolean isFavourite = false;
     private boolean isPublic = false;
     private boolean isRemove = false;
+    List<Integer> albumIds = null;
 
     public ImageDTO() {
 
@@ -120,5 +122,13 @@ public class ImageDTO {
 
     public void setRemove(boolean remove) {
         isRemove = remove;
+    }
+
+    public List<Integer> getAlbumIds() {
+        return albumIds;
+    }
+
+    public void setAlbumIds(List<Integer> albumIds) {
+        this.albumIds = albumIds;
     }
 }

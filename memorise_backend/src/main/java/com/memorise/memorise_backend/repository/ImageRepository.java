@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ImageRepository extends JpaRepository<Image, Integer> {
     Image findByUrl(String url);
-
-    List<Image> findByFavouriteAndUser(boolean isFovourite, User user);
+    Image findTopByUrlOrderByUpdateDateDesc(String url);
+    List<Image> findByFavouriteAndUserAndIsRemove(boolean isFavourite, User user, boolean isRemove);
+    List<Image> findByIsRemoveAndUser(boolean status, User user);
+    List<Image> findByIsRemoveAndUserAndLocationContainingOrIsRemoveAndUserAndNameContaining(boolean isRemove, User user, String inforLocation, boolean isRemove1, User user1, String inforName);
 }

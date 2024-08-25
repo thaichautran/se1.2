@@ -1,6 +1,18 @@
 <template>
   <a-row :gutter="[16, 16]">
-    <ImageItem v-for="item in imageList" :key="item.id" :image="item" />
+    <ImageItem
+      v-for="item in imageList"
+      :key="item.id"
+      :image="item"
+      :albumId="albumId"
+      @getNewList="getNewList"
+      @setImage="setImage"
+      @closeModal="
+        () => {
+          $emit('closeModal');
+        }
+      "
+    />
   </a-row>
 </template>
 
@@ -13,20 +25,28 @@ export default {
     imageList: {
       type: Array,
     },
+    albumId: {
+      type: Number,
+    },
   },
 
   components: {
     ImageItem,
   },
-  setup(props) {
+  setup(props, { emit }) {
     watch(
       () => props.imageList,
       (newVal) => {
         console.log(newVal);
       }
     );
-
-    return {};
+    const getNewList = () => {
+      emit("getNewList");
+    };
+    const setImage = (item) => {
+      emit("setImage", item);
+    };
+    return { getNewList, setImage };
   },
 };
 </script>
